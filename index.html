@@ -488,13 +488,25 @@
     var val = document.getElementById('dept-select').value;
     if (!val) return;
     localStorage.setItem('btl_dept', val);
+    var name = document.getElementById('staff-name').value.trim();
+    if (name) localStorage.setItem('btl_name', name);
     document.getElementById('dept-modal').style.display = 'none';
+    updateGreeting();
     showCalendarContent();
   }
 
   function resetDepartment() {
     localStorage.removeItem('btl_dept');
+    localStorage.removeItem('btl_name');
     document.getElementById('dept-modal').style.display = 'flex';
+  }
+
+  function updateGreeting() {
+    var now = new Date();
+    var hour = now.getHours();
+    var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    var name = localStorage.getItem('btl_name');
+    document.getElementById('greeting').textContent = name ? greeting + ', ' + name + '!' : greeting + '!';
   }
 
   window.addEventListener('DOMContentLoaded', function() {
@@ -502,9 +514,7 @@
     var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-    var hour = now.getHours();
-    var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-    document.getElementById('greeting').textContent = greeting + '!';
+    updateGreeting();
 
     var fullDate = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
     document.getElementById('today-full-date').textContent = fullDate;
@@ -524,12 +534,15 @@
 <div id="dept-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);z-index:999;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:12px;padding:1.5rem;width:320px;">
     <div style="font-size:15px;font-weight:500;margin-bottom:6px;">Welcome to the Staff Dashboard</div>
-    <div style="font-size:13px;color:#666;margin-bottom:16px;">Select your department to personalize your experience. You can change this anytime.</div>
+    <div style="font-size:13px;color:#666;margin-bottom:16px;">Enter your name and select your department to personalize your experience. You can change this anytime.</div>
+    <input type="text" id="staff-name" placeholder="Your first name" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
     <select id="dept-select" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;">
       <option value="">— Select your department —</option>
       <option value="childrens">Children's Department</option>
       <option value="adult-teen">Adult & Teen Services</option>
       <option value="circulation">Circulation</option>
+      <option value="reference">Reference</option>
+      <option value="outreach">Outreach</option>
       <option value="administration">Administration</option>
     </select>
     <button onclick="saveDepartment()" style="width:100%;background:#185FA5;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;">Save & continue</button>
