@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<!-- saved from url=(0072)file:///C:/Users/Rachel%20Burt/Downloads/library_dashboard_mockup_7.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bernards Township Library — Staff Dashboard</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:#1a1a19;min-height:100vh}
+  .topbar{background:#fff;border-bottom:1px solid #e5e5e0;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-icon{width:30px;height:30px;background:#185FA5;border-radius:7px;display:flex;align-items:center;justify-content:center}
+  .logo-icon svg{width:16px;height:16px;fill:white}
+  .logo-text{font-size:15px;font-weight:500}
+  .logo-sub{font-size:11px;color:#888}
+  .topbar-right{display:flex;align-items:center;gap:10px}
+  .avatar{width:32px;height:32px;border-radius:50%;background:#185FA5;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:white}
+  .topbar-name{font-size:13px;color:#666}
+  .layout{display:flex;padding-top:0}
+  .sidenav{width:210px;min-height:calc(100vh - 54px);background:#fff;border-right:1px solid #e5e5e0;padding:1.25rem 0;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;flex-shrink:0}
+  .nav-section{padding:0 0.75rem;margin-bottom:1.25rem}
+  .nav-label{font-size:10px;font-weight:500;color:#aaa;letter-spacing:0.08em;text-transform:uppercase;padding:0 0.5rem;margin-bottom:6px}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:#555;transition:background 0.15s;text-decoration:none}
+  .nav-item:hover{background:#f5f5f3;color:#1a1a19}
+  .nav-item.active{background:#E6F1FB;color:#185FA5;font-weight:500}
+  .nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .main{flex:1;padding:1.5rem;max-width:960px}
+  .page-title{font-size:18px;font-weight:500;margin-bottom:3px}
+  .page-sub{font-size:13px;color:#666;margin-bottom:1.25rem}
+  .metrics-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1.25rem}
+  .metric{background:#eeede8;border-radius:8px;padding:0.875rem 1rem}
+  .metric-label{font-size:12px;color:#666;margin-bottom:6px}
+  .metric-val{font-size:22px;font-weight:500}
+  .metric-sub{font-size:11px;color:#888;margin-top:3px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+  .card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1rem 1.25rem}
+  .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+  .card-title{font-size:14px;font-weight:500;display:flex;align-items:center;gap:7px}
+  .card-icon{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap}
+  .badge-blue{background:#E6F1FB;color:#185FA5}
+  .badge-green{background:#EAF3DE;color:#3B6D11}
+  .badge-amber{background:#FAEEDA;color:#854F0B}
+  .badge-red{background:#FCEBEB;color:#A32D2D}
+  .badge-purple{background:#EEEDFE;color:#534AB7}
+  .badge-gray{background:#f0efe9;color:#5F5E5A}
+  .action-btn{font-size:12px;padding:5px 10px;border:1px solid #d0d0c8;border-radius:8px;background:transparent;color:#555;cursor:pointer;transition:background 0.15s}
+  .action-btn:hover{background:#f5f5f3;color:#1a1a19}
+  .action-btn.primary{background:#185FA5;border-color:#185FA5;color:white}
+  .action-btn.primary:hover{background:#0C447C}
+  .task-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0efe9;font-size:13px}
+  .task-row:last-child{border-bottom:none}
+  .task-check{width:15px;height:15px;border:1px solid #ccc;border-radius:3px;flex-shrink:0}
+  .task-check.done{background:#185FA5;border-color:#185FA5}
+  .task-text{flex:1}
+  .task-text.done{color:#aaa;text-decoration:line-through}
+  .task-due{font-size:11px;color:#888}
+  .task-due.urgent{color:#A32D2D;font-weight:500}
+  .search-bar{display:flex;align-items:center;gap:8px;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:7px 10px;margin-bottom:10px}
+  .search-bar input{background:transparent;border:none;outline:none;font-size:13px;color:#1a1a19;flex:1;font-family:inherit}
+  .search-bar input::placeholder{color:#aaa}
+  .filter-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+  .filter-btn{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;cursor:pointer;border:none}
+  .policy-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f0efe9;font-size:13px;cursor:pointer;transition:color 0.12s}
+  .policy-row:last-child{border-bottom:none}
+  .policy-row:hover .policy-name{color:#185FA5}
+  .policy-name{flex:1}
+  .cal-select{width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:7px 10px;font-size:13px;color:#1a1a19;font-family:inherit;outline:none;margin-bottom:12px;cursor:pointer}
+  .cal-event{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #f0efe9;align-items:flex-start}
+  .cal-event:last-child{border-bottom:none}
+  .cal-time{font-size:11px;color:#888;width:58px;flex-shrink:0;padding-top:1px;line-height:1.5}
+  .cal-title{font-size:13px}
+  .cal-dept{font-size:11px;color:#888;margin-top:2px}
+  .onboard-name{font-size:14px;font-weight:500;margin-bottom:1px}
+  .onboard-role{font-size:12px;color:#888;margin-bottom:8px}
+  .progress-bar{height:5px;background:#f0efe9;border-radius:10px;overflow:hidden;margin-bottom:4px}
+  .progress-fill{height:100%;background:#185FA5;border-radius:10px}
+  .progress-label{font-size:11px;color:#888}
+  .embed-placeholder{background:#f5f5f3;border-radius:8px;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1px dashed #ccc}
+  .embed-label{font-size:12px;color:#888}
+  .embed-hint{font-size:11px;color:#aaa}
+  .hw-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0efe9;font-size:13px}
+  .hw-row:last-child{border-bottom:none}
+  .hw-name{flex:1}
+  .hw-loc{font-size:11px;color:#888;width:90px}
+  .view-all{display:block;width:100%;text-align:center;font-size:12px;padding:6px;border:1px solid #e5e5e0;border-radius:8px;background:transparent;color:#666;cursor:pointer;margin-top:10px;transition:background 0.15s}
+  .view-all:hover{background:#f5f5f3;color:#1a1a19}
+  .onboard-divider{border-top:1px solid #f0efe9;margin-top:12px;padding-top:10px}
+  .section-micro-label{font-size:12px;font-weight:500;color:#888;margin-bottom:8px}
+  .traffic-val{font-size:22px;font-weight:500;color:#1a1a19}
+  .traffic-yesterday{font-size:11px;color:#888;margin-top:3px}
+  .traffic-loading{font-size:13px;color:#aaa}
+  .traffic-error{font-size:11px;color:#A32D2D;margin-top:4px}
+</style>
+<script>
+  /* ============================================================
+     SENSOURCE API CREDENTIALS
+     Replace the values below with your actual Client ID and Secret
+     ============================================================ */
+  const PROXY_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbyEJXej4GEqEqsaiPGpLuJ0SP5yhjJLtd6nwJlQ2YgsHKthpfi2rbJiV1YM0sFHQnSz/exec';
+
+  async function loadTrafficData() {
+    const todayEl     = document.getElementById('traffic-today');
+    const yesterdayEl = document.getElementById('traffic-yesterday');
+    const errorEl     = document.getElementById('traffic-error');
+
+    try {
+      const res  = await fetch(PROXY_URL);
+      if (!res.ok) throw new Error('Proxy request failed');
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      todayEl.textContent     = data.today.toLocaleString();
+      yesterdayEl.textContent = `Yesterday: ${data.yesterday.toLocaleString()}`;
+    } catch (err) {
+      todayEl.textContent = '—';
+      errorEl.textContent = 'Could not load traffic data: ' + err.message;
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', loadTrafficData);
+</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.3L20 8.5v7L12 19.7 4 15.5v-7L12 4.3z"></path></svg>
+    </div>
+    <div>
+      <div class="logo-text">Bernards Township Library</div>
+      <div class="logo-sub">Staff Dashboard</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-name">Welcome back, Library Director</div>
+    <div class="avatar">LD</div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="sidenav">
+    <div class="nav-section">
+      <div class="nav-label">Overview</div>
+      <div class="nav-item active">
+        <div class="nav-dot" style="background:#185FA5"></div> Home
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Administration</div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#534AB7"></div> Onboarding
+      </div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#534AB7"></div> Offboarding
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Resources</div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#1D9E75"></div> Policies
+      </div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#1D9E75"></div> Procedures
+      </div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#1D9E75"></div> Hardware
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Public Services</div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#BA7517"></div> Adult &amp; Teen
+      </div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#BA7517"></div> Children's
+      </div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#BA7517"></div> Circulation
+      </div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#BA7517"></div> Outreach
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Metrics &amp; Tracking</div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#D85A30"></div> Statistics
+      </div>
+      <div class="nav-item">
+        <div class="nav-dot" style="background:#D85A30"></div> Collection Dev
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="page-title">Good morning — Tuesday, April 15</div>
+    <div class="page-sub">Here's what needs your attention today.</div>
+
+    <div class="metrics-row" style="grid-template-columns:repeat(3,1fr)">
+      <div class="metric">
+        <div class="metric-label">Active onboarding</div>
+        <div class="metric-val">2</div>
+        <div class="metric-sub">staff members</div>
+      </div>
+      <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <div class="metric-label">Tasks due this week</div>
+          <div class="metric-val">7</div>
+          <div class="metric-sub">3 unassigned</div>
+        </div>
+        <a href="https://tasks.google.com/" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;padding:4px 10px;border:1px solid #d0d0c8;border-radius:7px;background:transparent;color:#555;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background=&#39;#f5f5f3&#39;" onmouseout="this.style.background=&#39;transparent&#39;">Open Tasks ↗</a>
+      </div>
+      <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <div class="metric-label">Visitor traffic today</div>
+          <div class="traffic-val" id="traffic-today">Loading...</div>
+          <div class="traffic-yesterday" id="traffic-yesterday"></div>
+          <div class="traffic-error" id="traffic-error"></div>
+        </div>
+        <a href="https://vea.sensourceinc.com/" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;padding:4px 10px;border:1px solid #d0d0c8;border-radius:7px;background:transparent;color:#555;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background=&#39;#f5f5f3&#39;" onmouseout="this.style.background=&#39;transparent&#39;">Open Vea ↗</a>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- Onboarding card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon" style="background:#E6F1FB">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"></path></svg>
+            </div>
+            Onboarding in progress
+          </div>
+          <button class="action-btn primary">+ New hire</button>
+        </div>
+        <div style="margin-bottom:14px">
+          <div class="onboard-name">Sarah M.</div>
+          <div class="onboard-role">PT Circulation Clerk · Starts Apr 21</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:35%"></div></div>
+          <div class="progress-label">5 of 14 tasks complete · 6 days to start</div>
+        </div>
+        <div>
+          <div class="onboard-name">James T.</div>
+          <div class="onboard-role">FT Reference Librarian · Starts May 5</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:10%"></div></div>
+          <div class="progress-label">2 of 14 tasks complete · 20 days to start</div>
+        </div>
+        <div class="onboard-divider">
+          <div class="section-micro-label">Urgent tasks</div>
+          <div class="task-row">
+            <div class="task-check"></div>
+            <div class="task-text">Set up Google Workspace account — Sarah M.</div>
+            <div class="task-due urgent">2 days</div>
+          </div>
+          <div class="task-row">
+            <div class="task-check"></div>
+            <div class="task-text">Order ID badge — Sarah M.</div>
+            <div class="task-due urgent">2 days</div>
+          </div>
+          <div class="task-row">
+            <div class="task-check done"></div>
+            <div class="task-text done">Send welcome email — James T.</div>
+            <div class="task-due">Done</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LocalHop Event Calendar card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon" style="background:#E1F5EE">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            Upcoming events
+          </div>
+        </div>
+        <div class="localhop-mini-list-embed" data-configid="PoAsnkdPsV" data-layout="list" data-limit="6" data-description="no" data-overlay="0" data-showcreatedigest="1"></div>
+        <script type="text/javascript" src="file://events.getlocalhop.com/widgets/embed-mini-list-js"></script></div></div></div></div></body></html>
