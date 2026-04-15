@@ -351,7 +351,7 @@
             </div>
             Policies
           </div>
-          <span class="badge badge-purple" id="policy-count">10 docs</span>
+          <span class="badge badge-purple" id="policy-count">39 docs</span>
         </div>
         <div class="search-bar">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -362,6 +362,7 @@
           <button class="filter-btn badge-gray" onclick="setPolicyFilter('patrons', this)">Patrons</button>
           <button class="filter-btn badge-gray" onclick="setPolicyFilter('staff', this)">Staff</button>
           <button class="filter-btn badge-gray" onclick="setPolicyFilter('services', this)">Services</button>
+          <button class="filter-btn badge-gray" onclick="setPolicyFilter('board', this)">Board</button>
           <button class="filter-btn badge-gray" onclick="setPolicyFilter('general', this)">General</button>
         </div>
         <div id="policy-list" style="max-height:148px;overflow-y:auto;"></div>
@@ -424,23 +425,53 @@
 
 <script>
   var policies = [
-    { name: "Vision & Mission", tag: "general", url: "https://docs.google.com/document/d/1Kq7sIJbOqI7e2EhZ_jxfHtjnDDnsYrvy/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Notary Policy", tag: "staff", url: "https://docs.google.com/document/d/1M4wzr5R8-seUowV0G1R8hdo-JJp-KEHd/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Computer, Internet & Printing Policy", tag: "services", url: "https://docs.google.com/document/d/1KORiK6f4clirpx2eEudCUuCiu2pcYpuY/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Collection Development, Deselection & Reconsideration Policy", tag: "services", url: "https://docs.google.com/document/d/1TSgLtFVq73p8QeSA8DcKmUOSRdDJgK0w/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Circulation Policy", tag: "services", url: "https://docs.google.com/document/d/1YXsVJpGG-K8suMOUVF3VMfoVpD_zE2IC/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Patron Behavior Policy", tag: "patrons", url: "https://docs.google.com/document/d/1Lrwc_DeGMG2_cKrEZ-TJA08roTK0TpR_/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Staff Device Use Policy", tag: "staff", url: "https://docs.google.com/document/d/1LoSABfe2NT0DKXYqxUsQ5OMXVE3lz8QR/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Inclement Weather & Emergency Closings", tag: "staff", url: "https://docs.google.com/document/d/1Ksf6XSD0GtOBS5eMOUjmOMJh9-7o98AZ/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Public Health Crisis Policy", tag: "patrons", url: "https://docs.google.com/document/d/1Lc6EQQ-L5zq4bMWlpuFbFUpUc5Gv_ed3/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Unattended Child Policy", tag: "patrons", url: "https://docs.google.com/document/d/1LXdhfcJhF1a6DiAI-u6-heg1NdmygCUf/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" }
+    { name: "Vision & Mission Statements", tag: "general", url: "https://docs.google.com/document/d/1Kq7sIJbOqI7e2EhZ_jxfHtjnDDnsYrvy/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.0 Hours of Operation", tag: "staff", url: "https://docs.google.com/document/d/1U6mqphls6nLjtxqiBhbIqLAiyRgze56K/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.1 Closings – Inclement Weather and Emergency", tag: "staff", url: "https://docs.google.com/document/d/1LXIb21n1AWAyZtspyBzFKkRZKihj_UE7/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.2 Delegation of Responsibility Policy", tag: "staff", url: "https://docs.google.com/document/d/1M0B_58SrozA7qxmTjsx6yJh17kxPZds8/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.3 Display Case Policy", tag: "patrons", url: "https://docs.google.com/document/d/1LSLY1pCOBSinc7JveIuwgtrPyG6txAKv/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.4 Sale of Items", tag: "patrons", url: "https://docs.google.com/document/d/1LONjtB5bdeg6UWaySYaV23bq1qERHV2w/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.5 Exhibit Policy", tag: "patrons", url: "https://docs.google.com/document/d/1LSxBNbLTbEXYXaePgXZTRnf2tdqQuDBt/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.6 Program Room Use by Community Groups & Organizations", tag: "patrons", url: "https://docs.google.com/document/d/1LTzpkbT7XNKEOWdz4i2wRGeKwRrV0PDL/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.7 Tangible Gifts Policy", tag: "patrons", url: "https://docs.google.com/document/d/1K5BX8TlMhOiZbN7adT93cwAr2eN4R994/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.8 Public Comments at Library Board Meetings", tag: "patrons", url: "https://docs.google.com/document/d/1LsfpmMxlrQ0c0fEMgqlPcv9KJLN6jsLL/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "1.9 Confidentiality of Library Records", tag: "patrons", url: "https://docs.google.com/document/d/1LNi_LerwzFvktC72MYW-ALcgq6_AtysK/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "2.1 Patron Service Policy", tag: "services", url: "https://docs.google.com/document/d/1KWhPL12f1kKyWGCCg4Lyg8J_NlAJwES6/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "2.2 Circulation Policy", tag: "services", url: "https://docs.google.com/document/d/1YXsVJpGG-K8suMOUVF3VMfoVpD_zE2IC/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "2.3 Fines", tag: "services", url: "https://docs.google.com/document/d/1qA5vXqrkP9ty5U1cH31JGLACxbPMR9bh/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "2.4 Collection Development, Deselection & Reconsideration Policy", tag: "services", url: "https://docs.google.com/document/d/1TSgLtFVq73p8QeSA8DcKmUOSRdDJgK0w/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "2.5 Notary Services Policy", tag: "services", url: "https://docs.google.com/document/d/1M4wzr5R8-seUowV0G1R8hdo-JJp-KEHd/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "2.6 Computer, Internet & Printing Acceptable Use Policy", tag: "services", url: "https://docs.google.com/document/d/1KORiK6f4clirpx2eEudCUuCiu2pcYpuY/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "2.7 Copyright Policy", tag: "services", url: "https://docs.google.com/document/d/1LYl6VUHly-dyiKPK0235Fuymo3Q2N6Y1/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "2.8 Hotspot Policy", tag: "services", url: "https://docs.google.com/document/d/1L7Xk8QGU_-GAQaLQtr9S2aC5RaAtK3Xy/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "3.0 Programming Policy", tag: "services", url: "https://docs.google.com/document/d/1M5_oRvDp_eXYLlcN-RAFBe7jAYbEQg7f/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "4.0 Patron Behavior Policy", tag: "patrons", url: "https://docs.google.com/document/d/1Lrwc_DeGMG2_cKrEZ-TJA08roTK0TpR_/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "5.0 Unattended Child Policy", tag: "patrons", url: "https://docs.google.com/document/d/1LXdhfcJhF1a6DiAI-u6-heg1NdmygCUf/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "6.0 Public Health Crisis/Pandemic Policy", tag: "patrons", url: "https://docs.google.com/document/d/1Lc6EQQ-L5zq4bMWlpuFbFUpUc5Gv_ed3/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "7.0 Digital Video Surveillance Policy", tag: "patrons", url: "https://docs.google.com/document/d/1S7Y1BK9xmEv8UYwS5SbKHaEu4G8wgR7A/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "8.1 HR Resources and Organizational Design/Staffing Policies", tag: "staff", url: "https://docs.google.com/document/d/1LqInjYnlL_FwcrrVz3iC8EqAlFCkTToN/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "8.2 General Personnel Policy", tag: "staff", url: "https://docs.google.com/document/d/1TkguL_ta-BlKVz4cg0fi0zWmEKus3GVu/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "8.3 Vacation Leave Policy", tag: "staff", url: "https://docs.google.com/document/d/1ZDzSZ873hk-uaKC68IQSMo07Jw5wcldD/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "8.4 Sick Leave Policy", tag: "staff", url: "https://docs.google.com/document/d/1v2K5sEXzKrsQ9dSi5dlDZIJVoJmBS1Ny/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "8.5 Personal Time", tag: "staff", url: "https://docs.google.com/document/d/1kb27FyvzEUxiRNMrbOUWAECVe5LalKhC/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "8.6 Bereavement Leave", tag: "staff", url: "https://docs.google.com/document/d/1sOOKmvadL1OXShsTWnI1brtaKoAoN3-c/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "8.7 Jury Duty", tag: "staff", url: "https://docs.google.com/document/d/1H-GFriwh80iocAy_ZMdrnSCYxnctutZt/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "8.8 Attendance, Punctuality & Dependability", tag: "staff", url: "https://docs.google.com/document/d/1e2A4uG6qRec17oFKzJiktMElYARTAFkV/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "9.0 Staff Device Use Policy", tag: "staff", url: "https://docs.google.com/document/d/1Y-kDT64_8Daeix6UN5rlYtnTkdXwYkbt/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "9.1 Device Use Guidelines", tag: "staff", url: "https://docs.google.com/document/d/1I2fksnx6MEPYQCjGClNRMbsoK4XaamfE/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "10.0 Board of Trustees – Roles & Responsibilities", tag: "board", url: "https://docs.google.com/document/d/1byKAZMbNuhV63UZkDwaLnH8f3ckoOgDi/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "10.1 Bylaws", tag: "board", url: "https://docs.google.com/document/d/1jPOmZWbO8ATi4_og5fK5dXf_mcdG8tu0/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "10.2 Trustee Job Description", tag: "board", url: "https://docs.google.com/document/d/1KfXUv6Vz20R7WHRlH2bTMQ8L3Xwypfss/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "10.3 Financial Matters – Library Board & Library Director", tag: "board", url: "https://docs.google.com/document/d/1lPqG9r9vCysOE3jyXP0TqOYZnv3rRJSW/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "10.4 Standing Committees", tag: "board", url: "https://docs.google.com/document/d/1VZwvKVUVRccD61CM4X_q_Raj97bWygk3/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" }
   ];
 
   var tagBadges = {
     general:  { cls: 'badge-blue',   label: 'General' },
     staff:    { cls: 'badge-purple', label: 'Staff' },
     services: { cls: 'badge-green',  label: 'Services' },
-    patrons:  { cls: 'badge-amber',  label: 'Patrons' }
+    patrons:  { cls: 'badge-amber',  label: 'Patrons' },
+    board:    { cls: 'badge-red',    label: 'Board' }
   };
 
   var currentPolicyFilter = 'all';
@@ -463,6 +494,7 @@
         row.target = '_blank';
         row.className = 'policy-row';
         row.style.textDecoration = 'none';
+        row.style.color = '#1a1a19';
         row.innerHTML = '<span class="policy-name">' + p.name + '</span><span class="badge ' + badge.cls + '">' + badge.label + '</span>';
         list.appendChild(row);
         visible++;
