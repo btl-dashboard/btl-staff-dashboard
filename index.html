@@ -973,26 +973,13 @@
   }
 
   function printContent(html) {
-    var frame = document.getElementById('print-frame');
-    frame.style.position = 'fixed';
-    frame.style.top = '0';
-    frame.style.left = '0';
-    frame.style.width = '100%';
-    frame.style.height = '100%';
-    frame.contentDocument.open();
-    frame.contentDocument.write(html);
-    frame.contentDocument.close();
-    setTimeout(function() {
-      frame.contentWindow.focus();
-      frame.contentWindow.print();
-      setTimeout(function() {
-        frame.style.position = 'fixed';
-        frame.style.top = '-9999px';
-        frame.style.left = '-9999px';
-        frame.style.width = '1px';
-        frame.style.height = '1px';
-      }, 1000);
-    }, 500);
+    var blob = new Blob([html], { type: 'text/html' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.click();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
   }
 
   function printHireSummary() {
@@ -1051,7 +1038,7 @@
       '<div><label>COMPLETED BY</label></div>' +
       '<div><label>DATE</label></div>' +
       '</div>' +
-      
+      '<script>window.onload=function(){window.print();}<\/script>' +
       '</body></html>';
 
     printContent(html);
@@ -1119,7 +1106,7 @@
       '<div class="sig" style="margin-top:1.5rem;">' +
       '<div><label>SUPERVISOR SIGNATURE</label></div>' +
       '</div>' +
-      
+      '<script>window.onload=function(){window.print();}<\/script>' +
       '</body></html>';
 
     printContent(html);
