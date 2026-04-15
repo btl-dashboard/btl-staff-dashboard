@@ -748,9 +748,9 @@
     { id: 'otc',   section: 'Security & Township Property', text: 'Remove employee from timeclock', flag: null },
     { id: 'odb',   section: 'Security & Township Property', text: 'Remove access to external company databases', flag: null },
     { id: 'oitp',  section: 'IT Requests', text: 'Return Township issued cell phone to IT', flag: null },
-    { id: 'oem',   section: 'IT Requests', text: 'Deactivate employee email — forward? auto reply?', flag: null },
+    { id: 'oem',   section: 'IT Requests', text: 'Deactivate employee email', flag: null },
     { id: 'ocl',   section: 'IT Requests', text: 'Deactivate employee computer login', flag: null },
-    { id: 'oel',   section: 'IT Requests', text: 'Remove employee email address from "Everyone" list', flag: null },
+    { id: 'oel',   section: 'IT Requests', text: 'Remove employee email from Township "Everyone" list and BTL "All Staff" list', flag: null },
     { id: 'oph',   section: 'IT Requests', text: 'Remove employee from phone system/caller ID', flag: null }
   ];
 
@@ -817,9 +817,10 @@
     var el = document.getElementById('active-hires-list');
     if (!hires.length) { el.innerHTML = '<div style="font-size:13px;color:#888;padding:8px 0;">No active onboarding checklists.</div>'; return; }
     el.innerHTML = hires.map(function(h) {
-      var done = Object.values(h.statuses).filter(function(s) { return s !== 'pending'; }).length;
-      var total = onboardTasks.filter(function(t) { return taskVisible(t, h.type); }).length;
-      var pct = Math.round(done / Object.keys(h.statuses).length * 100);
+      var visibleTasks = onboardTasks.filter(function(t) { return taskVisible(t, h.type); });
+      var done = visibleTasks.filter(function(t) { return h.statuses[t.id] !== 'pending'; }).length;
+      var total = visibleTasks.length;
+      var pct = Math.round(done / total * 100);
       var isOpen = currentHireId === h.id;
       var chevron = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition:transform 0.2s;transform:rotate(' + (isOpen ? '180' : '0') + 'deg);flex-shrink:0;"><polyline points="6,9 12,15 18,9"/></svg>';
       return '<div class="active-hire-tab' + (isOpen ? ' selected' : '') + '" onclick="loadHireChecklist(\'' + h.id + '\')">' +
@@ -885,8 +886,9 @@
       if (!sections[t.section]) sections[t.section] = [];
       sections[t.section].push(t);
     });
-    var done = Object.values(hire.statuses).filter(function(s) { return s !== 'pending'; }).length;
-    var total = Object.keys(hire.statuses).length;
+    var visibleTasks = onboardTasks.filter(function(t) { return taskVisible(t, hire.type); });
+    var done = visibleTasks.filter(function(t) { return hire.statuses[t.id] !== 'pending'; }).length;
+    var total = visibleTasks.length;
     var pct = Math.round(done / total * 100);
     document.getElementById('checklist-progress-bar').style.width = pct + '%';
     document.getElementById('checklist-progress-label').textContent = done + ' of ' + total + ' tasks complete';
@@ -950,7 +952,6 @@
             '<option value=""' + (emailAction === '' ? ' selected' : '') + '>— Select action —</option>' +
             '<option value="deactivate"' + (emailAction === 'deactivate' ? ' selected' : '') + '>Fully deactivate</option>' +
             '<option value="forward"' + (emailAction === 'forward' ? ' selected' : '') + '>Set up forwarding</option>' +
-            '<option value="autoreply"' + (emailAction === 'autoreply' ? ' selected' : '') + '>Set up auto-reply</option>' +
             '</select>';
         }
         html += '<div class="checklist-item">' +
@@ -1000,7 +1001,7 @@
       sections[sec].forEach(function(t) {
         var status = hire.statuses[t.id] || 'pending';
         var dateStr = (hire.dates && hire.dates[t.id]) ? hire.dates[t.id] : '';
-        var completed = status === 'completed' ? dateStr : '';
+        var completed = status === 'completed' ? dateStr : (status === 'na' ? 'N/A' : '');
         var na = status === 'na' ? '✓' : '';
         rows += '<tr>' +
           '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td>' +
@@ -1061,11 +1062,11 @@
       sections[sec].forEach(function(t) {
         var status = term.statuses[t.id] || 'pending';
         var dateStr = (term.dates && term.dates[t.id]) ? term.dates[t.id] : '';
-        var completed = status === 'completed' ? dateStr : '';
+        var completed = status === 'completed' ? dateStr : (status === 'na' ? 'N/A' : '');
         var na = status === 'na' ? '✓' : '';
         var taskText = t.text;
         if (t.id === 'oem' && term.emailAction) {
-          var actionLabels = { deactivate: 'Fully deactivate', forward: 'Set up forwarding', autoreply: 'Set up auto-reply' };
+          var actionLabels = { deactivate: 'Fully deactivate', forward: 'Set up forwarding' };
           taskText += ' (' + (actionLabels[term.emailAction] || term.emailAction) + ')';
         }
         rows += '<tr>' +
@@ -1161,8 +1162,9 @@
     if (hires.length) {
       html += '<div style="font-size:12px;font-weight:500;color:#888;margin-bottom:8px;">Onboarding</div>';
       hires.forEach(function(h) {
-        var done = Object.values(h.statuses).filter(function(s) { return s !== 'pending'; }).length;
-        var total = Object.keys(h.statuses).length;
+        var visibleTasks = onboardTasks.filter(function(t) { return taskVisible(t, h.type); });
+        var done = visibleTasks.filter(function(t) { return h.statuses[t.id] !== 'pending'; }).length;
+        var total = visibleTasks.length;
         var pct = Math.round(done / total * 100);
         html += '<div style="margin-bottom:12px;">' +
           '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">' +
