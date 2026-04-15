@@ -108,7 +108,7 @@
   .flag-na{background:#f0efe9;color:#5F5E5A}
   .status-btn{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid #e5e5e0;background:transparent;cursor:pointer;color:#888;transition:all 0.15s;flex-shrink:0}
   .status-btn.completed{background:#EAF3DE;border-color:#3B6D11;color:#3B6D11;font-weight:500}
-  .status-btn.na{background:#f0efe9;border-color:#888;color:#5F5E5A;font-weight:500}
+  .status-btn.na{background:#FAEEDA;border-color:#EF9F27;color:#854F0B;font-weight:500}
   .hire-card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem}
   .hire-form input, .hire-form select{width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px}
   .hire-form label{font-size:12px;color:#666;margin-bottom:4px;display:block}
@@ -226,9 +226,9 @@
 
     <div class="metrics-row" style="grid-template-columns:repeat(3,1fr)">
       <div class="metric">
-        <div class="metric-label">Active onboarding</div>
-        <div class="metric-val">2</div>
-        <div class="metric-sub">staff members</div>
+        <div class="metric-label">Active Onboarding/Offboarding</div>
+        <div class="metric-val" id="home-onboard-count">—</div>
+        <div class="metric-sub" id="home-onboard-sub">loading...</div>
       </div>
       <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between;background:#E6F1FB;border-radius:8px;padding:0.875rem 1rem;">
         <div>
@@ -258,46 +258,19 @@
     <div class="grid-2">
       <!-- Onboarding card -->
       <div class="card">
-        <div class="card-header">
+        <div class="card-header" style="flex-direction:column;align-items:flex-start;gap:10px;">
           <div class="card-title">
             <div class="card-icon" style="background:#E6F1FB">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
             </div>
-            Onboarding in progress
+            Onboarding & Offboarding
           </div>
-          <button class="action-btn primary">+ New hire</button>
-          <button class="action-btn" style="background:#FAEEDA;border-color:#EF9F27;color:#854F0B;margin-left:6px;">+ Employee Term</button>
-        </div>
-        <div style="margin-bottom:14px">
-          <div class="onboard-name">Sarah M.</div>
-          <div class="onboard-role">PT Circulation Clerk · Starts Apr 21</div>
-          <div class="progress-bar"><div class="progress-fill" style="width:35%"></div></div>
-          <div class="progress-label">5 of 14 tasks complete · 6 days to start</div>
-        </div>
-        <div>
-          <div class="onboard-name">James T.</div>
-          <div class="onboard-role">FT Reference Librarian · Starts May 5</div>
-          <div class="progress-bar"><div class="progress-fill" style="width:10%"></div></div>
-          <div class="progress-label">2 of 14 tasks complete · 20 days to start</div>
-        </div>
-        <div class="onboard-divider">
-          <div class="section-micro-label">Urgent tasks</div>
-          <div class="task-row">
-            <div class="task-check"></div>
-            <div class="task-text">Set up Google Workspace account — Sarah M.</div>
-            <div class="task-due urgent">2 days</div>
-          </div>
-          <div class="task-row">
-            <div class="task-check"></div>
-            <div class="task-text">Order ID badge — Sarah M.</div>
-            <div class="task-due urgent">2 days</div>
-          </div>
-          <div class="task-row">
-            <div class="task-check done"></div>
-            <div class="task-text done">Send welcome email — James T.</div>
-            <div class="task-due">Done</div>
+          <div style="display:flex;gap:8px;width:100%;">
+            <button class="action-btn primary" style="flex:1;text-align:center;" onclick="showPage('onboarding')">+ New Hire</button>
+            <button class="action-btn" style="flex:1;text-align:center;background:#FAEEDA;border-color:#EF9F27;color:#854F0B;" onclick="showPage('offboarding')">+ Employee Term</button>
           </div>
         </div>
+        <div id="home-onboard-content"></div>
       </div>
 
       <!-- LocalHop Event Calendar card -->
@@ -495,6 +468,7 @@
           </div>
           <div style="display:flex;gap:8px;align-items:center;">
             <div id="checklist-progress-label" style="font-size:12px;color:#888;"></div>
+            <button class="action-btn" onclick="printHireSummary()">Print summary</button>
             <button id="delete-hire-btn" class="action-btn" style="color:#A32D2D;border-color:#A32D2D;" onclick="confirmDelete('onboard')">Delete</button>
             <span id="delete-hire-confirm" style="display:none;font-size:12px;color:#A32D2D;">Are you sure? <a href="#" onclick="deleteHire(currentHireId,'onboard');return false;" style="color:#A32D2D;font-weight:500;">Yes, delete</a> · <a href="#" onclick="document.getElementById('delete-hire-confirm').style.display='none';document.getElementById('delete-hire-btn').style.display='inline-block';return false;" style="color:#888;">Cancel</a></span>
           </div>
@@ -706,6 +680,7 @@
     renderPolicies();
     renderActiveHires();
     renderActiveTerms();
+    renderHomeOnboardCard();
   });
 
   // PAGE NAVIGATION
@@ -765,18 +740,18 @@
     { id: 'odpw',  section: 'HR & Administration', text: 'Email DPW — deactivate gas code', flag: null },
     { id: 'oweb',  section: 'HR & Administration', text: 'Remove employee contact information from dept. website', flag: null },
     { id: 'owl',   section: 'HR & Administration', text: 'Request website login be disabled (email Jen Gander)', flag: null },
-    { id: 'okey',  section: 'Security & Township Property', text: 'Collect building/vehicle keys', flag: null },
+    { id: 'okey',  section: 'Security & Township Property', text: 'Collect building keys', flag: null },
     { id: 'odev',  section: 'Security & Township Property', text: 'Collect Township issued cell phone/computer', flag: null },
     { id: 'obad',  section: 'Security & Township Property', text: 'Collect Township photo ID badge', flag: null },
     { id: 'ounif', section: 'Security & Township Property', text: 'Collect uniform', flag: null },
     { id: 'ovm',   section: 'Security & Township Property', text: 'Obtain/change employee voicemail password', flag: null },
     { id: 'otc',   section: 'Security & Township Property', text: 'Remove employee from timeclock', flag: null },
     { id: 'odb',   section: 'Security & Township Property', text: 'Remove access to external company databases', flag: null },
-    { id: 'oitp',  section: 'IT Requests (via Workorder System)', text: 'Return Township issued cell phone to IT', flag: null },
-    { id: 'oem',   section: 'IT Requests (via Workorder System)', text: 'Deactivate employee email — forward? auto reply?', flag: null },
-    { id: 'ocl',   section: 'IT Requests (via Workorder System)', text: 'Deactivate employee computer login', flag: null },
-    { id: 'oel',   section: 'IT Requests (via Workorder System)', text: 'Remove employee email address from "Everyone" list', flag: null },
-    { id: 'oph',   section: 'IT Requests (via Workorder System)', text: 'Remove employee from phone system/caller ID', flag: null }
+    { id: 'oitp',  section: 'IT Requests', text: 'Return Township issued cell phone to IT', flag: null },
+    { id: 'oem',   section: 'IT Requests', text: 'Deactivate employee email — forward? auto reply?', flag: null },
+    { id: 'ocl',   section: 'IT Requests', text: 'Deactivate employee computer login', flag: null },
+    { id: 'oel',   section: 'IT Requests', text: 'Remove employee email address from "Everyone" list', flag: null },
+    { id: 'oph',   section: 'IT Requests', text: 'Remove employee from phone system/caller ID', flag: null }
   ];
 
   var currentHireId = null;
@@ -816,6 +791,7 @@
     document.getElementById('hire-type').value = '';
     renderActiveHires();
     loadHireChecklist(id);
+    renderHomeOnboardCard();
   }
 
   function createTerm() {
@@ -833,6 +809,7 @@
     document.getElementById('term-lastday').value = '';
     renderActiveTerms();
     loadTermChecklist(id);
+    renderHomeOnboardCard();
   }
 
   function renderActiveHires() {
@@ -918,8 +895,9 @@
       html += '<div class="checklist-section"><div class="checklist-section-title">' + sec + '</div>';
       sections[sec].forEach(function(t) {
         var status = hire.statuses[t.id] || 'pending';
+        var dateStr = (hire.dates && hire.dates[t.id]) ? '<span style="font-size:10px;color:#3B6D11;margin-left:6px;">' + hire.dates[t.id] + '</span>' : '';
         html += '<div class="checklist-item">' +
-          '<div class="checklist-item-text">' + t.text + '</div>' +
+          '<div class="checklist-item-text">' + t.text + dateStr + '</div>' +
           (t.flag ? flagLabel(t.flag) : '') +
           '<button class="status-btn ' + (status === 'completed' ? 'completed' : '') + '" onclick="setTaskStatus(\'' + hire.id + '\',\'' + t.id + '\',\'completed\',\'onboard\')">' + (status === 'completed' ? '✓ Done' : 'Done') + '</button>' +
           '<button class="status-btn ' + (status === 'na' ? 'na' : '') + '" onclick="setTaskStatus(\'' + hire.id + '\',\'' + t.id + '\',\'na\',\'onboard\')">N/A</button>' +
@@ -965,8 +943,18 @@
       sections[sec].forEach(function(t) {
         var status = term.statuses[t.id] || 'pending';
         var dateStr = (term.dates && term.dates[t.id]) ? '<span style="font-size:10px;color:#3B6D11;margin-left:6px;">' + term.dates[t.id] + '</span>' : '';
+        var emailDropdown = '';
+        if (t.id === 'oem') {
+          var emailAction = term.emailAction || '';
+          emailDropdown = '<select onchange="setEmailAction(\'' + term.id + '\', this.value)" style="font-size:11px;padding:3px 6px;border:1px solid #e5e5e0;border-radius:6px;background:#f5f5f3;color:#555;font-family:inherit;margin-left:6px;cursor:pointer;">' +
+            '<option value=""' + (emailAction === '' ? ' selected' : '') + '>— Select action —</option>' +
+            '<option value="deactivate"' + (emailAction === 'deactivate' ? ' selected' : '') + '>Fully deactivate</option>' +
+            '<option value="forward"' + (emailAction === 'forward' ? ' selected' : '') + '>Set up forwarding</option>' +
+            '<option value="autoreply"' + (emailAction === 'autoreply' ? ' selected' : '') + '>Set up auto-reply</option>' +
+            '</select>';
+        }
         html += '<div class="checklist-item">' +
-          '<div class="checklist-item-text">' + t.text + dateStr + '</div>' +
+          '<div class="checklist-item-text" style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">' + t.text + dateStr + emailDropdown + '</div>' +
           '<button class="status-btn ' + (status === 'completed' ? 'completed' : '') + '" onclick="setTaskStatus(\'' + term.id + '\',\'' + t.id + '\',\'completed\',\'offboard\')">' + (status === 'completed' ? '✓ Done' : 'Done') + '</button>' +
           '<button class="status-btn ' + (status === 'na' ? 'na' : '') + '" onclick="setTaskStatus(\'' + term.id + '\',\'' + t.id + '\',\'na\',\'offboard\')">N/A</button>' +
           '</div>';
@@ -974,6 +962,99 @@
       html += '</div>';
     });
     document.getElementById('offboard-tasks').innerHTML = html;
+  }
+
+  function setEmailAction(termId, value) {
+    var terms = getTerms();
+    var term = terms.find(function(t) { return t.id === termId; });
+    if (!term) return;
+    term.emailAction = value;
+    saveTerms(terms);
+  }
+
+  function printContent(html) {
+    var frame = document.getElementById('print-frame');
+    frame.style.position = 'fixed';
+    frame.style.top = '0';
+    frame.style.left = '0';
+    frame.style.width = '100%';
+    frame.style.height = '100%';
+    frame.contentDocument.open();
+    frame.contentDocument.write(html);
+    frame.contentDocument.close();
+    setTimeout(function() {
+      frame.contentWindow.focus();
+      frame.contentWindow.print();
+      setTimeout(function() {
+        frame.style.position = 'fixed';
+        frame.style.top = '-9999px';
+        frame.style.left = '-9999px';
+        frame.style.width = '1px';
+        frame.style.height = '1px';
+      }, 1000);
+    }, 500);
+  }
+
+  function printHireSummary() {
+    var hires = getHires();
+    var hire = hires.find(function(h) { return h.id === currentHireId; });
+    if (!hire) return;
+
+    var sections = {};
+    onboardTasks.forEach(function(t) {
+      if (!taskVisible(t, hire.type)) return;
+      if (!sections[t.section]) sections[t.section] = [];
+      sections[t.section].push(t);
+    });
+
+    var rows = '';
+    Object.keys(sections).forEach(function(sec) {
+      rows += '<tr><td colspan="3" style="background:#f5f5f3;font-weight:600;padding:8px 10px;font-size:12px;border-top:2px solid #ccc;">' + sec + '</td></tr>';
+      sections[sec].forEach(function(t) {
+        var status = hire.statuses[t.id] || 'pending';
+        var dateStr = (hire.dates && hire.dates[t.id]) ? hire.dates[t.id] : '';
+        var completed = status === 'completed' ? dateStr : '';
+        var na = status === 'na' ? '✓' : '';
+        rows += '<tr>' +
+          '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td>' +
+          '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:60px;text-align:center;">' + na + '</td>' +
+          '<td style="padding:6px 10px;border-bottom:1px solid #eee;">' + t.text + '</td>' +
+          '</tr>';
+      });
+    });
+
+    var html = '<!DOCTYPE html><html><head><title>Employee Onboarding Checklist</title>' +
+      '<style>body{font-family:Arial,sans-serif;font-size:13px;margin:2rem;color:#1a1a19;}' +
+      'h2{font-size:16px;margin-bottom:4px;}' +
+      '.meta{display:flex;gap:2rem;margin-bottom:1.5rem;font-size:13px;flex-wrap:wrap;}' +
+      '.meta div{border-bottom:1px solid #333;min-width:180px;padding-bottom:2px;}' +
+      '.meta label{font-size:11px;color:#666;display:block;margin-bottom:2px;}' +
+      'table{width:100%;border-collapse:collapse;}' +
+      'th{text-align:left;font-size:11px;color:#666;padding:6px 10px;border-bottom:2px solid #333;}' +
+      '.sig{margin-top:2rem;display:flex;gap:3rem;}' +
+      '.sig div{border-bottom:1px solid #333;min-width:220px;padding-bottom:2px;}' +
+      '.sig label{font-size:11px;color:#666;display:block;margin-bottom:20px;}' +
+      '@media print{body{margin:1rem;}}' +
+      '</style></head><body>' +
+      '<h2>EMPLOYEE ONBOARDING CHECKLIST</h2>' +
+      '<p style="font-size:12px;color:#555;margin-bottom:1rem;">Bernards Township Library</p>' +
+      '<div class="meta">' +
+      '<div><label>EMPLOYEE NAME</label>' + hire.name + '</div>' +
+      '<div><label>DATE OF HIRE</label>' + (hire.dateofhire ? formatDate(hire.dateofhire) : '—') + '</div>' +
+      '<div><label>START DATE</label>' + formatDate(hire.start) + '</div>' +
+      '<div><label>EMPLOYMENT TYPE</label>' + typeLabel(hire.type) + '</div>' +
+      '</div>' +
+      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th style="width:60px;">N/A</th><th>TASK</th></tr></thead><tbody>' +
+      rows +
+      '</tbody></table>' +
+      '<div class="sig">' +
+      '<div><label>COMPLETED BY</label></div>' +
+      '<div><label>DATE</label></div>' +
+      '</div>' +
+      
+      '</body></html>';
+
+    printContent(html);
   }
 
   function printTermSummary() {
@@ -995,10 +1076,15 @@
         var dateStr = (term.dates && term.dates[t.id]) ? term.dates[t.id] : '';
         var completed = status === 'completed' ? dateStr : '';
         var na = status === 'na' ? '✓' : '';
+        var taskText = t.text;
+        if (t.id === 'oem' && term.emailAction) {
+          var actionLabels = { deactivate: 'Fully deactivate', forward: 'Set up forwarding', autoreply: 'Set up auto-reply' };
+          taskText += ' (' + (actionLabels[term.emailAction] || term.emailAction) + ')';
+        }
         rows += '<tr>' +
           '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td>' +
           '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:60px;text-align:center;">' + na + '</td>' +
-          '<td style="padding:6px 10px;border-bottom:1px solid #eee;">' + t.text + '</td>' +
+          '<td style="padding:6px 10px;border-bottom:1px solid #eee;">' + taskText + '</td>' +
           '</tr>';
       });
     });
@@ -1033,12 +1119,10 @@
       '<div class="sig" style="margin-top:1.5rem;">' +
       '<div><label>SUPERVISOR SIGNATURE</label></div>' +
       '</div>' +
-      '<script>window.onload=function(){window.print();}<\/script>' +
+      
       '</body></html>';
 
-    var w = window.open('', '_blank');
-    w.document.write(html);
-    w.document.close();
+    printContent(html);
   }
 
   function setTaskStatus(id, taskId, status, type) {
@@ -1073,6 +1157,55 @@
     }
   }
 
+  function renderHomeOnboardCard() {
+    var hires = getHires();
+    var terms = getTerms();
+    var countEl = document.getElementById('home-onboard-count');
+    var subEl = document.getElementById('home-onboard-sub');
+    var total = hires.length + terms.length;
+    if (countEl) { countEl.textContent = total; }
+    if (subEl) { subEl.textContent = hires.length + ' onboarding · ' + terms.length + ' offboarding'; }
+    var el = document.getElementById('home-onboard-content');
+    if (!hires.length && !terms.length) {
+      el.innerHTML = '<div style="text-align:center;padding:1.5rem 0;color:#aaa;font-size:13px;">Hooray! No onboarding or offboarding in progress.</div>';
+      return;
+    }
+    var html = '';
+    if (hires.length) {
+      html += '<div style="font-size:12px;font-weight:500;color:#888;margin-bottom:8px;">Onboarding</div>';
+      hires.forEach(function(h) {
+        var done = Object.values(h.statuses).filter(function(s) { return s !== 'pending'; }).length;
+        var total = Object.keys(h.statuses).length;
+        var pct = Math.round(done / total * 100);
+        html += '<div style="margin-bottom:12px;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">' +
+          '<div class="onboard-name" style="cursor:pointer;color:#185FA5;" onclick="showPage(\'onboarding\')">' + h.name + '</div>' +
+          '<div style="font-size:11px;color:#888;">' + pct + '% complete</div>' +
+          '</div>' +
+          '<div class="onboard-role">Starts ' + formatDate(h.start) + ' · ' + typeLabel(h.type) + '</div>' +
+          '<div class="progress-bar" style="margin-top:5px;"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
+          '</div>';
+      });
+    }
+    if (terms.length) {
+      html += '<div style="font-size:12px;font-weight:500;color:#888;margin-top:' + (hires.length ? '8px' : '0') + ';margin-bottom:8px;">Offboarding</div>';
+      terms.forEach(function(t) {
+        var done = Object.values(t.statuses).filter(function(s) { return s !== 'pending'; }).length;
+        var total = offboardTasks.length;
+        var pct = Math.round(done / total * 100);
+        html += '<div style="margin-bottom:12px;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">' +
+          '<div class="onboard-name" style="cursor:pointer;color:#854F0B;" onclick="showPage(\'offboarding\')">' + t.name + '</div>' +
+          '<div style="font-size:11px;color:#888;">' + pct + '% complete</div>' +
+          '</div>' +
+          '<div class="onboard-role">Last day ' + formatDate(t.lastDay) + '</div>' +
+          '<div class="progress-bar" style="margin-top:5px;"><div class="progress-fill" style="width:' + pct + '%;background:#EF9F27;"></div></div>' +
+          '</div>';
+      });
+    }
+    el.innerHTML = html;
+  }
+
   function confirmDelete(type) {
     if (type === 'onboard') {
       document.getElementById('delete-hire-btn').style.display = 'none';
@@ -1097,6 +1230,7 @@
       document.getElementById('offboard-checklist-area').style.display = 'none';
       renderActiveTerms();
     }
+    renderHomeOnboardCard();
   }
 
   function typeLabel(type) {
@@ -1129,5 +1263,6 @@
     <button onclick="saveDepartment()" style="width:100%;background:#185FA5;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;">Save & continue</button>
   </div>
 </div>
+<iframe id="print-frame" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;"></iframe>
 </body>
 </html>
