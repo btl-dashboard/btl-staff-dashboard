@@ -736,7 +736,7 @@
   var offboardTasks = [
     { id: 'ohr',   section: 'HR & Administration', text: 'Advise HR of employee termination', flag: null },
     { id: 'oeaf',  section: 'HR & Administration', text: 'Complete Employee Advice Form (attach letter)', flag: null },
-    { id: 'oprf',  section: 'HR & Administration', text: 'Complete Position Requisition Form — send to HR', flag: null },
+    { id: 'oprf',  section: 'HR & Administration', text: 'Complete Position Requisition Form &#8212; send to HR', flag: null },
     { id: 'odpw',  section: 'HR & Administration', text: 'Email DPW — deactivate gas code', flag: null },
     { id: 'oweb',  section: 'HR & Administration', text: 'Remove employee contact information from dept. website', flag: null },
     { id: 'owl',   section: 'HR & Administration', text: 'Request website login be disabled (email Jen Gander)', flag: null },
@@ -1002,10 +1002,8 @@
         var status = hire.statuses[t.id] || 'pending';
         var dateStr = (hire.dates && hire.dates[t.id]) ? hire.dates[t.id] : '';
         var completed = status === 'completed' ? dateStr : (status === 'na' ? 'N/A' : '');
-        var na = status === 'na' ? '✓' : '';
         rows += '<tr>' +
           '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td>' +
-          '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:60px;text-align:center;">' + na + '</td>' +
           '<td style="padding:6px 10px;border-bottom:1px solid #eee;">' + t.text + '</td>' +
           '</tr>';
       });
@@ -1032,7 +1030,7 @@
       '<div><label>START DATE</label>' + formatDate(hire.start) + '</div>' +
       '<div><label>EMPLOYMENT TYPE</label>' + typeLabel(hire.type) + '</div>' +
       '</div>' +
-      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th style="width:60px;">N/A</th><th>TASK</th></tr></thead><tbody>' +
+      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th>TASK</th></tr></thead><tbody>' +
       rows +
       '</tbody></table>' +
       '<div class="sig">' +
@@ -1063,7 +1061,6 @@
         var status = term.statuses[t.id] || 'pending';
         var dateStr = (term.dates && term.dates[t.id]) ? term.dates[t.id] : '';
         var completed = status === 'completed' ? dateStr : (status === 'na' ? 'N/A' : '');
-        var na = status === 'na' ? '✓' : '';
         var taskText = t.text;
         if (t.id === 'oem' && term.emailAction) {
           var actionLabels = { deactivate: 'Fully deactivate', forward: 'Set up forwarding' };
@@ -1071,7 +1068,6 @@
         }
         rows += '<tr>' +
           '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td>' +
-          '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:60px;text-align:center;">' + na + '</td>' +
           '<td style="padding:6px 10px;border-bottom:1px solid #eee;">' + taskText + '</td>' +
           '</tr>';
       });
@@ -1097,7 +1093,7 @@
       '<div><label>EMPLOYEE NAME</label>' + term.name + '</div>' +
       '<div><label>SEPARATION DATE</label>' + formatDate(term.lastDay) + '</div>' +
       '</div>' +
-      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th style="width:60px;">N/A</th><th>TASK</th></tr></thead><tbody>' +
+      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th>TASK</th></tr></thead><tbody>' +
       rows +
       '</tbody></table>' +
       '<div class="sig">' +
