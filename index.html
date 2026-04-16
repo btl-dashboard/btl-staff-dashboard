@@ -225,33 +225,43 @@
     <div class="page-sub" id="today-full-date"></div>
 
     <div class="metrics-row" style="grid-template-columns:repeat(3,1fr)">
-      <div class="metric">
-        <div class="metric-label">Active Onboarding/Offboarding</div>
-        <div class="metric-val" id="home-onboard-count">—</div>
-        <div class="metric-sub" id="home-onboard-sub">loading...</div>
-      </div>
-      <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between;background:#E6F1FB;border-radius:8px;padding:0.875rem 1rem;">
+      <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between;background:#FEF0E0;border-radius:8px;padding:0.875rem 1rem;">
         <div>
-          <div class="metric-label" style="color:#185FA5;display:flex;align-items:center;gap:5px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            My calendar
+          <div class="metric-label" style="color:#E57200;font-weight:500;">Staff Blog</div>
+          <div style="display:flex;align-items:center;gap:10px;margin:10px 0;">
+            <div style="width:36px;height:36px;background:#E57200;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16v2.5a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/><rect x="4" y="10" width="16" height="10" rx="2"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:500;color:#1a1a19;">Bernards Township Library</div>
+              <div style="font-size:11px;color:#1a1a19;">Staff updates &amp; announcements</div>
+            </div>
           </div>
-          <div id="today-date" style="font-size:15px;font-weight:500;color:#0C447C;margin-bottom:8px;"></div>
+        </div>
+        <a href="https://staff.bernardslibrary.org" target="_blank" style="display:inline-block;margin-top:6px;font-size:11px;padding:4px 10px;border:1px solid #E57200;border-radius:7px;background:transparent;color:#E57200;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='#FEF0E0'" onmouseout="this.style.background='transparent'">Open Staff Blog ↗</a>
+      </div>
+      <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between;background:#E0F3F4;border-radius:8px;padding:0.875rem 1rem;">
+        <div>
+          <div class="metric-label" style="color:#007681;font-weight:500;display:flex;align-items:center;gap:5px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#007681" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            My Calendar
+          </div>
+          <div id="today-date" style="font-size:15px;font-weight:500;color:#004F56;margin-bottom:8px;"></div>
           <div id="calendar-content"></div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
-          <a href="https://calendar.google.com" target="_blank" style="font-size:11px;padding:4px 10px;border:1px solid #378ADD;border-radius:7px;background:transparent;color:#185FA5;text-decoration:none;text-align:center;" onmouseover="this.style.background='#B5D4F4'" onmouseout="this.style.background='transparent'">Open Calendar ↗</a>
-          <span id="change-dept" style="font-size:10px;color:#378ADD;cursor:pointer;text-decoration:underline;" onclick="resetDepartment()">Change department</span>
+          <a href="https://calendar.google.com" target="_blank" style="font-size:11px;padding:4px 10px;border:1px solid #007681;border-radius:7px;background:transparent;color:#007681;text-decoration:none;text-align:center;" onmouseover="this.style.background='#B2E0E3'" onmouseout="this.style.background='transparent'">Open Calendar ↗</a>
+          <span id="change-dept" style="font-size:10px;color:#007681;cursor:pointer;text-decoration:underline;" onclick="resetDepartment()">Change department</span>
         </div>
       </div>
-      <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between">
+      <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between;background:#F2F9E0;border-radius:8px;padding:0.875rem 1rem;">
         <div>
-          <div class="metric-label">Visitor traffic today</div>
-          <div class="traffic-val" id="traffic-today">Loading...</div>
-          <div class="traffic-yesterday" id="traffic-yesterday"></div>
+          <div class="metric-label" style="color:#84BD00;font-weight:500;">Visitor Traffic Today</div>
+          <div class="traffic-val" id="traffic-today" style="color:#4A6B00;">Loading...</div>
+          <div class="traffic-yesterday" id="traffic-yesterday" style="color:#84BD00;"></div>
           <div class="traffic-error" id="traffic-error"></div>
         </div>
-        <a href="https://vea.sensourceinc.com" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;padding:4px 10px;border:1px solid #d0d0c8;border-radius:7px;background:transparent;color:#555;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='#f5f5f3'" onmouseout="this.style.background='transparent'">Open Vea ↗</a>
+        <a href="https://vea.sensourceinc.com" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;padding:4px 10px;border:1px solid #84BD00;border-radius:7px;background:transparent;color:#84BD00;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='#E0F0A0'" onmouseout="this.style.background='transparent'">Open Vea ↗</a>
       </div>
     </div>
 
@@ -631,7 +641,7 @@
     if (dept && DEPT_CALENDARS[dept]) {
       content.innerHTML = '<iframe src="' + DEPT_CALENDARS[dept] + '" style="width:100%;height:160px;border:none;border-radius:6px;" frameborder="0" scrolling="no"></iframe>';
     } else {
-      content.innerHTML = '<div style="font-size:11px;color:#378ADD;margin-top:4px;">Open your calendar to view today\'s appointments.</div>';
+      content.innerHTML = '<div style="font-size:11px;color:#1a1a19;margin-top:4px;">Open your calendar to view today\'s appointments.</div>';
     }
   }
 
