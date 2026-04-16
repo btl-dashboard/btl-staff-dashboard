@@ -224,6 +224,9 @@
       <div class="nav-item" onclick="showPage('procedures',this)">
         <div class="nav-dot" style="background:#1D9E75"></div> Procedures
       </div>
+      <div class="nav-item" onclick="showPage('emergency',this)">
+        <div class="nav-dot" style="background:#1D9E75"></div> Emergency
+      </div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Public Services</div>
@@ -712,6 +715,132 @@
         <div id="procedure-page-none" style="display:none;font-size:13px;color:#aaa;padding:1rem 0;text-align:center;">No procedures match your search.</div>
       </div>
     </div><!-- end page-procedures -->
+
+    <!-- EMERGENCY PAGE -->
+    <div id="page-emergency" class="page-section">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div class="page-title">Emergency &amp; Safety</div>
+          <div class="page-sub" style="color:#1a1a19;font-size:15px;">Quick reference for emergencies, important contacts, and safety procedures</div>
+        </div>
+        <a href="https://drive.google.com/file/d/1vQ6FP5Au7HW2PzSsEeI_M-3MzdmdsWFr/view?usp=drive_link" target="_blank" class="action-btn" style="font-size:14px;padding:8px 16px;align-self:center;background:#1D9E75;border-color:#1D9E75;color:white;" onmouseover="this.style.background='#166f53'" onmouseout="this.style.background='#1D9E75'">View Full Emergency Manual ↗</a>
+      </div>
+
+      <!-- Key contacts row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem;">
+        <div style="background:#FCEBEB;border:1px solid #f5c6c6;border-radius:12px;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:13px;font-weight:700;color:#1a1a19;text-transform:uppercase;letter-spacing:0.05em;">Police Non-Emergency</div>
+          <div style="font-size:26px;font-weight:700;color:#1a1a19;letter-spacing:0.03em;">908-766-1122</div>
+          <div style="font-size:13px;color:#1a1a19;">Bernards Township Police</div>
+        </div>
+        <div style="background:#FAEEDA;border:1px solid #f5d9a8;border-radius:12px;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:13px;font-weight:700;color:#1a1a19;text-transform:uppercase;letter-spacing:0.05em;">DPW</div>
+          <div style="font-size:26px;font-weight:700;color:#1a1a19;letter-spacing:0.03em;">908-204-3084</div>
+          <div style="font-size:13px;color:#1a1a19;">Department of Public Works</div>
+        </div>
+        <div style="background:#E6F1FB;border:1px solid #b3d4f0;border-radius:12px;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:13px;font-weight:700;color:#1a1a19;text-transform:uppercase;letter-spacing:0.05em;">After-Hours Contacts</div>
+          <div style="font-size:13px;color:#1a1a19;margin-top:4px;">Director, Board President &amp; DPW emergency contacts</div>
+          <a href="https://docs.google.com/document/d/1xkDbRKnJmOaTrGCDTXDbyrheSVcrEW2U/edit" target="_blank" style="display:inline-block;margin-top:4px;font-size:12px;padding:5px 10px;border:1px solid #185FA5;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;font-weight:500;transition:background 0.15s;" onmouseover="this.style.background='rgba(24,95,165,0.08)'" onmouseout="this.style.background='transparent'">View Contact Info ↗</a>
+        </div>
+      </div>
+
+      <!-- Emergency procedure tiles -->
+      <div style="margin-bottom:0.75rem;font-size:14px;font-weight:600;color:#1a1a19;">Emergency Procedures</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem;">
+
+        <a href="https://docs.google.com/document/d/1SDdt3v6XZXiIERz0HAlVKiBiEXcNNopj/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Fire: Alarm / Evacuation</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Emergency &amp; evacuation procedure</div>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/document/d/1kLriWvab2cZ6vUXYpgnA5GvaAcT64FFM/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Gas Odor Procedure</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">What to do if you smell gas</div>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/document/d/1Xm5uunDSPvmg7Kv_ONqAeEnTb3SChVX-/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Calling 911 / Police</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Emergency situations procedure</div>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/document/d/1i2GvGVtz92YpnEUGlZHO2tXYN59iRfqn/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Problem Situations</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">What to do / who to contact</div>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/document/d/1T4xm5SwLOwrQGZ9p2uiEe1WLZ-UE3XDY/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Fire Boxes, AEDs &amp; Exits</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Locations of safety equipment</div>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/document/d/1z-Bmy_HOmp2aKsRKosTyjZa7hsgSQD4K/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Unattended Children</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Procedure at closing time</div>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/document/d/1vtBt4bsActXMsX9DGCY8tb38Z6SEaLve/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/><line x1="12" y1="2" x2="9" y2="5"/><line x1="12" y1="2" x2="15" y2="5"/><line x1="12" y1="22" x2="9" y2="19"/><line x1="12" y1="22" x2="15" y2="19"/><line x1="2" y1="12" x2="5" y2="9"/><line x1="2" y1="12" x2="5" y2="15"/><line x1="22" y1="12" x2="19" y2="9"/><line x1="22" y1="12" x2="19" y2="15"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Inclement Weather Closing</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Emergency closing procedures</div>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/document/d/1CSvDJXlNSm6ejWMzC3hO9yqij5lGVryS/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Inappropriate Content on PCs</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">What to do on public computers</div>
+          </div>
+        </a>
+
+        <a href="https://docs.google.com/document/d/1zY2jSaCIrfLZQ1J5ZIg23eYWKZmcb2iA/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Fire Alarm Covers &amp; Exit Alarms</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Child-proof covers &amp; door alarms</div>
+          </div>
+        </a>
+
+      </div>
+    </div><!-- end page-emergency -->
 
   </div><!-- end main -->
 </div>
@@ -1521,6 +1650,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     document.getElementById('page-' + page).classList.add('active');
     if (el) el.classList.add('active');
     if (page === 'policies')   renderPoliciesPage();
+    if (page === 'procedures') renderProceduresPage();
     if (page === 'procedures') renderProceduresPage();
   }
 
