@@ -24,7 +24,7 @@
   .nav-item:hover{background:#f5f5f3;color:#1a1a19}
   .nav-item.active{background:#E6F1FB;color:#185FA5;font-weight:500}
   .nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-  .main{flex:1;padding:1.5rem;max-width:960px}
+  .main{flex:1;padding:1.5rem;max-width:1100px}
   .page-title{font-size:18px;font-weight:500;margin-bottom:3px}
   .page-sub{font-size:13px;color:#666;margin-bottom:1.25rem}
   .metrics-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1.25rem}
@@ -45,6 +45,7 @@
   .badge-red{background:#FCEBEB;color:#A32D2D}
   .badge-purple{background:#EEEDFE;color:#534AB7}
   .badge-gray{background:#f0efe9;color:#5F5E5A}
+  .badge-teal{background:#E0F3F4;color:#007681}
   .action-btn{font-size:12px;padding:5px 10px;border:1px solid #d0d0c8;border-radius:8px;background:transparent;color:#555;cursor:pointer;transition:background 0.15s}
   .action-btn:hover{background:#f5f5f3;color:#1a1a19}
   .action-btn.primary{background:#185FA5;border-color:#185FA5;color:white}
@@ -99,8 +100,6 @@
   .checklist-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0efe9;font-size:13px}
   .checklist-item:last-child{border-bottom:none}
   .checklist-item-text{flex:1;color:#1a1a19}
-  .checklist-item-text.ft-only{color:#1a1a19}
-  .checklist-item-text.student-only{color:#1a1a19}
   .checklist-flag{font-size:10px;padding:2px 6px;border-radius:10px;white-space:nowrap;flex-shrink:0}
   .flag-ft{background:#E6F1FB;color:#185FA5}
   .flag-student{background:#EAF3DE;color:#3B6D11}
@@ -116,19 +115,43 @@
   .active-hire-tab:hover{background:#f5f5f3}
   .active-hire-tab.selected{background:#E6F1FB;border-color:#185FA5;color:#185FA5;font-weight:500}
   .hire-progress{font-size:11px;color:#888;margin-left:auto}
+
+  /* ── Hardware Inventory Page ── */
+  .hw-page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px}
+  .hw-stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.25rem}
+  .hw-stat{background:#fff;border:1px solid #e5e5e0;border-radius:10px;padding:0.75rem 1rem;text-align:center}
+  .hw-stat-val{font-size:20px;font-weight:600;margin-bottom:2px}
+  .hw-stat-label{font-size:11px;color:#888}
+  .hw-tab-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:1rem;background:#fff;border:1px solid #e5e5e0;border-radius:10px;padding:6px}
+  .hw-tab{font-size:12px;padding:5px 12px;border-radius:7px;cursor:pointer;border:none;background:transparent;color:#666;font-weight:500;transition:all 0.15s;white-space:nowrap}
+  .hw-tab:hover{background:#f5f5f3;color:#1a1a19}
+  .hw-tab.active{background:#185FA5;color:white}
+  .hw-controls{display:flex;gap:8px;align-items:center;margin-bottom:1rem;flex-wrap:wrap}
+  .hw-search{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e5e0;border-radius:8px;padding:7px 12px;flex:1;min-width:200px}
+  .hw-search input{background:transparent;border:none;outline:none;font-size:13px;color:#1a1a19;flex:1;font-family:inherit}
+  .hw-search input::placeholder{color:#aaa}
+  .hw-table-wrap{background:#fff;border:1px solid #e5e5e0;border-radius:12px;overflow:hidden}
+  .hw-table{width:100%;border-collapse:collapse;font-size:13px}
+  .hw-table thead th{background:#f5f5f3;font-weight:500;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;padding:9px 14px;text-align:left;border-bottom:1px solid #e5e5e0;white-space:nowrap}
+  .hw-table tbody tr{border-bottom:1px solid #f0efe9;transition:background 0.1s}
+  .hw-table tbody tr:last-child{border-bottom:none}
+  .hw-table tbody tr:hover{background:#fafaf8}
+  .hw-table td{padding:9px 14px;vertical-align:middle}
+  .hw-name-cell{font-weight:500}
+  .hw-sub{font-size:11px;color:#888;margin-top:1px}
+  .hw-empty{text-align:center;padding:2.5rem;color:#aaa;font-size:13px}
+  .hw-count-label{font-size:12px;color:#888;margin-bottom:6px}
+  .copy-btn{background:none;border:none;cursor:pointer;color:#aaa;padding:2px 4px;border-radius:4px;font-size:11px;transition:color 0.1s}
+  .copy-btn:hover{color:#185FA5}
+  .hw-tag-mono{font-family:monospace;font-size:11px;background:#f5f5f3;padding:2px 6px;border-radius:4px;color:#555}
 </style>
 <script>
-  /* ============================================================
-     SENSOURCE API CREDENTIALS
-     Replace the values below with your actual Client ID and Secret
-     ============================================================ */
   const PROXY_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbyEJXej4GEqEqsaiPGpLuJ0SP5yhjJLtd6nwJlQ2YgsHKthpfi2rbJiV1YM0sFHQnSz/exec';
 
   async function loadTrafficData() {
     const todayEl     = document.getElementById('traffic-today');
     const yesterdayEl = document.getElementById('traffic-yesterday');
     const errorEl     = document.getElementById('traffic-error');
-
     try {
       const res  = await fetch(PROXY_URL);
       if (!res.ok) throw new Error('Proxy request failed');
@@ -167,16 +190,16 @@
   <div class="sidenav">
     <div class="nav-section">
       <div class="nav-label">Overview</div>
-      <div class="nav-item active" onclick="showPage('home')">
+      <div class="nav-item active" onclick="showPage('home',this)">
         <div class="nav-dot" style="background:#185FA5"></div> Home
       </div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Administration</div>
-      <div class="nav-item" onclick="showPage('onboarding')">
+      <div class="nav-item" onclick="showPage('onboarding',this)">
         <div class="nav-dot" style="background:#534AB7"></div> Onboarding
       </div>
-      <div class="nav-item" onclick="showPage('offboarding')">
+      <div class="nav-item" onclick="showPage('offboarding',this)">
         <div class="nav-dot" style="background:#534AB7"></div> Offboarding
       </div>
     </div>
@@ -188,7 +211,7 @@
       <div class="nav-item">
         <div class="nav-dot" style="background:#1D9E75"></div> Procedures
       </div>
-      <div class="nav-item">
+      <div class="nav-item" onclick="showPage('hardware',this)">
         <div class="nav-dot" style="background:#1D9E75"></div> Hardware
       </div>
     </div>
@@ -219,6 +242,7 @@
   </div>
 
   <div class="main">
+
     <!-- HOME PAGE -->
     <div id="page-home" class="page-section active">
     <div class="page-title" id="greeting"></div>
@@ -266,7 +290,6 @@
     </div>
 
     <div class="grid-2">
-      <!-- Onboarding card -->
       <div class="card">
         <div class="card-header" style="flex-direction:column;align-items:flex-start;gap:10px;">
           <div class="card-title">
@@ -276,14 +299,12 @@
             Onboarding & Offboarding
           </div>
           <div style="display:flex;gap:8px;width:100%;">
-            <button class="action-btn primary" style="flex:1;text-align:center;" onclick="showPage('onboarding')">+ New Hire</button>
-            <button class="action-btn" style="flex:1;text-align:center;background:#FAEEDA;border-color:#EF9F27;color:#854F0B;" onclick="showPage('offboarding')">+ Employee Term</button>
+            <button class="action-btn primary" style="flex:1;text-align:center;" onclick="showPage('onboarding',null)">+ New Hire</button>
+            <button class="action-btn" style="flex:1;text-align:center;background:#FAEEDA;border-color:#EF9F27;color:#854F0B;" onclick="showPage('offboarding',null)">+ Employee Term</button>
           </div>
         </div>
         <div id="home-onboard-content"></div>
       </div>
-
-      <!-- LocalHop Event Calendar card -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">
@@ -299,7 +320,6 @@
     </div>
 
     <div class="grid-2">
-      <!-- Stats sheet -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">
@@ -311,20 +331,10 @@
           <a href="https://docs.google.com/spreadsheets/d/1SVMaxkdJcK1AYQpTE922zU-w1jChVGUJ/edit?usp=sharing&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" class="action-btn">Open Sheet ↗</a>
         </div>
         <a href="https://docs.google.com/spreadsheets/d/1SVMaxkdJcK1AYQpTE922zU-w1jChVGUJ/edit?usp=sharing&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:2rem 0;text-decoration:none;background:#f5f5f3;border-radius:8px;border:1px solid #e5e5e0;transition:background 0.15s;" onmouseover="this.style.background='#eaf3de'" onmouseout="this.style.background='#f5f5f3'">
-          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="56" height="56" rx="8" fill="#0F9D58"/>
-            <rect x="14" y="14" width="28" height="28" rx="2" fill="white" fill-opacity="0.15"/>
-            <line x1="14" y1="22" x2="42" y2="22" stroke="white" stroke-width="1.5"/>
-            <line x1="14" y1="30" x2="42" y2="30" stroke="white" stroke-width="1.5"/>
-            <line x1="14" y1="38" x2="42" y2="38" stroke="white" stroke-width="1.5"/>
-            <line x1="24" y1="14" x2="24" y2="42" stroke="white" stroke-width="1.5"/>
-            <rect x="14" y="14" width="28" height="28" rx="2" stroke="white" stroke-width="1.5"/>
-          </svg>
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><rect width="56" height="56" rx="8" fill="#0F9D58"/><rect x="14" y="14" width="28" height="28" rx="2" fill="white" fill-opacity="0.15"/><line x1="14" y1="22" x2="42" y2="22" stroke="white" stroke-width="1.5"/><line x1="14" y1="30" x2="42" y2="30" stroke="white" stroke-width="1.5"/><line x1="14" y1="38" x2="42" y2="38" stroke="white" stroke-width="1.5"/><line x1="24" y1="14" x2="24" y2="42" stroke="white" stroke-width="1.5"/><rect x="14" y="14" width="28" height="28" rx="2" stroke="white" stroke-width="1.5"/></svg>
           <span style="font-size:13px;font-weight:500;color:#0F9D58;">Open in Google Sheets</span>
         </a>
       </div>
-
-      <!-- Materials sheet -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">
@@ -336,15 +346,7 @@
           <a href="https://docs.google.com/spreadsheets/d/13qhjTfRmE3vrVwCFgJsEztm3fxEqyQy8kCsE3T4_YF8/edit?usp=sharing" target="_blank" class="action-btn">Open Sheet ↗</a>
         </div>
         <a href="https://docs.google.com/spreadsheets/d/13qhjTfRmE3vrVwCFgJsEztm3fxEqyQy8kCsE3T4_YF8/edit?usp=sharing" target="_blank" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:2rem 0;text-decoration:none;background:#f5f5f3;border-radius:8px;border:1px solid #e5e5e0;transition:background 0.15s;" onmouseover="this.style.background='#eaf3de'" onmouseout="this.style.background='#f5f5f3'">
-          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="56" height="56" rx="8" fill="#0F9D58"/>
-            <rect x="14" y="14" width="28" height="28" rx="2" fill="white" fill-opacity="0.15"/>
-            <line x1="14" y1="22" x2="42" y2="22" stroke="white" stroke-width="1.5"/>
-            <line x1="14" y1="30" x2="42" y2="30" stroke="white" stroke-width="1.5"/>
-            <line x1="14" y1="38" x2="42" y2="38" stroke="white" stroke-width="1.5"/>
-            <line x1="24" y1="14" x2="24" y2="42" stroke="white" stroke-width="1.5"/>
-            <rect x="14" y="14" width="28" height="28" rx="2" stroke="white" stroke-width="1.5"/>
-          </svg>
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><rect width="56" height="56" rx="8" fill="#0F9D58"/><rect x="14" y="14" width="28" height="28" rx="2" fill="white" fill-opacity="0.15"/><line x1="14" y1="22" x2="42" y2="22" stroke="white" stroke-width="1.5"/><line x1="14" y1="30" x2="42" y2="30" stroke="white" stroke-width="1.5"/><line x1="14" y1="38" x2="42" y2="38" stroke="white" stroke-width="1.5"/><line x1="24" y1="14" x2="24" y2="42" stroke="white" stroke-width="1.5"/><rect x="14" y="14" width="28" height="28" rx="2" stroke="white" stroke-width="1.5"/></svg>
           <span style="font-size:13px;font-weight:500;color:#0F9D58;">Open in Google Sheets</span>
         </a>
       </div>
@@ -409,7 +411,7 @@
         <div id="procedure-none" style="display:none;font-size:12px;color:#aaa;padding:8px 0;">No procedures match your search.</div>
       </div>
 
-      <!-- Hardware -->
+      <!-- Hardware preview -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">
@@ -418,17 +420,13 @@
             </div>
             Hardware inventory
           </div>
-          <span class="badge badge-amber">61 items</span>
+          <span class="badge badge-amber">142 items</span>
         </div>
-        <div class="search-bar">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" placeholder="Search hardware...">
-        </div>
-        <div class="hw-row"><div class="hw-name">Chromebook #1</div><div class="hw-loc">Circulation</div><span class="badge badge-green">Active</span></div>
-        <div class="hw-row"><div class="hw-name">HP LaserJet 4</div><div class="hw-loc">Reference</div><span class="badge badge-green">Active</span></div>
-        <div class="hw-row"><div class="hw-name">iPad (Outreach)</div><div class="hw-loc">Outreach</div><span class="badge badge-green">Active</span></div>
-        <div class="hw-row"><div class="hw-name">Dell Monitor #3</div><div class="hw-loc">Children's</div><span class="badge badge-red">Repair</span></div>
-        <button class="view-all">View full inventory →</button>
+        <div class="hw-row"><div class="hw-name">Staff PCs</div><div class="hw-loc">All depts</div><span class="badge badge-blue">28 units</span></div>
+        <div class="hw-row"><div class="hw-name">Public PCs</div><div class="hw-loc">Public areas</div><span class="badge badge-blue">10 units</span></div>
+        <div class="hw-row"><div class="hw-name">Laptops &amp; Chromebooks</div><div class="hw-loc">Various</div><span class="badge badge-blue">17 units</span></div>
+        <div class="hw-row"><div class="hw-name">Printers</div><div class="hw-loc">All depts</div><span class="badge badge-blue">19 units</span></div>
+        <button class="view-all" onclick="showPage('hardware',null)">View full inventory →</button>
       </div>
     </div>
 
@@ -443,8 +441,6 @@
         </div>
         <button class="action-btn primary" onclick="showNewHireForm()">+ New hire</button>
       </div>
-
-      <!-- New hire form -->
       <div id="new-hire-form" style="display:none;" class="hire-card">
         <div style="font-size:14px;font-weight:500;margin-bottom:12px;">New hire details</div>
         <div class="hire-form">
@@ -468,11 +464,7 @@
           </div>
         </div>
       </div>
-
-      <!-- Active hires list -->
       <div id="active-hires-list" style="margin-bottom:1.25rem;"></div>
-
-      <!-- Checklist display -->
       <div id="onboard-checklist-area" style="display:none;" class="hire-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
           <div>
@@ -500,8 +492,6 @@
         </div>
         <button class="action-btn" style="background:#FAEEDA;border-color:#EF9F27;color:#854F0B;" onclick="showTermForm()">+ Employee Term</button>
       </div>
-
-      <!-- Term form -->
       <div id="term-form" style="display:none;" class="hire-card">
         <div style="font-size:14px;font-weight:500;margin-bottom:12px;">Employee termination details</div>
         <div class="hire-form">
@@ -515,11 +505,7 @@
           </div>
         </div>
       </div>
-
-      <!-- Active terms list -->
       <div id="active-terms-list" style="margin-bottom:1.25rem;"></div>
-
-      <!-- Offboard checklist display -->
       <div id="offboard-checklist-area" style="display:none;" class="hire-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
           <div>
@@ -538,8 +524,429 @@
       </div>
     </div>
 
+    <!-- ═══════════════════════════════════════════
+         HARDWARE INVENTORY PAGE
+         ═══════════════════════════════════════════ -->
+    <div id="page-hardware" class="page-section">
+      <div class="hw-page-header">
+        <div>
+          <div class="page-title">Hardware Inventory</div>
+          <div class="page-sub">All library devices — computers, printers, AV equipment, and peripherals</div>
+        </div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="hw-stats-row">
+        <div class="hw-stat">
+          <div class="hw-stat-val" style="color:#185FA5;">28</div>
+          <div class="hw-stat-label">Staff PCs</div>
+        </div>
+        <div class="hw-stat">
+          <div class="hw-stat-val" style="color:#185FA5;">10</div>
+          <div class="hw-stat-label">Public PCs</div>
+        </div>
+        <div class="hw-stat">
+          <div class="hw-stat-val" style="color:#185FA5;">17</div>
+          <div class="hw-stat-label">Laptops &amp; Chromebooks</div>
+        </div>
+        <div class="hw-stat">
+          <div class="hw-stat-val" style="color:#BA7517;">19</div>
+          <div class="hw-stat-label">Printers</div>
+        </div>
+        <div class="hw-stat">
+          <div class="hw-stat-val" style="color:#534AB7;">68</div>
+          <div class="hw-stat-label">Other Devices</div>
+        </div>
+      </div>
+
+      <!-- Tab bar -->
+      <div class="hw-tab-bar">
+        <button class="hw-tab active" onclick="hwShowTab('staff-pcs',this)">Staff PCs</button>
+        <button class="hw-tab" onclick="hwShowTab('public-pcs',this)">Public PCs</button>
+        <button class="hw-tab" onclick="hwShowTab('laptops',this)">Laptops &amp; Chromebooks</button>
+        <button class="hw-tab" onclick="hwShowTab('printers',this)">Printers</button>
+        <button class="hw-tab" onclick="hwShowTab('av',this)">AV Equipment</button>
+        <button class="hw-tab" onclick="hwShowTab('scanners',this)">Barcode Scanners</button>
+        <button class="hw-tab" onclick="hwShowTab('selfcheck',this)">Self-Check</button>
+      </div>
+
+      <!-- Search + filter row -->
+      <div class="hw-controls">
+        <div class="hw-search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="hw-search-input" placeholder="Search by name, location, service tag, user…" oninput="hwApplySearch()">
+        </div>
+        <div id="hw-filter-btns" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+      </div>
+
+      <div id="hw-result-count" class="hw-count-label"></div>
+      <div class="hw-table-wrap">
+        <table class="hw-table" id="hw-table">
+          <thead id="hw-thead"></thead>
+          <tbody id="hw-tbody"></tbody>
+        </table>
+        <div id="hw-empty" class="hw-empty" style="display:none;">No items match your search.</div>
+      </div>
+    </div><!-- end page-hardware -->
+
   </div><!-- end main -->
 </div>
+
+<!-- ════════════════════════════════════════════════════
+     HARDWARE DATA
+     ════════════════════════════════════════════════════ -->
+<script>
+var hwData = {
+
+  'staff-pcs': {
+    cols: ['PC Name','Location','User','Make / Model','Service Tag','Ship Year','Processor','RAM','HD','OS','Data Jack','MS Office'],
+    filters: ['All','Downstairs','Upstairs'],
+    filterKey: 'floor',
+    rows: [
+      { name:'ADMIN-PC', loc:'Outer Admin Area', user:'Greg, DPW', model:'Dell Optiplex 7020', tag:'6VXBN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 12-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-100', loc:'Outer Admin Area', user:'Lori', model:'Dell Optiplex 7020', tag:'HWXBN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-101', loc:'Tech Services', user:'TS', model:'Dell Optiplex 7010', tag:'6N7ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-09D', office:'Office 2016', floor:'Downstairs' },
+      { name:'BER-103', loc:'Tech Services', user:'Carolyn', model:'Dell Optiplex 7010', tag:'CH4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-08D', office:'Office 2016', floor:'Downstairs' },
+      { name:'BER-104', loc:'Tech Services', user:'Carol', model:'Dell Optiplex 7010', tag:'8H4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-10D', office:'Office 2016', floor:'Downstairs' },
+      { name:'BER-115', loc:'ILL', user:'ILL', model:'Dell Pro Micro QCM1250', tag:'HON5V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-06D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-116', loc:'ILL', user:'ILL', model:'Dell Pro Micro QCM1250', tag:'87K2V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-05D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-117', loc:'ILL', user:'Amy', model:'Dell Pro Micro QCM1250', tag:'91N5V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-106', loc:"Program Coordinator's Office", user:'Maureen N.', model:'Dell Optiplex 7020', tag:'201CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 13-01D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-107', loc:'Admin Office', user:'Nicole', model:'Dell Optiplex 7020', tag:'DTXBN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 11-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-108', loc:'Admin Office', user:'Mary Ann', model:'Dell Optiplex 7020', tag:'501CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-109', loc:"Director's Office", user:'Rachel', model:'Dell Optiplex 7020', tag:'521CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 10-01D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-110', loc:"Children's Office", user:'Staff', model:'Dell Optiplex 3090', tag:'7HV4RN3', year:'2022', cpu:'i5-10500T', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 02-01D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-111', loc:"Children's Office", user:'Anne', model:'Dell Optiplex 3090', tag:'2W15RN3', year:'2022', cpu:'i5-10500T', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 02-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-199', loc:"Children's Office", user:'Ellen R.', model:'Dell Optiplex 3090', tag:'JRY4RN3', year:'2022', cpu:'i5-10500T', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 02-03D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-112', loc:"Children's Desk", user:'Staff', model:'Dell Optiplex 3090', tag:'5RY4RN3', year:'2022', cpu:'i5-6500 3.20GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-113', loc:"Children's Desk", user:'Staff', model:'Dell Optiplex 3090', tag:'GMY4RN3', year:'2022', cpu:'i5-6500 3.20GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-03D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-114', loc:"Children's Desk", user:'Staff', model:'Dell Optiplex 3090', tag:'9JV4RN3', year:'2022', cpu:'i5-6500 3.20GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-01D', office:'Office Pro Plus 2016', floor:'Downstairs' },
+      { name:'BER-201', loc:'Circ Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'5P7ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 01-01D', office:'Office 2016', floor:'Upstairs' },
+      { name:'BER-202', loc:'Circ Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'FH4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 01-02D', office:'Office 2016', floor:'Upstairs' },
+      { name:'BER-203', loc:'Circ Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'3J4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 01-03D', office:'Office 2016', floor:'Upstairs' },
+      { name:'BER-204', loc:'Circ Alcove', user:'Athena', model:'Dell Optiplex 3090', tag:'8JV4RN3', year:'2022', cpu:'i5-6500 3.20GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 02-01D', office:'Office Pro Plus 2016', floor:'Upstairs' },
+      { name:'BER-205', loc:'Circ Alcove', user:'Staff', model:'Dell Optiplex 7010', tag:'2H4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 02-03D', office:'Office 2016', floor:'Upstairs' },
+      { name:'BER-206', loc:'Reference Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'DG4ZMW#', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 09-19D', office:'Office 2016', floor:'Upstairs' },
+      { name:'BER-207', loc:'Reference Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'9H4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 09-20D', office:'Office 2016', floor:'Upstairs' },
+      { name:'BER-208', loc:'Teen Space', user:'Maura Crouch', model:'Dell Pro Micro QCM1250', tag:'DZM5V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F2 05-01D', office:'Office Pro Plus 2016', floor:'Upstairs' },
+      { name:'BER-210', loc:'Reference Office', user:'Karen Andriolo', model:'Dell Pro Micro QCM1250', tag:'QCM1250', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F2 07-18D', office:'Office Pro Plus 2016', floor:'Upstairs' },
+      { name:'BER-211', loc:'Reference Office', user:'Karen Vaias', model:'Dell Optiplex 7020', tag:'431CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F2 07-29D', office:'Office Pro Plus 2016', floor:'Upstairs' },
+      { name:'BER-212', loc:'Reference Office', user:'Lynn Hilf', model:'Dell Pro Micro QCM1250', tag:'JS53V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F2 07-30D', office:'Office Pro Plus 2016', floor:'Upstairs' }
+    ]
+  },
+
+  'public-pcs': {
+    cols: ['PC Name','Location','Make / Model','Service Tag','Purchase Year','Processor','RAM','HD','OS','Data Jack','MS Office'],
+    filters: ['All','Downstairs','Upstairs'],
+    filterKey: 'floor',
+    rows: [
+      { name:'CHILD1PC', loc:"Children's", model:'Dell Optiplex 7020', tag:'401CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-04D', office:'Professional 2016', floor:'Downstairs' },
+      { name:'CHILD2PC', loc:"Children's", model:'Dell Optiplex 7020', tag:'611CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-05D', office:'Professional 2016', floor:'Downstairs' },
+      { name:'CHILD3PC', loc:'Catalog Only', model:'Dell Optiplex 3090', tag:'DKB61M3', year:'2020', cpu:'i5-10500T', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-07D', office:'None', floor:'Downstairs' },
+      { name:'BTL-201', loc:'Catalog Computer', model:'Dell Optiplex 7490', tag:'DGTLMH3', year:'2021', cpu:'i5-9500 @ 4.4GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'Wi-Fi', office:'Professional 2016', floor:'Upstairs' },
+      { name:'BTL-202', loc:'Student Corner', model:'Dell Optiplex 7020', tag:'HRXBN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 09-16D', office:'Professional 2016', floor:'Upstairs' },
+      { name:'BTL-203', loc:'Group Study', model:'Dell Pro Micro QCM1250', tag:'95K2V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 09-15D', office:'Professional 2016', floor:'Upstairs' },
+      { name:'BTL-204', loc:'Outside Teen Space', model:'Dell Pro Micro QCM1250', tag:'FX53V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Professional 2016', floor:'Upstairs' },
+      { name:'BTL-205', loc:'Outside Teen Space', model:'Dell Pro Micro QCM1250', tag:'4P83V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Professional 2016', floor:'Upstairs' },
+      { name:'BTL-206', loc:'Cactus Garden', model:'Dell Pro Micro QCM1250', tag:'FS53V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Professional 2016', floor:'Upstairs' },
+      { name:'BTL-207', loc:'Quiet Study', model:'Dell Pro Micro QCM1250', tag:'7M83V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 08-07F', office:'Professional 2016', floor:'Upstairs' },
+      { name:'TEEN-01', loc:'Teen Room', model:'Dell Pro Micro QCM1250', tag:'JXM5V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 07-26D', office:'Professional 2016', floor:'Upstairs' },
+      { name:'TEEN-02', loc:'Teen Room', model:'Dell Optiplex 7020', tag:'601CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 07-32D', office:'Professional 2016', floor:'Upstairs' }
+    ]
+  },
+
+  'laptops': {
+    cols: ['PC Name','Type','Make / Model','Service Tag','Ship Year','Processor','RAM','HD','OS','Used By','Notes'],
+    filters: ['All','Laptops','Chromebooks'],
+    filterKey: 'type',
+    rows: [
+      { name:'BTL-Laptop1', type:'Laptops', model:'Dell Latitude 3540', tag:'5SB6LY3', year:'2023', cpu:'i5-10210U', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', user:'Nicole', notes:'Has Edmunds' },
+      { name:'BTL-Laptop2', type:'Laptops', model:'Dell Latitude 3540', tag:'B4D6LY3', year:'2023', cpu:'i5-10210U', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', user:'Program Room', notes:'Has Edmunds' },
+      { name:'BTL-Laptop4', type:'Laptops', model:'Dell Latitude 3550', tag:'J1QKG74', year:'2025', cpu:'i5-1335U', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', user:'Mary Ann', notes:'Has Edmunds' },
+      { name:'BTL-Laptop5', type:'Laptops', model:'Dell Latitude 3520', tag:'BST85B3', year:'2021', cpu:'i7', ram:'8GB', hd:'256GB SSD', os:'Win 10 Pro', user:'Poster Printer', notes:'Has Edmunds' },
+      { name:'JVBYP94', type:'Laptops', model:'Dell Pro 16 BTX Base', tag:'—', year:'2025', cpu:'Intel Core 5', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', user:'Rachel', notes:'Has Edmunds' },
+      { name:'Chrome1', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'38PF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome2', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'J5PF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome3', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'BGPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome4', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'HFPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'Ellen', notes:'' },
+      { name:'Chrome5', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'9GPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome6', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'4GPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome7', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'FJPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome8', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'BBPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome9', type:'Chromebooks', model:'Dell Chromebook 3110', tag:'FGR6DF3', year:'2023', cpu:'Celeron N4500', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome10', type:'Chromebooks', model:'Dell Chromebook 3110', tag:'2FD7DF3', year:'2023', cpu:'Celeron N4500', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome11', type:'Chromebooks', model:'Dell Chromebook 3110', tag:'70Q7DF3', year:'2023', cpu:'Celeron N4500', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
+      { name:'Chrome12', type:'Chromebooks', model:'Dell Chromebook 3110', tag:'5WR6DF3', year:'2023', cpu:'Celeron N4500', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' }
+    ]
+  },
+
+  'printers': {
+    cols: ['Device','Color','Location','Use','Data Jack','IP Address','Workstation / Notes'],
+    filters: ['All','Downstairs','Upstairs'],
+    filterKey: 'floor',
+    rows: [
+      { name:'HP Color LaserJet Pro M452dw', color:'Color', loc:"Program Coordinator's Office", use:'Staff', jack:'F/1 13-02D', ip:'10.51.2.171', notes:'BER-106', floor:'Downstairs' },
+      { name:'HP LaserJet 1200 Series', color:'B&W', loc:'Administration', use:'Staff', jack:'USB', ip:'—', notes:'BER-108', floor:'Downstairs' },
+      { name:'HP LaserJet 1012', color:'B&W', loc:'Tech Services', use:'Staff', jack:'USB', ip:'—', notes:'—', floor:'Downstairs' },
+      { name:'HP LaserJet 1020', color:'B&W', loc:'Tech Services', use:'Staff', jack:'USB', ip:'—', notes:'—', floor:'Downstairs' },
+      { name:'HP LaserJet 1320', color:'B&W', loc:'ILL', use:'Staff', jack:'USB', ip:'—', notes:'—', floor:'Downstairs' },
+      { name:'Epson TM-T88V', color:'Receipt', loc:'ILL', use:'Staff', jack:'F/1 14-06V', ip:'10.51.2.19', notes:'BER 116', floor:'Downstairs' },
+      { name:'Epson TM-T88V', color:'Receipt', loc:'ILL', use:'Staff', jack:'F/1 14-05V', ip:'10.51.2.20', notes:'BER 115', floor:'Downstairs' },
+      { name:'Konica Minolta Bizhub C301i', color:'Color', loc:'Outer Admin Area', use:'Staff', jack:'F/1 12-01P', ip:'10.51.2.181', notes:'ID: ADXK013013892', floor:'Downstairs' },
+      { name:'Brother HL-L8260CDW', color:'Color', loc:"Children's Desk", use:'Both', jack:'F/1 01-01P', ip:'10.51.3.251', notes:'—', floor:'Downstairs' },
+      { name:'Star TSP-743IIL', color:'Receipt', loc:"Children's Desk", use:'Staff', jack:'F/1 01-03P', ip:'10.51.2.14', notes:'BER 114', floor:'Downstairs' },
+      { name:'Star TSP-743IIL', color:'Receipt', loc:"Children's Desk", use:'Staff', jack:'F/1 01-02P', ip:'10.51.2.18', notes:'BER 113', floor:'Downstairs' },
+      { name:'Star TSP-743IIL', color:'Receipt', loc:"Children's Desk", use:'Staff', jack:'F/1 01-01P', ip:'10.51.2.16', notes:'BER 112', floor:'Downstairs' },
+      { name:'Star TSP-700II', color:'Receipt', loc:'Circ Desk', use:'Staff', jack:'F/2 01-01D (S)', ip:'10.51.2.12', notes:'BER 201', floor:'Upstairs' },
+      { name:'Star TSP-700II', color:'Receipt', loc:'Circ Desk', use:'Staff', jack:'F/2 01-02P', ip:'10.51.2.13', notes:'BER 202', floor:'Upstairs' },
+      { name:'Star TSP-700II', color:'Receipt', loc:'Circ Desk', use:'Staff', jack:'F/2 01-03P', ip:'10.51.2.17', notes:'BER 203', floor:'Upstairs' },
+      { name:'Star TSP-700II', color:'Receipt', loc:'Circ Alcove', use:'Staff', jack:'F/2 02-03D', ip:'10.51.2.11', notes:'BER 205', floor:'Upstairs' },
+      { name:'HP LaserJet 1020', color:'B&W', loc:'Circ Alcove', use:'Staff', jack:'USB', ip:'—', notes:'—', floor:'Upstairs' },
+      { name:'HP Color LaserJet Pro MFP M277dw', color:'Color', loc:'Reference Office', use:'Staff', jack:'F2 07-23D', ip:'10.51.2.237', notes:'—', floor:'Upstairs' },
+      { name:'HP Color LaserJet Pro M255dw', color:'Color', loc:'Reference Desk', use:'Both', jack:'WiFi', ip:'10.51.4.82', notes:'—', floor:'Upstairs' },
+      { name:'Konica Minolta Bizhub C301i', color:'Color', loc:'Reference Desk Area', use:'Both', jack:'Upstairs Pillar-1', ip:'10.51.3.116', notes:'ID: ADXK013014226', floor:'Upstairs' }
+    ]
+  },
+
+  'av': {
+    cols: ['Device','Room','Device Type','MAC Address','IP Address','Hostname','Credentials','Notes'],
+    filters: ['All','Room A','Room B','Teen Space','Tech Center'],
+    filterKey: 'room',
+    rows: [
+      { name:'Dell Optiplex 3050', room:'Room A', type:'MicroPC', mac:'9C-DA-3E-99-58-09', ip:'10.51.5.12', host:'ROOM-A-PC', creds:'Staff; no password', notes:'Needs MS Office Key' },
+      { name:'Vizio TV', room:'Room A', type:'TV Display', mac:'04:5D:4B:F9:62:12', ip:'10.51.5.13', host:'XBR-65X750D', creds:'NONE', notes:'Purchased 5/2025' },
+      { name:'Google Chromecast', room:'Room A', type:'Streaming', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
+      { name:'Blu-Ray DVD Player', room:'Room A', type:'Player', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
+      { name:'Cable TV (Optimum)', room:'Room A', type:'Cable', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
+      { name:'Crestron AirMedia 101', room:'Room B', type:'Presentation', mac:'00:12:5F:18:4D:D5', ip:'10.51.5.21', host:'AM184dd5-RmB', creds:'admin, M****####!', notes:'Firmware 2.6.0.12' },
+      { name:'Dell Optiplex 3050', room:'Room B', type:'MicroPC', mac:'14-B3-1F-26-20-70', ip:'10.51.5.22', host:'Room-B-PC', creds:'Staff; no password', notes:'Needs MS Office Key' },
+      { name:'Sony Projector', room:'Room B', type:'Projector', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
+      { name:'Apple TV (A1842)', room:'Room B', type:'Streaming', mac:'dc:56:e7:46:f0:fd', ip:'10.51.5.24', host:'Rm B Apple TV', creds:'NONE', notes:'S/N: C1MVXDPSJ1WF · tvOS 11.2.6' },
+      { name:'Google Chromecast', room:'Room B', type:'Streaming', mac:'48:D6:D5:08:C8:38', ip:'10.51.5.25', host:'RoomBChromeCastU', creds:'bernardstownshiplibrary@gmail.com', notes:'Firmware 1.29.106401' },
+      { name:'Blu-Ray DVD Player', room:'Room B', type:'Player', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
+      { name:'Cable TV (FiOS)', room:'Room B', type:'Cable', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
+      { name:'Crestron AirMedia 101', room:'Teen Space', type:'Presentation', mac:'00:12:5F:18:45:B4', ip:'10.51.5.31', host:'AM1845b4-Teen', creds:'admin, M****####!', notes:'Firmware 2.6.0.12' },
+      { name:'Dell Optiplex 3050', room:'Teen Space', type:'MicroPC', mac:'AC-ED-5C-A0-A0-A0', ip:'10.51.5.32', host:'Teen-TV-PC', creds:'Admin / Staff / Visitor', notes:'Needs MS Office Key' },
+      { name:'Sony TV', room:'Teen Space', type:'TV Display', mac:'D8:0F:99:2E:03:83', ip:'10.51.5.33', host:'XBR-65X750D', creds:'NONE', notes:'—' },
+      { name:'Apple TV (A1842)', room:'Teen Space', type:'Streaming', mac:'40:cb:c0:c3:cb:d8', ip:'10.51.5.34', host:'Teen Apple TV', creds:'bernardstownshiplibrary@gmail.com', notes:'S/N: C07V446MJ1WF · tvOS 11.3' },
+      { name:'Google Chromecast', room:'Teen Space', type:'Streaming', mac:'F4:F5:D8:FF:6E:6F', ip:'10.51.5.35', host:'TeenSpaceChromecastU', creds:'bernardstownshiplibrary@gmail.com', notes:'Firmware 1.29.106401' },
+      { name:'Crestron AirMedia 101', room:'Tech Center', type:'Presentation', mac:'00:12:5F:18:45:C2', ip:'10.51.5.41', host:'AM1845c2-Tech', creds:'admin', notes:'Firmware 2.6.0.12' },
+      { name:'Dell Optiplex 3050', room:'Tech Center', type:'MicroPC', mac:'34-f6-4b-f2-8a-c8', ip:'10.51.5.42', host:'TECHCENTER-PC', creds:'Admin / Visitor', notes:'Needs MS Office Key' },
+      { name:'Sony TV', room:'Tech Center', type:'TV Display', mac:'D8:0F:99:13:12:F5', ip:'10.51.5.43', host:'XBR-65X750D', creds:'NONE', notes:'—' },
+      { name:'Apple TV (A1842)', room:'Tech Center', type:'Streaming', mac:'40:cb:c0:c3:a6:80', ip:'10.51.5.44', host:'Tech Apple TV', creds:'NONE', notes:'S/N: DY3V8177J1WF · tvOS 11.1' },
+      { name:'Google Chromecast', room:'Tech Center', type:'Streaming', mac:'F4:F5:D8:FF:6E:7B', ip:'10.51.5.45', host:'TechCenterChromecastU', creds:'bernardstownshiplibrary@gmail.com', notes:'—' }
+    ]
+  },
+
+  'scanners': {
+    cols: ['Workstation','User / Location','Scanner Model','Date Purchased','Floor'],
+    filters: ['All','Downstairs','Upstairs'],
+    filterKey: 'floor',
+    rows: [
+      { ws:'BER-101', user:'TS Shared', model:'Honeywell Xenon XP 1950', date:'2025', floor:'Downstairs' },
+      { ws:'BER-103', user:'Carolyn', model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
+      { ws:'BER-104', user:'Carol', model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
+      { ws:'BER-115', user:'ILL', model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
+      { ws:'BER-116', user:'ILL', model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
+      { ws:'BER-117', user:'Amy', model:'Metrologic', date:'—', floor:'Downstairs' },
+      { ws:'BER-111', user:'Anne', model:'Metrologic', date:'—', floor:'Downstairs' },
+      { ws:'BER-112', user:"Children's Desk", model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
+      { ws:'BER-113', user:"Children's Desk", model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
+      { ws:'BER-114', user:"Children's Desk", model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
+      { ws:'BER-201', user:'Circ Desk', model:'Honeywell Xenon XP 1900', date:'—', floor:'Upstairs' },
+      { ws:'BER-202', user:'Circ Desk', model:'Honeywell Xenon XP 1900', date:'—', floor:'Upstairs' },
+      { ws:'BER-203', user:'Circ Desk', model:'Honeywell Xenon XP 1900', date:'—', floor:'Upstairs' },
+      { ws:'BER-204', user:'Circ Alcove — Athena', model:'Metrologic', date:'—', floor:'Upstairs' },
+      { ws:'BER-205', user:'Circ Alcove', model:'Metrologic', date:'—', floor:'Upstairs' },
+      { ws:'—', user:'Circ Alcove — Outreach Kit', model:'Metrologic', date:'—', floor:'Upstairs' },
+      { ws:'BER-208', user:'Teen Space — Maura', model:'Metrologic', date:'—', floor:'Upstairs' },
+      { ws:'BER-206', user:'Reference Desk', model:'Metrologic', date:'—', floor:'Upstairs' },
+      { ws:'BER-207', user:'Reference Desk', model:'Metrologic', date:'—', floor:'Upstairs' },
+      { ws:'BER-211', user:'Reference Office — Karen Vaias', model:'Metrologic', date:'—', floor:'Upstairs' },
+      { ws:'—', user:'Reference Office — Storage', model:'Metrologic', date:'—', floor:'Upstairs' }
+    ]
+  },
+
+  'selfcheck': {
+    cols: ['Location','Model','Serial Number','Data Jack'],
+    filters: [],
+    filterKey: null,
+    rows: [
+      { loc:"Children's", model:'3M SelfCheck 500', serial:'B18104', jack:'F/1 01-06D' },
+      { loc:'Upstairs', model:'3M SelfCheck 500', serial:'B18099', jack:'Upstairs Pillar-2' }
+    ]
+  }
+};
+
+// ── Render helpers ──────────────────────────────────────────
+var hwCurrentTab = 'staff-pcs';
+var hwCurrentFilter = 'All';
+
+function hwRowMatchesSearch(rowStr, q) {
+  return rowStr.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+}
+
+function hwRender() {
+  var tab   = hwData[hwCurrentTab];
+  var q     = document.getElementById('hw-search-input').value.trim();
+  var rows  = tab.rows;
+  var tbody = document.getElementById('hw-tbody');
+  var empty = document.getElementById('hw-empty');
+  var count = document.getElementById('hw-result-count');
+
+  // Filter by category
+  if (hwCurrentFilter !== 'All' && tab.filterKey) {
+    rows = rows.filter(function(r) {
+      return (r[tab.filterKey] || '') === hwCurrentFilter ||
+             (r.room || r.type || r.floor || '') === hwCurrentFilter;
+    });
+  }
+
+  // Filter by search
+  if (q) {
+    rows = rows.filter(function(r) {
+      return hwRowMatchesSearch(Object.values(r).join(' '), q);
+    });
+  }
+
+  count.textContent = rows.length + ' item' + (rows.length !== 1 ? 's' : '');
+
+  if (!rows.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Build thead
+  var thead = document.getElementById('hw-thead');
+  thead.innerHTML = '<tr>' + tab.cols.map(function(c) {
+    return '<th>' + c + '</th>';
+  }).join('') + '</tr>';
+
+  // Build tbody rows
+  tbody.innerHTML = rows.map(function(r) {
+    var cells = '';
+    if (hwCurrentTab === 'staff-pcs') {
+      cells = [
+        '<td><span class="hw-tag-mono">' + r.name + '</span></td>',
+        '<td>' + r.loc + '</td>',
+        '<td>' + r.user + '</td>',
+        '<td><div>' + r.model + '</div></td>',
+        '<td><span class="hw-tag-mono">' + r.tag + '</span></td>',
+        '<td>' + r.year + '</td>',
+        '<td>' + r.cpu + '</td>',
+        '<td>' + r.ram + '</td>',
+        '<td>' + r.hd + '</td>',
+        '<td>' + r.os + '</td>',
+        '<td>' + r.jack + '</td>',
+        '<td>' + r.office + '</td>'
+      ].join('');
+    } else if (hwCurrentTab === 'public-pcs') {
+      cells = [
+        '<td><span class="hw-tag-mono">' + r.name + '</span></td>',
+        '<td>' + r.loc + '</td>',
+        '<td>' + r.model + '</td>',
+        '<td><span class="hw-tag-mono">' + r.tag + '</span></td>',
+        '<td>' + r.year + '</td>',
+        '<td>' + r.cpu + '</td>',
+        '<td>' + r.ram + '</td>',
+        '<td>' + r.hd + '</td>',
+        '<td>' + r.os + '</td>',
+        '<td>' + r.jack + '</td>',
+        '<td>' + r.office + '</td>'
+      ].join('');
+    } else if (hwCurrentTab === 'laptops') {
+      cells = [
+        '<td><span class="hw-tag-mono">' + r.name + '</span></td>',
+        '<td><span class="badge ' + (r.type === 'Chromebooks' ? 'badge-teal' : 'badge-blue') + '">' + r.type + '</span></td>',
+        '<td>' + r.model + '</td>',
+        '<td><span class="hw-tag-mono">' + r.tag + '</span></td>',
+        '<td>' + r.year + '</td>',
+        '<td>' + r.cpu + '</td>',
+        '<td>' + r.ram + '</td>',
+        '<td>' + r.hd + '</td>',
+        '<td>' + r.os + '</td>',
+        '<td>' + r.user + '</td>',
+        '<td>' + r.notes + '</td>'
+      ].join('');
+    } else if (hwCurrentTab === 'printers') {
+      var colorBadge = r.color === 'Color' ? 'badge-blue' : r.color === 'B&W' ? 'badge-gray' : 'badge-amber';
+      cells = [
+        '<td class="hw-name-cell">' + r.name + '</td>',
+        '<td><span class="badge ' + colorBadge + '">' + r.color + '</span></td>',
+        '<td>' + r.loc + '</td>',
+        '<td><span class="badge ' + (r.use === 'Both' ? 'badge-green' : 'badge-gray') + '">' + r.use + '</span></td>',
+        '<td>' + r.jack + '</td>',
+        '<td>' + (r.ip !== '—' ? '<span class="hw-tag-mono">' + r.ip + '</span>' : '—') + '</td>',
+        '<td>' + r.notes + '</td>'
+      ].join('');
+    } else if (hwCurrentTab === 'av') {
+      cells = [
+        '<td class="hw-name-cell">' + r.name + '</td>',
+        '<td><span class="badge badge-blue">' + r.room + '</span></td>',
+        '<td>' + r.type + '</td>',
+        '<td>' + (r.mac !== '—' ? '<span class="hw-tag-mono">' + r.mac + '</span>' : '—') + '</td>',
+        '<td>' + (r.ip !== '—' ? '<span class="hw-tag-mono">' + r.ip + '</span>' : '—') + '</td>',
+        '<td>' + r.host + '</td>',
+        '<td>' + r.creds + '</td>',
+        '<td>' + r.notes + '</td>'
+      ].join('');
+    } else if (hwCurrentTab === 'scanners') {
+      cells = [
+        '<td><span class="hw-tag-mono">' + r.ws + '</span></td>',
+        '<td>' + r.user + '</td>',
+        '<td>' + r.model + '</td>',
+        '<td>' + r.date + '</td>',
+        '<td><span class="badge ' + (r.floor === 'Downstairs' ? 'badge-amber' : 'badge-blue') + '">' + r.floor + '</span></td>'
+      ].join('');
+    } else if (hwCurrentTab === 'selfcheck') {
+      cells = [
+        '<td>' + r.loc + '</td>',
+        '<td>' + r.model + '</td>',
+        '<td><span class="hw-tag-mono">' + r.serial + '</span></td>',
+        '<td>' + r.jack + '</td>'
+      ].join('');
+    }
+    return '<tr>' + cells + '</tr>';
+  }).join('');
+}
+
+function hwShowTab(tabId, btn) {
+  hwCurrentTab = tabId;
+  hwCurrentFilter = 'All';
+  document.getElementById('hw-search-input').value = '';
+
+  // Update tab buttons
+  document.querySelectorAll('.hw-tab').forEach(function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+
+  // Update filter buttons
+  var tab = hwData[tabId];
+  var filterContainer = document.getElementById('hw-filter-btns');
+  filterContainer.innerHTML = '';
+  if (tab.filters && tab.filters.length > 1) {
+    tab.filters.forEach(function(f, i) {
+      var b = document.createElement('button');
+      b.className = 'filter-btn ' + (i === 0 ? 'badge-blue' : 'badge-gray');
+      b.textContent = f;
+      b.onclick = function() {
+        hwCurrentFilter = f;
+        document.querySelectorAll('#hw-filter-btns .filter-btn').forEach(function(x) { x.className = 'filter-btn badge-gray'; });
+        b.className = 'filter-btn badge-blue';
+        hwRender();
+      };
+      filterContainer.appendChild(b);
+    });
+  }
+
+  hwRender();
+}
+
+function hwApplySearch() {
+  hwRender();
+}
+</script>
 
 <script>
   var policies = [
@@ -595,9 +1002,9 @@
   var procedures = [
     { name: "Contact Information: Director / Board President / DPW", tags: ["contact"], url: "https://docs.google.com/document/d/1xkDbRKnJmOaTrGCDTXDbyrheSVcrEW2U/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
     { name: "Emergency Situations: Calling 911 / Police", tags: ["incharge"], url: "https://docs.google.com/document/d/1Xm5uunDSPvmg7Kv_ONqAeEnTb3SChVX-/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Problem Situations &#8212; What To Do / Who To Contact", tags: ["incharge"], url: "https://docs.google.com/document/d/1i2GvGVtz92YpnEUGlZHO2tXYN59iRfqn/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Problem Situations — What To Do / Who To Contact", tags: ["incharge"], url: "https://docs.google.com/document/d/1i2GvGVtz92YpnEUGlZHO2tXYN59iRfqn/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
     { name: "Inclement Weather and Other Emergency Closing Procedures", tags: ["incharge"], url: "https://docs.google.com/document/d/1vtBt4bsActXMsX9DGCY8tb38Z6SEaLve/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
-    { name: "Inclement Weather &#8212; Staff Contact List", tags: ["contact"], url: "https://docs.google.com/document/d/1jCTeq3BFaZwic7GBBNBugrPlJN5gCTqP/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Inclement Weather — Staff Contact List", tags: ["contact"], url: "https://docs.google.com/document/d/1jCTeq3BFaZwic7GBBNBugrPlJN5gCTqP/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
     { name: "Unexpected Library Closing: Updating the Website", tags: ["website"], url: "https://docs.google.com/document/d/1fQKYbpeA9h509JUdKFnXkCEK44KVZITo/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
     { name: "Changing Library Phone System Attendant Announcements", tags: ["phones"], url: "https://docs.google.com/document/d/1gW26J0zexEm5Gxb_gHSNf-5bxiBXxzBq/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
     { name: "Self-Check Machines: Turning On", tags: ["technical"], url: "https://docs.google.com/document/d/1B1uO8L58gtu4BSJwQ_Zwbw0PrneP7W1L/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
@@ -641,7 +1048,6 @@
     var count   = document.getElementById('procedure-count');
     var visible = 0;
     list.innerHTML = '';
-
     procedures.forEach(function(p) {
       var matchFilter = currentProcedureFilter === 'all' || p.tags.indexOf(currentProcedureFilter) !== -1;
       var matchSearch = p.name.toLowerCase().indexOf(search) !== -1;
@@ -662,7 +1068,6 @@
         visible++;
       }
     });
-
     none.style.display  = visible === 0 ? 'block' : 'none';
     count.textContent   = visible + ' doc' + (visible !== 1 ? 's' : '');
   }
@@ -671,9 +1076,7 @@
 
   function setProcedureFilter(tag, btn) {
     currentProcedureFilter = tag;
-    document.querySelectorAll('#procedure-filters .filter-btn').forEach(function(b) {
-      b.className = 'filter-btn badge-gray';
-    });
+    document.querySelectorAll('#procedure-filters .filter-btn').forEach(function(b) { b.className = 'filter-btn badge-gray'; });
     btn.className = 'filter-btn badge-blue';
     renderProcedures();
   }
@@ -685,7 +1088,6 @@
     var count   = document.getElementById('policy-count');
     var visible = 0;
     list.innerHTML = '';
-
     policies.forEach(function(p) {
       var matchFilter = currentPolicyFilter === 'all' || p.tag === currentPolicyFilter;
       var matchSearch = p.name.toLowerCase().indexOf(search) !== -1;
@@ -702,7 +1104,6 @@
         visible++;
       }
     });
-
     none.style.display  = visible === 0 ? 'block' : 'none';
     count.textContent   = visible + ' doc' + (visible !== 1 ? 's' : '');
   }
@@ -711,9 +1112,7 @@
 
   function setPolicyFilter(tag, btn) {
     currentPolicyFilter = tag;
-    document.querySelectorAll('#policy-filters .filter-btn').forEach(function(b) {
-      b.className = 'filter-btn badge-gray';
-    });
+    document.querySelectorAll('#policy-filters .filter-btn').forEach(function(b) { b.className = 'filter-btn badge-gray'; });
     btn.className = 'filter-btn badge-blue';
     renderPolicies();
   }
@@ -761,32 +1160,30 @@
     var now = new Date();
     var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
     updateGreeting();
-
     var fullDate = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
     document.getElementById('today-full-date').textContent = fullDate;
     document.getElementById('today-date').textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
-
     if (!localStorage.getItem('btl_dept')) {
       document.getElementById('dept-modal').style.display = 'flex';
     } else {
       showCalendarContent();
     }
-
     renderPolicies();
     renderProcedures();
     renderActiveHires();
     renderActiveTerms();
     renderHomeOnboardCard();
+    // Init hardware tab
+    hwShowTab('staff-pcs', document.querySelector('.hw-tab'));
   });
 
   // PAGE NAVIGATION
-  function showPage(page) {
+  function showPage(page, el) {
     document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
     document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
     document.getElementById('page-' + page).classList.add('active');
-    event.currentTarget.classList.add('active');
+    if (el) el.classList.add('active');
   }
 
   // ONBOARDING TASK DEFINITIONS
@@ -798,26 +1195,26 @@
     { id: 'nhid',  section: 'Administrative Coordinator', text: 'Prepare New Hire Information Document (signed by employee)', flag: 'not-student' },
     { id: 'jd',    section: 'Administrative Coordinator', text: 'Job Description (signed by employee)', flag: null },
     { id: 'hrnec', section: 'Administrative Coordinator', text: 'HR New Employee Checklist', flag: null },
-    { id: 'wp',    section: 'Employee Forms', text: 'Working Papers Working Papers — must be completed online#8212; must be completed online', flag: 'student' },
+    { id: 'wp',    section: 'Employee Forms', text: 'Working Papers — must be completed online', flag: 'student' },
     { id: 'bgc',   section: 'Employee Forms', text: 'Authorization to Obtain a Background Check', flag: 'not-student' },
     { id: 'mvc',   section: 'Employee Forms', text: 'Consent for Motor Vehicle Check', flag: 'not-student' },
     { id: 'taf',   section: 'Employee Forms', text: 'Township Application Form', flag: null },
     { id: 'edr',   section: 'Employee Forms', text: 'Employee Data Record', flag: null },
     { id: 'i9',    section: 'Employee Forms', text: 'I-9 Form', flag: null },
-    { id: 'w4f',   section: 'Employee Forms', text: 'W-4 Form W-4 Form – Federal#8211; Federal', flag: null },
-    { id: 'w4nj',  section: 'Employee Forms', text: 'W-4 Form W-4 Form – NJ State#8211; NJ State', flag: null },
+    { id: 'w4f',   section: 'Employee Forms', text: 'W-4 Form – Federal', flag: null },
+    { id: 'w4nj',  section: 'Employee Forms', text: 'W-4 Form – NJ State', flag: null },
     { id: 'dd',    section: 'Employee Forms', text: 'Direct Deposit Form', flag: null },
     { id: 'njsl',  section: 'Employee Forms', text: 'Receipt of NJ Sick Leave (give copy of policy)', flag: 'pt-student' },
     { id: 'eh',    section: 'Employee Forms', text: 'Receipt of Employee Handbook Form', flag: null },
     { id: 'adf',   section: 'Employee Forms', text: 'Receipt of Alcohol & Drug Free Policy (give copy)', flag: null },
     { id: 'rtk',   section: 'Employee Forms', text: 'Receipt of Right To Know Pamphlet (give pamphlet)', flag: null },
     { id: 'oef',   section: 'Employee Forms', text: 'Request for Outside Employment (optional)', flag: null },
-    { id: 'med',   section: 'Full-Time Only &#8212; Town Hall', text: 'Medical/Dental Enrollment', flag: 'ft' },
-    { id: 'pers',  section: 'Full-Time Only &#8212; Town Hall', text: 'PERS Enrollment/Transfer', flag: 'ft' },
-    { id: 'db',    section: 'Full-Time Only &#8212; Town Hall', text: 'Death Benefit Enrollment', flag: 'ft' },
-    { id: 'dcrp',  section: 'Full-Time Only &#8212; Town Hall', text: 'DCRP Enrollment/Transfer', flag: 'ft' },
+    { id: 'med',   section: 'Full-Time Only — Town Hall', text: 'Medical/Dental Enrollment', flag: 'ft' },
+    { id: 'pers',  section: 'Full-Time Only — Town Hall', text: 'PERS Enrollment/Transfer', flag: 'ft' },
+    { id: 'db',    section: 'Full-Time Only — Town Hall', text: 'Death Benefit Enrollment', flag: 'ft' },
+    { id: 'dcrp',  section: 'Full-Time Only — Town Hall', text: 'DCRP Enrollment/Transfer', flag: 'ft' },
     { id: 'em1',   section: 'System Access', text: 'Email Karen Andriolo to set up email, blog access & Google Drive', flag: null },
-    { id: 'em2',   section: 'System Access', text: 'Email Judy O\'Connell to set up Edmunds & ESS access', flag: null },
+    { id: 'em2',   section: 'System Access', text: "Email Judy O'Connell to set up Edmunds & ESS access", flag: null },
     { id: 'em3',   section: 'System Access', text: 'Email IT to add email to Township distribution lists', flag: null },
     { id: 'add1',  section: 'Add to Lists', text: 'Staff List', flag: null },
     { id: 'add2',  section: 'Add to Lists', text: 'Birthday List', flag: null },
@@ -834,8 +1231,8 @@
   var offboardTasks = [
     { id: 'ohr',   section: 'HR & Administration', text: 'Advise HR of employee termination', flag: null },
     { id: 'oeaf',  section: 'HR & Administration', text: 'Complete Employee Advice Form (attach letter)', flag: null },
-    { id: 'oprf',  section: 'HR & Administration', text: 'Complete Position Requisition Form &#8212; send to HR', flag: null },
-    { id: 'odpw',  section: 'HR & Administration', text: 'Email DPW Email DPW — deactivate gas code#8212; deactivate gas code', flag: null },
+    { id: 'oprf',  section: 'HR & Administration', text: 'Complete Position Requisition Form — send to HR', flag: null },
+    { id: 'odpw',  section: 'HR & Administration', text: 'Email DPW — deactivate gas code', flag: null },
     { id: 'oweb',  section: 'HR & Administration', text: 'Remove employee contact information from dept. website', flag: null },
     { id: 'owl',   section: 'HR & Administration', text: 'Request website login be disabled (email Jen Gander)', flag: null },
     { id: 'okey',  section: 'Security & Township Property', text: 'Collect building keys', flag: null },
@@ -1085,59 +1482,28 @@
     var hires = getHires();
     var hire = hires.find(function(h) { return h.id === currentHireId; });
     if (!hire) return;
-
     var sections = {};
     onboardTasks.forEach(function(t) {
       if (!taskVisible(t, hire.type)) return;
       if (!sections[t.section]) sections[t.section] = [];
       sections[t.section].push(t);
     });
-
     var rows = '';
     Object.keys(sections).forEach(function(sec) {
-      rows += '<tr><td colspan="3" style="background:#f5f5f3;font-weight:600;padding:8px 10px;font-size:12px;border-top:2px solid #ccc;">' + sec + '</td></tr>';
+      rows += '<tr><td colspan="2" style="background:#f5f5f3;font-weight:600;padding:8px 10px;font-size:12px;border-top:2px solid #ccc;">' + sec + '</td></tr>';
       sections[sec].forEach(function(t) {
         var status = hire.statuses[t.id] || 'pending';
         var dateStr = (hire.dates && hire.dates[t.id]) ? hire.dates[t.id] : '';
         var completed = status === 'completed' ? dateStr : (status === 'na' ? 'N/A' : '');
-        rows += '<tr>' +
-          '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td>' +
-          '<td style="padding:6px 10px;border-bottom:1px solid #eee;">' + t.text + '</td>' +
-          '</tr>';
+        rows += '<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td><td style="padding:6px 10px;border-bottom:1px solid #eee;">' + t.text + '</td></tr>';
       });
     });
-
-    var html = '<!DOCTYPE html><html><head><title>Employee Onboarding Checklist</title>' +
-      '<style>body{font-family:Arial,sans-serif;font-size:13px;margin:2rem;color:#1a1a19;}' +
-      'h2{font-size:16px;margin-bottom:4px;}' +
-      '.meta{display:flex;gap:2rem;margin-bottom:1.5rem;font-size:13px;flex-wrap:wrap;}' +
-      '.meta div{border-bottom:1px solid #333;min-width:180px;padding-bottom:2px;}' +
-      '.meta label{font-size:11px;color:#666;display:block;margin-bottom:2px;}' +
-      'table{width:100%;border-collapse:collapse;}' +
-      'th{text-align:left;font-size:11px;color:#666;padding:6px 10px;border-bottom:2px solid #333;}' +
-      '.sig{margin-top:2rem;display:flex;gap:3rem;}' +
-      '.sig div{border-bottom:1px solid #333;min-width:220px;padding-bottom:2px;}' +
-      '.sig label{font-size:11px;color:#666;display:block;margin-bottom:20px;}' +
-      '@media print{body{margin:1rem;}}' +
-      '</style></head><body>' +
-      '<h2>NEW EMPLOYEE ONBOARDING CHECKLIST</h2>' +
-      '<p style="font-size:12px;color:#555;margin-bottom:1rem;">Bernards Township Library · Please complete all applicable tasks and retain a copy for the employee file.</p>' +
-      '<div class="meta">' +
-      '<div><label>EMPLOYEE NAME</label>' + hire.name + '</div>' +
-      '<div><label>DATE OF HIRE</label>' + (hire.dateofhire ? formatDate(hire.dateofhire) : '—') + '</div>' +
-      '<div><label>START DATE</label>' + formatDate(hire.start) + '</div>' +
-      '<div><label>EMPLOYMENT TYPE</label>' + typeLabel(hire.type) + '</div>' +
-      '</div>' +
-      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th>TASK</th></tr></thead><tbody>' +
-      rows +
-      '</tbody></table>' +
-      '<div class="sig">' +
-      '<div><label>COMPLETED BY</label></div>' +
-      '<div><label>DATE</label></div>' +
-      '</div>' +
-      '<script>window.onload=function(){window.print();}<\/script>' +
-      '</body></html>';
-
+    var html = '<!DOCTYPE html><html><head><title>Employee Onboarding Checklist</title><style>body{font-family:Arial,sans-serif;font-size:13px;margin:2rem;color:#1a1a19;}h2{font-size:16px;margin-bottom:4px;}.meta{display:flex;gap:2rem;margin-bottom:1.5rem;font-size:13px;flex-wrap:wrap;}.meta div{border-bottom:1px solid #333;min-width:180px;padding-bottom:2px;}.meta label{font-size:11px;color:#666;display:block;margin-bottom:2px;}table{width:100%;border-collapse:collapse;}th{text-align:left;font-size:11px;color:#666;padding:6px 10px;border-bottom:2px solid #333;}.sig{margin-top:2rem;display:flex;gap:3rem;}.sig div{border-bottom:1px solid #333;min-width:220px;padding-bottom:2px;}.sig label{font-size:11px;color:#666;display:block;margin-bottom:20px;}@media print{body{margin:1rem;}}</style></head><body>' +
+      '<h2>NEW EMPLOYEE ONBOARDING CHECKLIST</h2><p style="font-size:12px;color:#555;margin-bottom:1rem;">Bernards Township Library</p>' +
+      '<div class="meta"><div><label>EMPLOYEE NAME</label>' + hire.name + '</div><div><label>DATE OF HIRE</label>' + (hire.dateofhire ? formatDate(hire.dateofhire) : '—') + '</div><div><label>START DATE</label>' + formatDate(hire.start) + '</div><div><label>EMPLOYMENT TYPE</label>' + typeLabel(hire.type) + '</div></div>' +
+      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th>TASK</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div class="sig"><div><label>COMPLETED BY</label></div><div><label>DATE</label></div></div>' +
+      '<script>window.onload=function(){window.print();}<\/script></body></html>';
     printContent(html);
   }
 
@@ -1145,65 +1511,29 @@
     var terms = getTerms();
     var term = terms.find(function(t) { return t.id === currentTermId; });
     if (!term) return;
-
     var sections = {};
     offboardTasks.forEach(function(t) {
       if (!sections[t.section]) sections[t.section] = [];
       sections[t.section].push(t);
     });
-
     var rows = '';
     Object.keys(sections).forEach(function(sec) {
-      rows += '<tr><td colspan="3" style="background:#f5f5f3;font-weight:600;padding:8px 10px;font-size:12px;border-top:2px solid #ccc;">' + sec + '</td></tr>';
+      rows += '<tr><td colspan="2" style="background:#f5f5f3;font-weight:600;padding:8px 10px;font-size:12px;border-top:2px solid #ccc;">' + sec + '</td></tr>';
       sections[sec].forEach(function(t) {
         var status = term.statuses[t.id] || 'pending';
         var dateStr = (term.dates && term.dates[t.id]) ? term.dates[t.id] : '';
         var completed = status === 'completed' ? dateStr : (status === 'na' ? 'N/A' : '');
         var taskText = t.text;
-        if (t.id === 'oem' && term.emailAction) {
-          var actionLabels = { deactivate: 'Fully deactivate', forward: 'Set up forwarding' };
-          taskText += ' (' + (actionLabels[term.emailAction] || term.emailAction) + ')';
-        }
-        rows += '<tr>' +
-          '<td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td>' +
-          '<td style="padding:6px 10px;border-bottom:1px solid #eee;">' + taskText + '</td>' +
-          '</tr>';
+        if (t.id === 'oem' && term.emailAction) { var al = { deactivate: 'Fully deactivate', forward: 'Set up forwarding' }; taskText += ' (' + (al[term.emailAction] || term.emailAction) + ')'; }
+        rows += '<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td><td style="padding:6px 10px;border-bottom:1px solid #eee;">' + taskText + '</td></tr>';
       });
     });
-
-    var html = '<!DOCTYPE html><html><head><title>Employee Termination Checklist</title>' +
-      '<style>body{font-family:Arial,sans-serif;font-size:13px;margin:2rem;color:#1a1a19;}' +
-      'h2{font-size:16px;margin-bottom:4px;}' +
-      '.meta{display:flex;gap:2rem;margin-bottom:1.5rem;font-size:13px;}' +
-      '.meta div{border-bottom:1px solid #333;min-width:200px;padding-bottom:2px;}' +
-      '.meta label{font-size:11px;color:#666;display:block;margin-bottom:2px;}' +
-      'table{width:100%;border-collapse:collapse;}' +
-      'th{text-align:left;font-size:11px;color:#666;padding:6px 10px;border-bottom:2px solid #333;}' +
-      '.sig{margin-top:2rem;display:flex;gap:3rem;}' +
-      '.sig div{border-bottom:1px solid #333;min-width:220px;padding-bottom:2px;}' +
-      '.sig label{font-size:11px;color:#666;display:block;margin-bottom:20px;}' +
-      '@media print{body{margin:1rem;}}' +
-      '</style></head><body>' +
-      '<div style="font-size:11px;color:#666;margin-bottom:4px;">Rev. 4/2022</div>' +
-      '<h2>EMPLOYEE TERMINATION CHECKLIST FOR SUPERVISORS</h2>' +
-      '<p style="font-size:12px;color:#555;margin-bottom:1rem;">Please complete this form upon termination of an employee in your department. Once complete – submit to HR.</p>' +
-      '<div class="meta">' +
-      '<div><label>EMPLOYEE NAME</label>' + term.name + '</div>' +
-      '<div><label>SEPARATION DATE</label>' + formatDate(term.lastDay) + '</div>' +
-      '</div>' +
-      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th>TASK</th></tr></thead><tbody>' +
-      rows +
-      '</tbody></table>' +
-      '<div class="sig">' +
-      '<div><label>SUPERVISOR NAME</label></div>' +
-      '<div><label>DATE</label></div>' +
-      '</div>' +
-      '<div class="sig" style="margin-top:1.5rem;">' +
-      '<div><label>SUPERVISOR SIGNATURE</label></div>' +
-      '</div>' +
-      '<script>window.onload=function(){window.print();}<\/script>' +
-      '</body></html>';
-
+    var html = '<!DOCTYPE html><html><head><title>Employee Termination Checklist</title><style>body{font-family:Arial,sans-serif;font-size:13px;margin:2rem;color:#1a1a19;}h2{font-size:16px;margin-bottom:4px;}.meta{display:flex;gap:2rem;margin-bottom:1.5rem;font-size:13px;}.meta div{border-bottom:1px solid #333;min-width:200px;padding-bottom:2px;}.meta label{font-size:11px;color:#666;display:block;margin-bottom:2px;}table{width:100%;border-collapse:collapse;}th{text-align:left;font-size:11px;color:#666;padding:6px 10px;border-bottom:2px solid #333;}.sig{margin-top:2rem;display:flex;gap:3rem;}.sig div{border-bottom:1px solid #333;min-width:220px;padding-bottom:2px;}.sig label{font-size:11px;color:#666;display:block;margin-bottom:20px;}@media print{body{margin:1rem;}}</style></head><body>' +
+      '<div style="font-size:11px;color:#666;margin-bottom:4px;">Rev. 4/2022</div><h2>EMPLOYEE TERMINATION CHECKLIST FOR SUPERVISORS</h2><p style="font-size:12px;color:#555;margin-bottom:1rem;">Please complete this form upon termination of an employee in your department. Once complete – submit to HR.</p>' +
+      '<div class="meta"><div><label>EMPLOYEE NAME</label>' + term.name + '</div><div><label>SEPARATION DATE</label>' + formatDate(term.lastDay) + '</div></div>' +
+      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th>TASK</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div class="sig"><div><label>SUPERVISOR NAME</label></div><div><label>DATE</label></div></div>' +
+      '<script>window.onload=function(){window.print();}<\/script></body></html>';
     printContent(html);
   }
 
@@ -1214,11 +1544,7 @@
       if (!hire) return;
       hire.statuses[taskId] = hire.statuses[taskId] === status ? 'pending' : status;
       if (!hire.dates) hire.dates = {};
-      if (hire.statuses[taskId] === 'completed') {
-        hire.dates[taskId] = new Date().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
-      } else {
-        delete hire.dates[taskId];
-      }
+      if (hire.statuses[taskId] === 'completed') { hire.dates[taskId] = new Date().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}); } else { delete hire.dates[taskId]; }
       saveHires(hires);
       renderHireChecklist(hire);
       renderActiveHires();
@@ -1228,11 +1554,7 @@
       if (!term) return;
       term.statuses[taskId] = term.statuses[taskId] === status ? 'pending' : status;
       if (!term.dates) term.dates = {};
-      if (term.statuses[taskId] === 'completed') {
-        term.dates[taskId] = new Date().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
-      } else {
-        delete term.dates[taskId];
-      }
+      if (term.statuses[taskId] === 'completed') { term.dates[taskId] = new Date().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}); } else { delete term.dates[taskId]; }
       saveTerms(terms);
       renderTermChecklist(term);
       renderActiveTerms();
@@ -1242,14 +1564,9 @@
   function renderHomeOnboardCard() {
     var hires = getHires();
     var terms = getTerms();
-    var countEl = document.getElementById('home-onboard-count');
-    var subEl = document.getElementById('home-onboard-sub');
-    var total = hires.length + terms.length;
-    if (countEl) { countEl.textContent = total; }
-    if (subEl) { subEl.textContent = hires.length + ' onboarding · ' + terms.length + ' offboarding'; }
     var el = document.getElementById('home-onboard-content');
     if (!hires.length && !terms.length) {
-      el.innerHTML = '<div style="text-align:center;padding:1.5rem 0;color:#aaa;font-size:13px;">Hooray! No onboarding or offboarding in progress.</div>';
+      el.innerHTML = '<div style="text-align:center;padding:1.5rem 0;color:#aaa;font-size:13px;">No onboarding or offboarding in progress.</div>';
       return;
     }
     var html = '';
@@ -1258,57 +1575,34 @@
       hires.forEach(function(h) {
         var visibleTasks = onboardTasks.filter(function(t) { return taskVisible(t, h.type); });
         var done = visibleTasks.filter(function(t) { return h.statuses[t.id] !== 'pending'; }).length;
-        var total = visibleTasks.length;
-        var pct = Math.round(done / total * 100);
-        html += '<div style="margin-bottom:12px;">' +
-          '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">' +
-          '<div class="onboard-name" style="cursor:pointer;color:#185FA5;" onclick="showPage(\'onboarding\')">' + h.name + '</div>' +
-          '<div style="font-size:11px;color:#888;">' + pct + '% complete</div>' +
-          '</div>' +
-          '<div class="onboard-role">Starts ' + formatDate(h.start) + ' · ' + typeLabel(h.type) + '</div>' +
-          '<div class="progress-bar" style="margin-top:5px;"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
-          '</div>';
+        var pct = Math.round(done / visibleTasks.length * 100);
+        html += '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;"><div class="onboard-name" style="cursor:pointer;color:#185FA5;" onclick="showPage(\'onboarding\',null)">' + h.name + '</div><div style="font-size:11px;color:#888;">' + pct + '%</div></div><div class="onboard-role">Starts ' + formatDate(h.start) + ' · ' + typeLabel(h.type) + '</div><div class="progress-bar" style="margin-top:5px;"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
       });
     }
     if (terms.length) {
       html += '<div style="font-size:12px;font-weight:500;color:#888;margin-top:' + (hires.length ? '8px' : '0') + ';margin-bottom:8px;">Offboarding</div>';
       terms.forEach(function(t) {
         var done = Object.values(t.statuses).filter(function(s) { return s !== 'pending'; }).length;
-        var total = offboardTasks.length;
-        var pct = Math.round(done / total * 100);
-        html += '<div style="margin-bottom:12px;">' +
-          '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">' +
-          '<div class="onboard-name" style="cursor:pointer;color:#854F0B;" onclick="showPage(\'offboarding\')">' + t.name + '</div>' +
-          '<div style="font-size:11px;color:#888;">' + pct + '% complete</div>' +
-          '</div>' +
-          '<div class="onboard-role">Last day ' + formatDate(t.lastDay) + '</div>' +
-          '<div class="progress-bar" style="margin-top:5px;"><div class="progress-fill" style="width:' + pct + '%;background:#EF9F27;"></div></div>' +
-          '</div>';
+        var pct = Math.round(done / offboardTasks.length * 100);
+        html += '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;"><div class="onboard-name" style="cursor:pointer;color:#854F0B;" onclick="showPage(\'offboarding\',null)">' + t.name + '</div><div style="font-size:11px;color:#888;">' + pct + '%</div></div><div class="onboard-role">Last day ' + formatDate(t.lastDay) + '</div><div class="progress-bar" style="margin-top:5px;"><div class="progress-fill" style="width:' + pct + '%;background:#EF9F27;"></div></div></div>';
       });
     }
     el.innerHTML = html;
   }
 
   function confirmDelete(type) {
-    if (type === 'onboard') {
-      document.getElementById('delete-hire-btn').style.display = 'none';
-      document.getElementById('delete-hire-confirm').style.display = 'inline';
-    } else {
-      document.getElementById('delete-term-btn').style.display = 'none';
-      document.getElementById('delete-term-confirm').style.display = 'inline';
-    }
+    if (type === 'onboard') { document.getElementById('delete-hire-btn').style.display = 'none'; document.getElementById('delete-hire-confirm').style.display = 'inline'; }
+    else { document.getElementById('delete-term-btn').style.display = 'none'; document.getElementById('delete-term-confirm').style.display = 'inline'; }
   }
 
   function deleteHire(id, type) {
     if (type === 'onboard') {
-      var hires = getHires().filter(function(h) { return h.id !== id; });
-      saveHires(hires);
+      saveHires(getHires().filter(function(h) { return h.id !== id; }));
       currentHireId = null;
       document.getElementById('onboard-checklist-area').style.display = 'none';
       renderActiveHires();
     } else {
-      var terms = getTerms().filter(function(t) { return t.id !== id; });
-      saveTerms(terms);
+      saveTerms(getTerms().filter(function(t) { return t.id !== id; }));
       currentTermId = null;
       document.getElementById('offboard-checklist-area').style.display = 'none';
       renderActiveTerms();
@@ -1316,9 +1610,7 @@
     renderHomeOnboardCard();
   }
 
-  function typeLabel(type) {
-    return { ft: 'Full-time', pt: 'Part-time', student: 'Student shelver', temp: 'Temporary' }[type] || type;
-  }
+  function typeLabel(type) { return { ft: 'Full-time', pt: 'Part-time', student: 'Student shelver', temp: 'Temporary' }[type] || type; }
 
   function formatDate(d) {
     if (!d) return '';
@@ -1332,7 +1624,7 @@
 <div id="dept-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);z-index:999;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:12px;padding:1.5rem;width:320px;">
     <div style="font-size:15px;font-weight:500;margin-bottom:6px;">Welcome to the Staff Dashboard</div>
-    <div style="font-size:13px;color:#666;margin-bottom:16px;">Enter your name and select your department to personalize your experience. You can change this anytime.</div>
+    <div style="font-size:13px;color:#666;margin-bottom:16px;">Enter your name and select your department to personalize your experience.</div>
     <input type="text" id="staff-name" placeholder="Your first name" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
     <select id="dept-select" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;">
       <option value="">— Select your department —</option>
