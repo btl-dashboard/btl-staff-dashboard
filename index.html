@@ -387,23 +387,26 @@
             </div>
             Procedures
           </div>
-          <span class="badge badge-purple">18 docs</span>
+          <span class="badge badge-purple" id="procedure-count">24 docs</span>
         </div>
         <div class="search-bar">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" placeholder="Search procedures...">
+          <input type="text" id="procedure-search" placeholder="Search procedures..." oninput="filterProcedures()">
         </div>
-        <div class="filter-row">
-          <button class="filter-btn badge-blue">All</button>
-          <button class="filter-btn badge-gray">Circulation</button>
-          <button class="filter-btn badge-gray">Programming</button>
-          <button class="filter-btn badge-gray">Facilities</button>
+        <div class="filter-row" id="procedure-filters">
+          <button class="filter-btn badge-blue" onclick="setProcedureFilter('all', this)">All</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('incharge', this)">In-Charge</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('contact', this)">Contact Info</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('technical', this)">Technical</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('circulation', this)">Circulation</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('reference', this)">Reference</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('childrens', this)">Children's</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('phones', this)">Phones</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('website', this)">Website</button>
+          <button class="filter-btn badge-gray" onclick="setProcedureFilter('board', this)">Board</button>
         </div>
-        <div class="policy-row"><span class="policy-name">Opening &amp; closing checklist</span><span class="badge badge-gray">Facilities</span></div>
-        <div class="policy-row"><span class="policy-name">Patron holds workflow</span><span class="badge badge-blue">Circulation</span></div>
-        <div class="policy-row"><span class="policy-name">Program room booking</span><span class="badge badge-amber">Programming</span></div>
-        <div class="policy-row"><span class="policy-name">Cash handling</span><span class="badge badge-gray">Circulation</span></div>
-        <button class="view-all">View all procedures →</button>
+        <div id="procedure-list" style="max-height:148px;overflow-y:auto;"></div>
+        <div id="procedure-none" style="display:none;font-size:12px;color:#aaa;padding:8px 0;">No procedures match your search.</div>
       </div>
 
       <!-- Hardware -->
@@ -589,7 +592,91 @@
     board:    { cls: 'badge-red',    label: 'Board' }
   };
 
+  var procedures = [
+    { name: "Contact Information: Director / Board President / DPW", tags: ["contact"], url: "https://docs.google.com/document/d/1xkDbRKnJmOaTrGCDTXDbyrheSVcrEW2U/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Emergency Situations: Calling 911 / Police", tags: ["incharge"], url: "https://docs.google.com/document/d/1Xm5uunDSPvmg7Kv_ONqAeEnTb3SChVX-/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Problem Situations &#8212; What To Do / Who To Contact", tags: ["incharge"], url: "https://docs.google.com/document/d/1i2GvGVtz92YpnEUGlZHO2tXYN59iRfqn/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Inclement Weather and Other Emergency Closing Procedures", tags: ["incharge"], url: "https://docs.google.com/document/d/1vtBt4bsActXMsX9DGCY8tb38Z6SEaLve/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Inclement Weather &#8212; Staff Contact List", tags: ["contact"], url: "https://docs.google.com/document/d/1jCTeq3BFaZwic7GBBNBugrPlJN5gCTqP/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Unexpected Library Closing: Updating the Website", tags: ["website"], url: "https://docs.google.com/document/d/1fQKYbpeA9h509JUdKFnXkCEK44KVZITo/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Changing Library Phone System Attendant Announcements", tags: ["phones"], url: "https://docs.google.com/document/d/1gW26J0zexEm5Gxb_gHSNf-5bxiBXxzBq/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Self-Check Machines: Turning On", tags: ["technical"], url: "https://docs.google.com/document/d/1B1uO8L58gtu4BSJwQ_Zwbw0PrneP7W1L/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Technical Issues", tags: ["technical"], url: "https://docs.google.com/document/d/1MavQhcuGZ3Y1OP0-goMnybIcbUDTosOd/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Main Staff Contact Info", tags: ["contact"], url: "https://docs.google.com/document/d/1CPqpb2J6LPJ-L-u72ZhDGy768BAEK1zQ/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Main: After-Hours Technical Support", tags: ["contact"], url: "https://docs.google.com/document/d/1rOVT7n8HcFT3enkqFxXaL_q5Fxc3AQ5P/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Inappropriate Content on Public PCs: What To Do", tags: ["incharge"], url: "https://docs.google.com/document/d/1CSvDJXlNSm6ejWMzC3hO9yqij5lGVryS/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Opening Procedures: Circulation Department", tags: ["circulation"], url: "https://docs.google.com/document/d/1mSCTAEzBOeZbXQAgn0i9SQgDNOnCsWDo/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Till Currency Amounts", tags: ["circulation","childrens"], url: "https://docs.google.com/document/d/1aGPaNlv30TDTsJ0zYaQgWTJFRgTmA2fV/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Opening Procedures: Reference Department", tags: ["reference"], url: "https://docs.google.com/document/d/1w74sLhqR2873vhs0ZpZKDMiDKkWKLdzj/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Opening Procedures: Children's Department", tags: ["childrens"], url: "https://docs.google.com/document/d/1WHm1hqA_pubzMpyLRIlE0E_aV6yECxQt/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Closing Procedures: Circulation Department", tags: ["circulation"], url: "https://docs.google.com/document/d/1GCHQWRHnvJ1YYkpsJFpWJqhEEMYitKph/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Closing Procedures: Reference Department", tags: ["reference"], url: "https://docs.google.com/document/d/1dPcmAEauiUGq5xGkvIorh1zo4Sxx483J/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Closing Procedures: Children's Department", tags: ["childrens"], url: "https://docs.google.com/document/d/1LLKmAVWwV6eYhL5sALZ1lSlt4U1XYWSC/edit?usp=sharing&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Unattended Children at Closing Time", tags: ["incharge"], url: "https://docs.google.com/document/d/1z-Bmy_HOmp2aKsRKosTyjZa7hsgSQD4K/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Child Proof Fire Alarm Covers and Emergency Exit Door Alarm", tags: ["incharge"], url: "https://docs.google.com/document/d/1zY2jSaCIrfLZQ1J5ZIg23eYWKZmcb2iA/edit?usp=sharing&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Fire: Alarm / Emergency / Evacuation", tags: ["incharge"], url: "https://docs.google.com/document/d/1SDdt3v6XZXiIERz0HAlVKiBiEXcNNopj/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Fire Alarm Boxes, Extinguishers, AEDs, and Emergency Exits", tags: ["incharge"], url: "https://docs.google.com/document/d/1T4xm5SwLOwrQGZ9p2uiEe1WLZ-UE3XDY/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
+    { name: "Gas Odor: Procedure", tags: ["incharge"], url: "https://docs.google.com/document/d/1kLriWvab2cZ6vUXYpgnA5GvaAcT64FFM/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" }
+  ];
+
+  var procedureTagBadges = {
+    incharge:    { cls: 'badge-blue',   label: 'In-Charge' },
+    contact:     { cls: 'badge-green',  label: 'Contact Info' },
+    technical:   { cls: 'badge-purple', label: 'Technical' },
+    circulation: { cls: 'badge-amber',  label: 'Circulation' },
+    reference:   { cls: 'badge-gray',   label: 'Reference' },
+    childrens:   { cls: 'badge-red',    label: "Children's" },
+    phones:      { cls: 'badge-blue',   label: 'Phones' },
+    website:     { cls: 'badge-green',  label: 'Website' },
+    board:       { cls: 'badge-purple', label: 'Board' }
+  };
+
+  var currentProcedureFilter = 'all';
   var currentPolicyFilter = 'all';
+
+  function renderProcedures() {
+    var search  = document.getElementById('procedure-search').value.toLowerCase();
+    var list    = document.getElementById('procedure-list');
+    var none    = document.getElementById('procedure-none');
+    var count   = document.getElementById('procedure-count');
+    var visible = 0;
+    list.innerHTML = '';
+
+    procedures.forEach(function(p) {
+      var matchFilter = currentProcedureFilter === 'all' || p.tags.indexOf(currentProcedureFilter) !== -1;
+      var matchSearch = p.name.toLowerCase().indexOf(search) !== -1;
+      if (matchFilter && matchSearch) {
+        var badge = procedureTagBadges[p.tags[0]];
+        var row = document.createElement('a');
+        row.href = p.url;
+        row.target = '_blank';
+        row.className = 'policy-row';
+        row.style.textDecoration = 'none';
+        row.style.color = '#1a1a19';
+        var badgesHtml = p.tags.map(function(t) {
+          var b = procedureTagBadges[t];
+          return '<span class="badge ' + b.cls + '" style="margin-left:3px;">' + b.label + '</span>';
+        }).join('');
+        row.innerHTML = '<span class="policy-name">' + p.name + '</span>' + badgesHtml;
+        list.appendChild(row);
+        visible++;
+      }
+    });
+
+    none.style.display  = visible === 0 ? 'block' : 'none';
+    count.textContent   = visible + ' doc' + (visible !== 1 ? 's' : '');
+  }
+
+  function filterProcedures() { renderProcedures(); }
+
+  function setProcedureFilter(tag, btn) {
+    currentProcedureFilter = tag;
+    document.querySelectorAll('#procedure-filters .filter-btn').forEach(function(b) {
+      b.className = 'filter-btn badge-gray';
+    });
+    btn.className = 'filter-btn badge-blue';
+    renderProcedures();
+  }
 
   function renderPolicies() {
     var search  = document.getElementById('policy-search').value.toLowerCase();
@@ -688,6 +775,7 @@
     }
 
     renderPolicies();
+    renderProcedures();
     renderActiveHires();
     renderActiveTerms();
     renderHomeOnboardCard();
