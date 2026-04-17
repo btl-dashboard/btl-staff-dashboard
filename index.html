@@ -116,6 +116,9 @@
   .active-hire-tab.selected{background:#E6F1FB;border-color:#185FA5;color:#185FA5;font-weight:500}
   .hire-progress{font-size:11px;color:#888;margin-left:auto}
 
+  #emergency-search:focus { outline: none; box-shadow: none; }
+  #page-emergency { contain: layout; }
+
   /* ── Card hide/show toggles ── */
   .card-toggle{background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:4px;color:#bbb;transition:color 0.15s;flex-shrink:0;line-height:1;margin-left:auto;}
   .card-toggle:hover{color:#555;}
@@ -692,8 +695,8 @@
     </div><!-- end page-procedures -->
 
     <!-- EMERGENCY PAGE -->
-    <div id="page-emergency" class="page-section">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;">
+    <div id="page-emergency" class="page-section" style="overflow-x:hidden;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;gap:10px;">
         <div>
           <div class="page-title">Emergency &amp; Safety</div>
           <div class="page-sub" style="color:#1a1a19;font-size:15px;">Quick reference for emergencies, important contacts, and safety procedures</div>
@@ -706,9 +709,11 @@
 
 
       <!-- Search -->
-      <div style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #1a1a19;border-radius:10px;padding:10px 16px;margin-bottom:1.25rem;box-sizing:border-box;width:100%;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="emergency-search" placeholder="Search emergency procedures…" oninput="filterEmergency()" style="background:transparent;border:none;outline:none;font-size:15px;color:#1a1a19;width:0;flex:1;min-width:0;font-family:inherit;">
+      <div style="position:relative;margin-bottom:1.25rem;">
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #1a1a19;border-radius:10px;padding:10px 16px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="emergency-search" placeholder="Search emergency procedures…" oninput="filterEmergency()" style="background:transparent;border:none;outline:none;font-size:15px;color:#1a1a19;width:100%;font-family:inherit;" onfocus="this.style.outline='none'" onblur="this.style.outline='none'">
+        </div>
       </div>
 
       <!-- Key contacts row -->
