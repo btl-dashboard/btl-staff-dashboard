@@ -89,8 +89,8 @@
   .view-all:hover{background:#f5f5f3;color:#1a1a19}
   .onboard-divider{border-top:1px solid #f0efe9;margin-top:12px;padding-top:10px}
   .section-micro-label{font-size:12px;font-weight:500;color:#888;margin-bottom:8px}
-  .traffic-val{font-size:22px;font-weight:500;color:#1a1a19}
-  .traffic-yesterday{font-size:11px;color:#888;margin-top:3px}
+  .traffic-val{font-size:28px;font-weight:500;color:#1a1a19}
+  .traffic-yesterday{font-size:13px;color:#1a1a19;margin-top:3px}
   .traffic-loading{font-size:13px;color:#aaa}
   .traffic-error{font-size:11px;color:#A32D2D;margin-top:4px}
   .page-section{display:none}
@@ -239,6 +239,9 @@
       <div class="nav-item">
         <div class="nav-dot" style="background:#BA7517"></div> Circulation
       </div>
+      <div class="nav-item" onclick="showPage('outreach',this)">
+        <div class="nav-dot" style="background:#BA7517"></div> Outreach
+      </div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Metrics &amp; Tracking</div>
@@ -247,9 +250,6 @@
       </div>
       <div class="nav-item">
         <div class="nav-dot" style="background:#D85A30"></div> Collection Dev
-      </div>
-      <div class="nav-item">
-        <div class="nav-dot" style="background:#D85A30"></div> Outreach
       </div>
       <div class="nav-item" onclick="showPage('hardware',this)">
         <div class="nav-dot" style="background:#D85A30"></div> Hardware Inventory
@@ -300,12 +300,12 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16v2.5a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/><rect x="4" y="10" width="16" height="10" rx="2"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
             </div>
             <div>
-              <div style="font-size:13px;font-weight:500;color:#1a1a19;">Bernards Township Library</div>
-              <div style="font-size:11px;color:#1a1a19;">Staff updates &amp; announcements</div>
+              <div style="font-size:15px;font-weight:500;color:#1a1a19;">Bernards Township Library</div>
+              <div style="font-size:13px;color:#1a1a19;">Staff updates &amp; announcements</div>
             </div>
           </div>
         </div>
-        <a href="https://staff.bernardslibrary.org" target="_blank" style="display:inline-block;margin-top:6px;font-size:11px;padding:4px 10px;border:1px solid #1a1a19;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='rgba(0,0,0,0.06)'" onmouseout="this.style.background='transparent'">Open Staff Blog ↗</a>
+        <a href="https://staff.bernardslibrary.org" target="_blank" style="display:inline-block;margin-top:6px;font-size:13px;padding:5px 12px;border:1px solid #1a1a19;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='rgba(0,0,0,0.06)'" onmouseout="this.style.background='transparent'">Open Staff Blog ↗</a>
       </div>
       <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between;background:#E0F3F4;border-radius:8px;padding:0.875rem 1rem;">
         <div>
@@ -313,12 +313,12 @@
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a1a19" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             My Calendar
           </div>
-          <div id="today-date" style="font-size:15px;font-weight:500;color:#1a1a19;margin-bottom:8px;"></div>
+          <div id="today-date" style="font-size:16px;font-weight:500;color:#1a1a19;margin-bottom:8px;"></div>
           <div id="calendar-content"></div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
-          <a href="https://calendar.google.com" target="_blank" style="font-size:11px;padding:4px 10px;border:1px solid #1a1a19;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;text-align:center;" onmouseover="this.style.background='rgba(0,0,0,0.06)'" onmouseout="this.style.background='transparent'">Open Calendar ↗</a>
-          <span id="change-dept" style="font-size:10px;color:#1a1a19;cursor:pointer;text-decoration:underline;" onclick="resetDepartment()">Change department</span>
+          <a href="https://calendar.google.com" target="_blank" style="font-size:13px;padding:5px 12px;border:1px solid #1a1a19;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;text-align:center;" onmouseover="this.style.background='rgba(0,0,0,0.06)'" onmouseout="this.style.background='transparent'">Open Calendar ↗</a>
+          <span id="change-dept" style="font-size:13px;color:#1a1a19;cursor:pointer;text-decoration:underline;" onclick="resetDepartment()">Change department</span>
         </div>
       </div>
       <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between;background:#F2F9E0;border-radius:8px;padding:0.875rem 1rem;">
@@ -328,7 +328,7 @@
           <div class="traffic-yesterday" id="traffic-yesterday" style="color:#1a1a19;"></div>
           <div class="traffic-error" id="traffic-error"></div>
         </div>
-        <a href="https://vea.sensourceinc.com" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;padding:4px 10px;border:1px solid #1a1a19;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='rgba(0,0,0,0.06)'" onmouseout="this.style.background='transparent'">Open Vea ↗</a>
+        <a href="https://vea.sensourceinc.com" target="_blank" style="display:inline-block;margin-top:10px;font-size:13px;padding:5px 12px;border:1px solid #1a1a19;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='rgba(0,0,0,0.06)'" onmouseout="this.style.background='transparent'">Open Vea ↗</a>
       </div>
     </div>
 
@@ -397,7 +397,7 @@
       </div>
     </div>
 
-    <div class="grid-3">
+    <div class="grid-2">
       <!-- Policies -->
       <div class="card" id="card-policies">
         <div class="card-header">
@@ -458,31 +458,6 @@
         <div id="procedure-none" style="display:none;font-size:12px;color:#aaa;padding:8px 0;">No procedures match your search.</div>
       </div>
 
-      <!-- Hardware preview -->
-      <div class="card" id="card-hardware">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="card-icon" style="background:#FAEEDA">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#BA7517" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            </div>
-            Hardware inventory
-          </div>
-          <button class="card-toggle" onclick="toggleCard('card-hardware',this)" title="Hide this card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-          <span class="badge badge-amber">142 items</span>
-        </div>
-        <div class="search-bar">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="hw-card-search" placeholder="Search hardware..." oninput="filterHwCard()">
-        </div>
-        <div id="hw-card-rows">
-          <div class="hw-row"><div class="hw-name">Staff PCs</div><div class="hw-loc">All depts</div><span class="badge badge-blue">29 units</span></div>
-          <div class="hw-row"><div class="hw-name">Public PCs</div><div class="hw-loc">Public areas</div><span class="badge badge-blue">12 units</span></div>
-          <div class="hw-row"><div class="hw-name">Laptops &amp; Chromebooks</div><div class="hw-loc">Various</div><span class="badge badge-blue">17 units</span></div>
-          <div class="hw-row"><div class="hw-name">Printers</div><div class="hw-loc">All depts</div><span class="badge badge-blue">20 units</span></div>
-        </div>
-        <div id="hw-card-none" style="display:none;font-size:12px;color:#aaa;padding:8px 0;">No items match your search.</div>
-        <button class="view-all" onclick="showPage('hardware',null)">View full inventory →</button>
-      </div>
     </div>
 
     </div><!-- end page-home -->
@@ -723,7 +698,17 @@
           <div class="page-title">Emergency &amp; Safety</div>
           <div class="page-sub" style="color:#1a1a19;font-size:15px;">Quick reference for emergencies, important contacts, and safety procedures</div>
         </div>
-        <a href="https://drive.google.com/file/d/1vQ6FP5Au7HW2PzSsEeI_M-3MzdmdsWFr/view?usp=drive_link" target="_blank" class="action-btn" style="font-size:14px;padding:8px 16px;align-self:center;background:#1D9E75;border-color:#1D9E75;color:white;" onmouseover="this.style.background='#166f53'" onmouseout="this.style.background='#1D9E75'">View Full Emergency Manual ↗</a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-self:center;">
+          <a href="https://drive.google.com/file/d/1PiWYO_fnBgIc3DlLnzo3yze_RcRCOkdK/view?usp=drive_link" target="_blank" class="action-btn" style="font-size:14px;padding:8px 16px;background:#A32D2D;border-color:#A32D2D;color:white;" onmouseover="this.style.background='#7d2222'" onmouseout="this.style.background='#A32D2D'">Bomb Threat Checklist ↗</a>
+          <a href="https://drive.google.com/file/d/1vQ6FP5Au7HW2PzSsEeI_M-3MzdmdsWFr/view?usp=drive_link" target="_blank" class="action-btn" style="font-size:14px;padding:8px 16px;background:#1D9E75;border-color:#1D9E75;color:white;" onmouseover="this.style.background='#166f53'" onmouseout="this.style.background='#1D9E75'">View Full Emergency Manual ↗</a>
+        </div>
+      </div>
+
+
+      <!-- Search -->
+      <div style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #1a1a19;border-radius:10px;padding:10px 16px;margin-bottom:1.25rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="emergency-search" placeholder="Search emergency procedures…" oninput="filterEmergency()" style="background:transparent;border:none;outline:none;font-size:15px;color:#1a1a19;flex:1;font-family:inherit;">
       </div>
 
       <!-- Key contacts row -->
@@ -741,106 +726,274 @@
         <div style="background:#E6F1FB;border:1px solid #b3d4f0;border-radius:12px;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:6px;">
           <div style="font-size:13px;font-weight:700;color:#1a1a19;text-transform:uppercase;letter-spacing:0.05em;">After-Hours Contacts</div>
           <div style="font-size:13px;color:#1a1a19;margin-top:4px;">Director, Board President &amp; DPW emergency contacts</div>
-          <a href="https://docs.google.com/document/d/1xkDbRKnJmOaTrGCDTXDbyrheSVcrEW2U/edit" target="_blank" style="display:inline-block;margin-top:4px;font-size:12px;padding:5px 10px;border:1px solid #185FA5;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;font-weight:500;transition:background 0.15s;" onmouseover="this.style.background='rgba(24,95,165,0.08)'" onmouseout="this.style.background='transparent'">View Contact Info ↗</a>
+          <a href="https://docs.google.com/document/d/1Ho6mvN3MV9WeWh8X6hbydCR9TwyRZ4R5/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" style="display:inline-block;margin-top:4px;font-size:12px;padding:5px 10px;border:1px solid #185FA5;border-radius:7px;background:transparent;color:#1a1a19;text-decoration:none;font-weight:500;transition:background 0.15s;" onmouseover="this.style.background='rgba(24,95,165,0.08)'" onmouseout="this.style.background='transparent'">View Contact Info ↗</a>
         </div>
       </div>
 
-      <!-- Emergency procedure tiles -->
-      <div style="margin-bottom:0.75rem;font-size:14px;font-weight:600;color:#1a1a19;">Emergency Procedures</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem;">
-
-        <a href="https://docs.google.com/document/d/1SDdt3v6XZXiIERz0HAlVKiBiEXcNNopj/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
-          <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          </div>
-          <div>
-            <div style="font-size:13px;font-weight:600;">Fire: Alarm / Evacuation</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Emergency &amp; evacuation procedure</div>
-          </div>
-        </a>
-
-        <a href="https://docs.google.com/document/d/1kLriWvab2cZ6vUXYpgnA5GvaAcT64FFM/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+      <div class="emergency-section">
+      <div style="margin:1.25rem 0 0.75rem;font-size:16px;font-weight:700;color:#1a1a19;">Immediate Threats</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:0.5rem;">
+        <a href="https://docs.google.com/document/d/1As1hpSRVwps28320Cc8esNpzKbtEXiiW/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Fire: Evacuation and Extinguisher Use" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
           <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v4l3 3"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:600;">Gas Odor Procedure</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">What to do if you smell gas</div>
+            <div style="font-size:13px;font-weight:600;">Fire: Evacuation &amp; Extinguisher Use</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Fire emergency procedure</div>
           </div>
         </a>
-
-        <a href="https://docs.google.com/document/d/1Xm5uunDSPvmg7Kv_ONqAeEnTb3SChVX-/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+        <a href="https://docs.google.com/document/d/1YwezDCkAg3APGisQ9uPYC32pd8RFqiqe/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Explosion" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
           <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:600;">Calling 911 / Police</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Emergency situations procedure</div>
+            <div style="font-size:13px;font-weight:600;">Explosion</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Explosion emergency procedure</div>
           </div>
         </a>
-
-        <a href="https://docs.google.com/document/d/1i2GvGVtz92YpnEUGlZHO2tXYN59iRfqn/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
-          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <a href="https://docs.google.com/document/d/1Y7yY2XubbqJKLZew5Cq-7tsvQghcKhmj/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Bomb Threat" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:600;">Problem Situations</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">What to do / who to contact</div>
+            <div style="font-size:13px;font-weight:600;">Bomb Threat</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Bomb threat procedure</div>
           </div>
         </a>
-
-        <a href="https://docs.google.com/document/d/1T4xm5SwLOwrQGZ9p2uiEe1WLZ-UE3XDY/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
-          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        <a href="https://docs.google.com/document/d/15fff61bVp_NdfRxbJq_kNiD0jnV4uxis/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Workplace Violence / Active Shooter" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:600;">Fire Boxes, AEDs &amp; Exits</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Locations of safety equipment</div>
+            <div style="font-size:13px;font-weight:600;">Workplace Violence / Active Shooter</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Active threat procedure</div>
           </div>
         </a>
+        <a href="https://docs.google.com/document/d/1CNyUVtXs15aXzuroN0owTydONMGyKZuU/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Contamination" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Contamination</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Contamination procedure</div>
+          </div>
+        </a>
+        <a href="https://docs.google.com/document/d/1mp4vqUszgdMFiMK0ysvvAvbE4zNkBCRG/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Suspicious Package or Mail" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FCEBEB';this.style.borderColor='#A32D2D'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#A32D2D;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Suspicious Package or Mail</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Suspicious package procedure</div>
+          </div>
+        </a>
+      </div>
 
-        <a href="https://docs.google.com/document/d/1z-Bmy_HOmp2aKsRKosTyjZa7hsgSQD4K/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+      <div class="emergency-section">
+      <div style="margin:1.25rem 0 0.75rem;font-size:16px;font-weight:700;color:#1a1a19;">Evacuation &amp; Lockdown</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:0.5rem;">
+        <a href="https://docs.google.com/document/d/1q-ZTU5xgOXZdpL4kUuM7b9bbsCiaaDBb/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Evacuation and Assembly" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
           <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:600;">Unattended Children</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Procedure at closing time</div>
+            <div style="font-size:13px;font-weight:600;">Evacuation and Assembly</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Evacuation procedure</div>
           </div>
         </a>
-
-        <a href="https://docs.google.com/document/d/1vtBt4bsActXMsX9DGCY8tb38Z6SEaLve/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
-          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/><line x1="12" y1="2" x2="9" y2="5"/><line x1="12" y1="2" x2="15" y2="5"/><line x1="12" y1="22" x2="9" y2="19"/><line x1="12" y1="22" x2="15" y2="19"/><line x1="2" y1="12" x2="5" y2="9"/><line x1="2" y1="12" x2="5" y2="15"/><line x1="22" y1="12" x2="19" y2="9"/><line x1="22" y1="12" x2="19" y2="15"/></svg>
+        <a href="https://docs.google.com/document/d/1mQT90MYwgBZBsSq_MJuJaJPvv-Rf0eYK/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Evacuation Assembly Areas" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="1,6 1,22 8,18 16,22 23,18 23,2 16,6 8,2"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:600;">Inclement Weather Closing</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Emergency closing procedures</div>
+            <div style="font-size:13px;font-weight:600;">Evacuation Assembly Areas</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Assembly point locations</div>
           </div>
         </a>
-
-        <a href="https://docs.google.com/document/d/1CSvDJXlNSm6ejWMzC3hO9yqij5lGVryS/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
-          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <a href="https://docs.google.com/document/d/1pfp7Q033lF1XBvtnec30CAX5N0dvQoZw/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Lockdown" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:600;">Inappropriate Content on PCs</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">What to do on public computers</div>
+            <div style="font-size:13px;font-weight:600;">Lockdown</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Lockdown procedure</div>
           </div>
         </a>
-
-        <a href="https://docs.google.com/document/d/1zY2jSaCIrfLZQ1J5ZIg23eYWKZmcb2iA/edit" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
-          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <a href="https://docs.google.com/document/d/1PNV1kotdSb8Y2yLTRQmv3BDGONSRAPKv/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Lockout" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:600;">Fire Alarm Covers &amp; Exit Alarms</div>
-            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Child-proof covers &amp; door alarms</div>
+            <div style="font-size:13px;font-weight:600;">Lockout</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Lockout procedure</div>
           </div>
         </a>
-
+        <a href="https://docs.google.com/document/d/1l78OH5MNjlq0gTkPXsyBxDcD7KaWRb8E/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="How to Report an Emergency" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">How to Report an Emergency</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Reporting procedure</div>
+          </div>
+        </a>
+        <a href="https://docs.google.com/document/d/1YnwQCyin7XYBk_AusYNvcDcsXZNgsmYD/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Emergency Alert Stations" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#FAEEDA';this.style.borderColor='#854F0B'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#854F0B;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Emergency Alert Stations</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Alert station locations &amp; use</div>
+          </div>
+        </a>
       </div>
+
+      <div class="emergency-section">
+      <div style="margin:1.25rem 0 0.75rem;font-size:16px;font-weight:700;color:#1a1a19;">Medical &amp; Weather</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:0.5rem;">
+        <a href="https://docs.google.com/document/d/192XqWioAXpVShmG7GTrAdRwBdc6d70EX/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Medical Emergency" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Medical Emergency</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Medical emergency procedure</div>
+          </div>
+        </a>
+        <a href="https://docs.google.com/document/d/1LwpmiVIPqUiHMquFLDzl8RSMSmF1SoQD/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Natural / Weather-Related Events" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20 17.58A5 5 0 0018 8h-1.26A8 8 0 104 16.25"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="8" y1="20" x2="8.01" y2="20"/><line x1="12" y1="18" x2="12.01" y2="18"/><line x1="12" y1="22" x2="12.01" y2="22"/><line x1="16" y1="16" x2="16.01" y2="16"/><line x1="16" y1="20" x2="16.01" y2="20"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Natural / Weather-Related Events</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Hurricane, tornado, earthquake</div>
+          </div>
+        </a>
+        <a href="https://docs.google.com/document/d/1UZ4HsIXFuBdyp8Yk_dgfQaQyBzju0GuJ/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Fire Boxes, AEDs and Emergency Exits" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E6F1FB';this.style.borderColor='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#185FA5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="1,6 1,22 8,18 16,22 23,18 23,2 16,6 8,2"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Fire Boxes, AEDs &amp; Emergency Exits</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Locations of safety equipment</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="emergency-section">
+      <div style="margin:1.25rem 0 0.75rem;font-size:16px;font-weight:700;color:#1a1a19;">Preparedness &amp; Administration</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:0.5rem;">
+        <a href="https://docs.google.com/document/d/1lWtTR1h1N8EhONfMi4PWkfypYyqf2f56/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Disaster Prevention" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E1F5EE';this.style.borderColor='#1D9E75'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#1D9E75;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Disaster Prevention</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Prevention measures</div>
+          </div>
+        </a>
+        <a href="https://docs.google.com/document/d/1yta9au2eP3KSgrN7VXxVi0QQScL2ya2D/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Disaster Recovery" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E1F5EE';this.style.borderColor='#1D9E75'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#1D9E75;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Disaster Recovery</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Recovery procedure</div>
+          </div>
+        </a>
+        <a href="https://docs.google.com/document/d/11X_S3rG5P_-4MNYs7H9EiqO9UA8swDsL/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Library Director Responsibilities" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E1F5EE';this.style.borderColor='#1D9E75'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#1D9E75;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Library Director Responsibilities</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Director emergency duties</div>
+          </div>
+        </a>
+        <a href="https://docs.google.com/document/d/1w9XoVmbSAtXH_5hFtU-n_GsGTOFZ87d4/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Sabotage / Vandalism" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E1F5EE';this.style.borderColor='#1D9E75'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#1D9E75;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Sabotage / Vandalism</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Sabotage &amp; vandalism procedure</div>
+          </div>
+        </a>
+        <a href="https://docs.google.com/document/d/135ciCjsKK7esG4LiIsQe9xkzfqCoOG_p/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" data-title="Dealing with News Media" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;text-decoration:none;color:#1a1a19;transition:all 0.15s;" onmouseover="this.style.background='#E1F5EE';this.style.borderColor='#1D9E75'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0'">
+          <div style="width:38px;height:38px;background:#1D9E75;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">Dealing with News Media</div>
+            <div style="font-size:11px;color:#1a1a19;margin-top:2px;">Media &amp; public inquiries</div>
+          </div>
+        </a>
+      </div>
+      </div><!-- end last emergency-section -->
+
     </div><!-- end page-emergency -->
+
+    <!-- OUTREACH PAGE -->
+    <div id="page-outreach" class="page-section">
+      <div style="margin-bottom:1.25rem;">
+        <div class="page-title">Outreach</div>
+        <div class="page-sub">Statistics, communications, and outreach resources</div>
+      </div>
+
+      <!-- Spreadsheet cards -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-icon" style="background:#FAECE7">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              Outreach &amp; Marketing Statistics
+            </div>
+            <a href="https://docs.google.com/spreadsheets/d/1SVMaxkdJcK1AYQpTE922zU-w1jChVGUJ/edit?usp=sharing&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" class="action-btn">Open Sheet ↗</a>
+          </div>
+          <a href="https://docs.google.com/spreadsheets/d/1SVMaxkdJcK1AYQpTE922zU-w1jChVGUJ/edit?usp=sharing&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:2rem 0;text-decoration:none;background:#f5f5f3;border-radius:8px;border:1px solid #e5e5e0;transition:background 0.15s;" onmouseover="this.style.background='#eaf3de'" onmouseout="this.style.background='#f5f5f3'">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><rect width="56" height="56" rx="8" fill="#0F9D58"/><rect x="14" y="14" width="28" height="28" rx="2" fill="white" fill-opacity="0.15"/><line x1="14" y1="22" x2="42" y2="22" stroke="white" stroke-width="1.5"/><line x1="14" y1="30" x2="42" y2="30" stroke="white" stroke-width="1.5"/><line x1="14" y1="38" x2="42" y2="38" stroke="white" stroke-width="1.5"/><line x1="24" y1="14" x2="24" y2="42" stroke="white" stroke-width="1.5"/><rect x="14" y="14" width="28" height="28" rx="2" stroke="white" stroke-width="1.5"/></svg>
+            <span style="font-size:13px;font-weight:500;color:#0F9D58;">Open in Google Sheets</span>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-icon" style="background:#FAECE7">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              </div>
+              Communication Initiatives &amp; Goals By Audience
+            </div>
+            <a href="https://docs.google.com/spreadsheets/d/1Xjchn53WioZnpZmhN787DVxDctHuwSShXVQH5L9uT0c/edit?usp=sharing" target="_blank" class="action-btn">Open Sheet ↗</a>
+          </div>
+          <a href="https://docs.google.com/spreadsheets/d/1Xjchn53WioZnpZmhN787DVxDctHuwSShXVQH5L9uT0c/edit?usp=sharing" target="_blank" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:2rem 0;text-decoration:none;background:#f5f5f3;border-radius:8px;border:1px solid #e5e5e0;transition:background 0.15s;" onmouseover="this.style.background='#eaf3de'" onmouseout="this.style.background='#f5f5f3'">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><rect width="56" height="56" rx="8" fill="#0F9D58"/><rect x="14" y="14" width="28" height="28" rx="2" fill="white" fill-opacity="0.15"/><line x1="14" y1="22" x2="42" y2="22" stroke="white" stroke-width="1.5"/><line x1="14" y1="30" x2="42" y2="30" stroke="white" stroke-width="1.5"/><line x1="14" y1="38" x2="42" y2="38" stroke="white" stroke-width="1.5"/><line x1="24" y1="14" x2="24" y2="42" stroke="white" stroke-width="1.5"/><rect x="14" y="14" width="28" height="28" rx="2" stroke="white" stroke-width="1.5"/></svg>
+            <span style="font-size:13px;font-weight:500;color:#0F9D58;">Open in Google Sheets</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Link buttons -->
+      <div style="margin-top:0.5rem;">
+        <div style="font-size:13px;font-weight:600;color:#1a1a19;margin-bottom:0.75rem;">Additional Resources</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#fff;border:1px solid #e5e5e0;border-radius:10px;text-decoration:none;color:#1a1a19;font-size:14px;font-weight:500;transition:all 0.15s;" onmouseover="this.style.background='#f5f5f3';this.style.borderColor='#185FA5';this.style.color='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0';this.style.color='#1a1a19'">
+            <span>Link placeholder 1</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#fff;border:1px solid #e5e5e0;border-radius:10px;text-decoration:none;color:#1a1a19;font-size:14px;font-weight:500;transition:all 0.15s;" onmouseover="this.style.background='#f5f5f3';this.style.borderColor='#185FA5';this.style.color='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0';this.style.color='#1a1a19'">
+            <span>Link placeholder 2</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#fff;border:1px solid #e5e5e0;border-radius:10px;text-decoration:none;color:#1a1a19;font-size:14px;font-weight:500;transition:all 0.15s;" onmouseover="this.style.background='#f5f5f3';this.style.borderColor='#185FA5';this.style.color='#185FA5'" onmouseout="this.style.background='#fff';this.style.borderColor='#e5e5e0';this.style.color='#1a1a19'">
+            <span>Link placeholder 3</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div><!-- end page-outreach -->
 
   </div><!-- end main -->
 </div>
@@ -1295,13 +1448,30 @@ function hwApplySearch() {
   var currentPolicyFilter = 'all';
 
 
+
+  // ── Emergency page search ────────────────────────────────────────────────
+  function filterEmergency() {
+    var q = document.getElementById('emergency-search').value.toLowerCase().trim();
+    var tiles = document.querySelectorAll('#page-emergency a[data-title]');
+    tiles.forEach(function(tile) {
+      var text = tile.getAttribute('data-title').toLowerCase();
+      tile.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
+    });
+    // Hide/show section labels based on whether any tiles in that section are visible
+    document.querySelectorAll('.emergency-section').forEach(function(section) {
+      var anyVisible = Array.from(section.querySelectorAll('a[data-title]')).some(function(t) {
+        return t.style.display !== 'none';
+      });
+      section.style.display = anyVisible ? '' : 'none';
+    });
+  }
+
   // ── Card hide/show ──────────────────────────────────────────────────────
   var TOGGLEABLE_CARDS = [
     { id: 'card-outreach',   label: 'Outreach Statistics' },
     { id: 'card-materials',  label: 'Materials Purchasing' },
     { id: 'card-policies',   label: 'Policies' },
-    { id: 'card-procedures', label: 'Procedures' },
-    { id: 'card-hardware',   label: 'Hardware' }
+    { id: 'card-procedures', label: 'Procedures' }
   ];
 
   function getHiddenCards() {
@@ -1539,7 +1709,7 @@ function hwApplySearch() {
     if (dept && DEPT_CALENDARS[dept]) {
       content.innerHTML = '<iframe src="' + DEPT_CALENDARS[dept] + '" style="width:100%;height:160px;border:none;border-radius:6px;" frameborder="0" scrolling="no"></iframe>';
     } else {
-      content.innerHTML = '<div style="font-size:11px;color:#1a1a19;margin-top:4px;">Open your calendar to view today\'s appointments.</div>';
+      content.innerHTML = '<div style="font-size:13px;color:#1a1a19;margin-top:4px;">Open your calendar to view today\'s appointments.</div>';
     }
   }
 
@@ -2100,8 +2270,6 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       <option value="childrens">Children's Department</option>
       <option value="adult-teen">Adult & Teen Services</option>
       <option value="circulation">Circulation</option>
-      <option value="reference">Reference</option>
-      <option value="outreach">Outreach</option>
       <option value="administration">Administration</option>
     </select>
     <button onclick="saveDepartment()" style="width:100%;background:#185FA5;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;">Save & continue</button>
