@@ -213,10 +213,10 @@
     <div class="nav-section">
       <div class="nav-label">Administration</div>
       <div class="nav-item" onclick="showPage('onboarding',this)">
-        <div class="nav-dot" style="background:#534AB7"></div> Onboarding
+        <div class="nav-dot" style="background:#534AB7"></div> <span>Onboarding</span><span id="nav-onboard-count" style="margin-left:4px;color:#888;font-size:12px;"></span>
       </div>
       <div class="nav-item" onclick="showPage('offboarding',this)">
-        <div class="nav-dot" style="background:#534AB7"></div> Offboarding
+        <div class="nav-dot" style="background:#534AB7"></div> <span>Offboarding</span><span id="nav-offboard-count" style="margin-left:4px;color:#888;font-size:12px;"></span>
       </div>
     </div>
     <div class="nav-section">
@@ -335,23 +335,22 @@
       </div>
     </div>
 
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header" style="flex-direction:column;align-items:flex-start;gap:10px;">
+    <div class="grid-2" id="home-row-in-charge">
+      <!-- In-Charge Today card -->
+      <div class="card" id="card-in-charge">
+        <div class="card-header">
           <div class="card-title">
-            <div class="card-icon" style="background:#E6F1FB">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <div class="card-icon" style="background:#FAECE7">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6z"/></svg>
             </div>
-            Onboarding &amp; Offboarding
+            In-Charge Today
           </div>
-          <div style="display:flex;gap:8px;width:100%;">
-            <button class="action-btn primary" style="flex:1;text-align:center;" onclick="showPage('onboarding',this)">+ New Hire</button>
-            <button class="action-btn" style="flex:1;text-align:center;background:#FAEEDA;border-color:#EF9F27;color:#854F0B;" onclick="showPage('offboarding',this)">+ Employee Term</button>
-          </div>
+          <button id="in-charge-edit-btn" class="action-btn" style="display:none;font-size:11px;padding:4px 8px;" onclick="openInChargeModal()">Edit</button>
         </div>
-        <div id="home-onboard-content"></div>
+        <div id="in-charge-display" style="padding:4px 0;"></div>
       </div>
-            <div class="card">
+
+      <div class="card">
         <div class="card-header">
           <div class="card-title">
             <div class="card-icon" style="background:#E1F5EE">
@@ -1909,6 +1908,8 @@ function hwApplySearch() {
     document.getElementById('dept-modal').style.display = 'none';
     updateGreeting();
     showCalendarContent();
+    if (typeof renderInChargeCard === 'function') renderInChargeCard();
+    if (typeof applyAdminVisibility === 'function') applyAdminVisibility();
   }
 
   function resetDepartment() {
@@ -1994,6 +1995,10 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
 
 
   function showPage(page, el) {
+    // HR-only pages: block non-HR users from navigating in
+    if ((page === 'onboarding' || page === 'offboarding') && !isHr()) {
+      return; // silently ignore — nav items are hidden for non-HR anyway
+    }
     document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
     document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
     document.getElementById('page-' + page).classList.add('active');
@@ -2379,33 +2384,13 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
   function renderHomeOnboardCard() {
+    // Update nav counts (card was removed from home page; this now just updates the side nav)
     var hires = getHires();
     var terms = getTerms();
-    var el = document.getElementById('home-onboard-content');
-    if (!el) return;
-    if (!hires.length && !terms.length) {
-      el.innerHTML = '<div style="text-align:center;padding:1.5rem 0;color:#aaa;font-size:13px;">No onboarding or offboarding in progress.</div>';
-      return;
-    }
-    var html = '';
-    if (hires.length) {
-      html += '<div style="font-size:12px;font-weight:500;color:#888;margin-bottom:8px;">Onboarding</div>';
-      hires.forEach(function(h) {
-        var visibleTasks = onboardTasks.filter(function(t) { return taskVisible(t, h.type); });
-        var done = visibleTasks.filter(function(t) { return h.statuses[t.id] !== 'pending'; }).length;
-        var pct = Math.round(done / visibleTasks.length * 100);
-        html += '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;"><div class="onboard-name" style="cursor:pointer;color:#185FA5;" onclick="showPage(\'onboarding\',null)">' + h.name + '</div><div style="font-size:11px;color:#888;">' + pct + '%</div></div><div class="onboard-role">Starts ' + formatDate(h.start) + ' · ' + typeLabel(h.type) + '</div><div class="progress-bar" style="margin-top:5px;"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
-      });
-    }
-    if (terms.length) {
-      html += '<div style="font-size:12px;font-weight:500;color:#888;margin-top:' + (hires.length ? '8px' : '0') + ';margin-bottom:8px;">Offboarding</div>';
-      terms.forEach(function(t) {
-        var done = Object.values(t.statuses).filter(function(s) { return s !== 'pending'; }).length;
-        var pct = Math.round(done / offboardTasks.length * 100);
-        html += '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;"><div class="onboard-name" style="cursor:pointer;color:#854F0B;" onclick="showPage(\'offboarding\',null)">' + t.name + '</div><div style="font-size:11px;color:#888;">' + pct + '%</div></div><div class="onboard-role">Last day ' + formatDate(t.lastDay) + '</div><div class="progress-bar" style="margin-top:5px;"><div class="progress-fill" style="width:' + pct + '%;background:#EF9F27;"></div></div></div>';
-      });
-    }
-    el.innerHTML = html;
+    var onboardEl  = document.getElementById('nav-onboard-count');
+    var offboardEl = document.getElementById('nav-offboard-count');
+    if (onboardEl)  onboardEl.textContent  = '(' + hires.length + ')';
+    if (offboardEl) offboardEl.textContent = '(' + terms.length + ')';
   }
 
   function confirmDelete(type) {
@@ -2557,6 +2542,198 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     chartEl.innerHTML = html;
   }
 
+  // ── In-Charge Today ────────────────────────────────────────
+  // Default (fallback when no override is set or override has expired)
+  var IN_CHARGE_DEFAULT = { name: 'Rachel', contact: 'x122' };
+
+  // ── Identity / Permissions ─────────────────────────────────
+  // Populated by fetchIdentity() on page load. Until it resolves, permissions is empty (least privilege).
+  var IDENTITY_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbxBlo6LNCcPfdDlWW1aIr8vyephDTlRi6b45DSctdhevg6tTJ1lfsdC9jb0B2zeWNrt/exec';
+  var currentIdentity = { email: null, permissions: [], loaded: false };
+
+  function hasPermission(perm) {
+    return currentIdentity.permissions.indexOf(perm) >= 0;
+  }
+  function isAdmin() { return hasPermission('admin'); }
+  function isHr()    { return hasPermission('hr'); }
+
+  async function fetchIdentity() {
+    try {
+      var res = await fetch(IDENTITY_URL);
+      if (!res.ok) throw new Error('Identity request failed');
+      var data = await res.json();
+
+      // Non-Bernards consortium users get the landing page and nothing else.
+      // Only act on a definitive "not Bernards" — if the script returned an
+      // error/no_identity, leave the dashboard alone (staff view).
+      if (data && data.isBernards === false) {
+        showOutsideLanding();
+        return;
+      }
+
+      currentIdentity = {
+        email: data.email || null,
+        permissions: Array.isArray(data.permissions) ? data.permissions : [],
+        loaded: true
+      };
+    } catch (err) {
+      // On failure, default to least privilege (but keep the dashboard visible)
+      currentIdentity = { email: null, permissions: [], loaded: true, error: err.message };
+    }
+    // Re-render any UI that depends on permissions
+    renderInChargeCard();
+    applyAdminVisibility();
+    enforceAdminPageAccess();
+  }
+
+  function getInChargeOverride() {
+    try {
+      var raw = localStorage.getItem('btl_in_charge_override');
+      if (!raw) return null;
+      var o = JSON.parse(raw);
+      // Check expiration
+      var today = new Date();
+      today.setHours(0,0,0,0);
+      if (o.endDate) {
+        var end = new Date(o.endDate + 'T23:59:59');
+        if (today > end) {
+          localStorage.removeItem('btl_in_charge_override');
+          return null;
+        }
+      }
+      return o;
+    } catch(e) { return null; }
+  }
+
+  function saveInChargeOverride(name, contact, endDate) {
+    localStorage.setItem('btl_in_charge_override', JSON.stringify({ name: name, contact: contact, endDate: endDate }));
+  }
+
+  function clearInChargeOverride() {
+    localStorage.removeItem('btl_in_charge_override');
+  }
+
+  function renderInChargeCard() {
+    var displayEl = document.getElementById('in-charge-display');
+    var editBtn = document.getElementById('in-charge-edit-btn');
+    if (!displayEl) return;
+
+    var override = getInChargeOverride();
+    var current = override || IN_CHARGE_DEFAULT;
+
+    var html = '<div style="font-size:22px;font-weight:500;color:#1a1a19;margin-bottom:4px;">' + escapeHtml(current.name) + '</div>'
+             + '<div style="font-size:13px;color:#666;">' + escapeHtml(current.contact || '') + '</div>';
+
+    if (override && override.endDate) {
+      var endFmt = formatDate(override.endDate);
+      html += '<div style="font-size:11px;color:#888;margin-top:8px;font-style:italic;">Covering through ' + endFmt + '</div>';
+    }
+
+    displayEl.innerHTML = html;
+
+    // Show edit button only for admins
+    if (editBtn) editBtn.style.display = isAdmin() ? 'inline-block' : 'none';
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function openInChargeModal() {
+    if (!isAdmin()) return;
+    var override = getInChargeOverride();
+    var today = new Date();
+    var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+
+    document.getElementById('ic-name').value    = override ? override.name    : IN_CHARGE_DEFAULT.name;
+    document.getElementById('ic-contact').value = override ? override.contact : IN_CHARGE_DEFAULT.contact;
+    document.getElementById('ic-end-date').value = override && override.endDate ? override.endDate : todayStr;
+    document.getElementById('ic-end-date').min = todayStr;
+    document.getElementById('ic-reset-btn').style.display = override ? 'inline-block' : 'none';
+    document.getElementById('in-charge-modal').style.display = 'flex';
+  }
+
+  function closeInChargeModal() {
+    document.getElementById('in-charge-modal').style.display = 'none';
+  }
+
+  function saveInChargeFromModal() {
+    var name = document.getElementById('ic-name').value.trim();
+    var contact = document.getElementById('ic-contact').value.trim();
+    var endDate = document.getElementById('ic-end-date').value;
+    if (!name) { alert('Name is required'); return; }
+    if (!endDate) { alert('End date is required'); return; }
+    // If the values match the default and there's no meaningful override, just clear
+    if (name === IN_CHARGE_DEFAULT.name && contact === IN_CHARGE_DEFAULT.contact) {
+      clearInChargeOverride();
+    } else {
+      saveInChargeOverride(name, contact, endDate);
+    }
+    closeInChargeModal();
+    renderInChargeCard();
+  }
+
+  function resetInChargeOverride() {
+    clearInChargeOverride();
+    closeInChargeModal();
+    renderInChargeCard();
+  }
+
+  function applyAdminVisibility() {
+    // Onboarding/Offboarding section: HR-only
+    var hr = isHr();
+    var navItems = document.querySelectorAll('.sidenav .nav-item');
+    navItems.forEach(function(el) {
+      var oc = el.getAttribute('onclick') || '';
+      if (oc.indexOf("showPage('onboarding'") >= 0 || oc.indexOf("showPage('offboarding'") >= 0) {
+        el.style.display = hr ? '' : 'none';
+      }
+    });
+    // Hide the "Administration" section label if HR items are hidden
+    var adminLabel = null;
+    document.querySelectorAll('.sidenav .nav-label').forEach(function(el) {
+      if (el.textContent.trim() === 'Administration') adminLabel = el;
+    });
+    if (adminLabel) {
+      var section = adminLabel.parentElement;
+      if (section) section.style.display = hr ? '' : 'none';
+    }
+  }
+
+  function enforceAdminPageAccess() {
+    // If a non-HR user has an onboarding/offboarding page open, bounce them to Home
+    if (isHr()) return;
+    var onboardPage  = document.getElementById('page-onboarding');
+    var offboardPage = document.getElementById('page-offboarding');
+    if ((onboardPage && onboardPage.classList.contains('active')) ||
+        (offboardPage && offboardPage.classList.contains('active'))) {
+      if (typeof showPage === 'function') {
+        var homeNav = null;
+        document.querySelectorAll('.sidenav .nav-item').forEach(function(el) {
+          var oc = el.getAttribute('onclick') || '';
+          if (oc.indexOf("showPage('home'") >= 0) homeNav = el;
+        });
+        showPage('home', homeNav);
+      }
+    }
+  }
+
+  function showOutsideLanding() {
+    // Replace entire dashboard with a friendly "wrong place" page
+    var body = document.body;
+    if (!body) return;
+    body.innerHTML =
+      '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f5f5f3;font-family:system-ui,-apple-system,sans-serif;padding:2rem;">' +
+        '<div style="max-width:480px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:2rem;text-align:center;">' +
+          '<div style="width:48px;height:48px;background:#185FA5;border-radius:10px;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;">' +
+            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6z"/></svg>' +
+          '</div>' +
+          '<div style="font-size:18px;font-weight:500;color:#1a1a19;margin-bottom:8px;">Bernards Township Library Staff Dashboard</div>' +
+          '<div style="font-size:14px;color:#666;line-height:1.5;">This dashboard is intended for Bernards Township Library staff. If you believe you should have access, please contact Bernards Township Library administration.</div>' +
+        '</div>' +
+      '</div>';
+  }
+
   // Hook into showPage so stats load when the page is opened
   var _origShowPage = typeof showPage === 'function' ? showPage : null;
   document.addEventListener('DOMContentLoaded', function() {
@@ -2565,6 +2742,9 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       origShow(page, el);
       if (page === 'statistics') loadStatistics();
     };
+    renderInChargeCard();
+    applyAdminVisibility();  // applies initial (non-admin) state immediately
+    fetchIdentity();         // async — will re-apply once identity is known
   });
 </script>
 
@@ -2582,6 +2762,27 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       <option value="administration">Administration</option>
     </select>
     <button onclick="saveDepartment()" style="width:100%;background:#185FA5;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;">Save & continue</button>
+  </div>
+</div>
+
+<!-- In-Charge Today edit modal (admin only) -->
+<div id="in-charge-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:1.5rem;width:360px;">
+    <div style="font-size:15px;font-weight:500;margin-bottom:6px;">Set In-Charge</div>
+    <div style="font-size:13px;color:#666;margin-bottom:16px;">This will override the default in-charge staff member through the end date you choose.</div>
+    <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Name</label>
+    <input type="text" id="ic-name" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
+    <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Contact (ext. or office)</label>
+    <input type="text" id="ic-contact" placeholder="e.g. x122 or Office B" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
+    <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Through (end date)</label>
+    <input type="date" id="ic-end-date" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;box-sizing:border-box;">
+    <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;">
+      <button id="ic-reset-btn" onclick="resetInChargeOverride()" style="display:none;background:transparent;border:none;color:#A32D2D;font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline;padding:0;">Reset to default</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button onclick="closeInChargeModal()" style="background:transparent;color:#666;border:1px solid #d0d0c8;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
+        <button onclick="saveInChargeFromModal()" style="background:#185FA5;color:white;border:none;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;">Save</button>
+      </div>
+    </div>
   </div>
 </div>
 <iframe id="print-frame" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;"></iframe>
