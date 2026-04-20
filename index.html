@@ -595,7 +595,7 @@
     <div id="page-statistics" class="page-section">
       <div style="margin-bottom:1.25rem;">
         <div class="page-title">Statistics</div>
-        <div class="page-sub">Patron traffic data from the Vea people counting system</div>
+        <div class="page-sub">Patron traffic data</div>
       </div>
 
       <!-- Stat cards row -->
@@ -613,6 +613,21 @@
       <!-- Error message -->
       <div id="stat-error" style="display:none;font-size:13px;color:#A32D2D;background:#FCEBEB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;"></div>
       <div id="stat-loading" style="font-size:12px;color:#aaa;margin-bottom:1rem;"></div>
+
+      <!-- Outreach & Marketing Statistics card -->
+      <div class="card" style="max-width:520px;">
+        <div class="card-header" style="margin-bottom:0.75rem;">
+          <div class="card-title">
+            <div class="card-icon" style="background:#FAECE7;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <span style="font-size:15px;font-weight:700;color:#1a1a19;">Outreach &amp; Marketing Statistics</span>
+          </div>
+          <span class="badge badge-green">Google Sheets</span>
+        </div>
+        <p style="font-size:13px;color:#555;margin-bottom:1rem;line-height:1.6;">Track outreach events, marketing efforts, and program statistics for the library.</p>
+        <a href="https://docs.google.com/spreadsheets/d/1SVMaxkdJcK1AYQpTE922zU-w1jChVGUJ/edit?usp=sharing" target="_blank" class="action-btn primary" style="font-size:13px;padding:8px 16px;display:inline-block;text-decoration:none;">Open Sheet ↗</a>
+      </div>
     </div><!-- end page-statistics -->
 
     <!-- ═══════════════════════════════════════════
@@ -1835,7 +1850,7 @@ PROCEDURES (with links): Emergency/911: https://docs.google.com/document/d/1Xm5u
 DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromebooks, Printers, AV Equipment, Barcode Scanners, Self-Check) - all searchable and filterable.`;
 
     try {
-      var geminiUrl = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbySqbYid4QAkKYZ3LIiTxb5DoUPxZR8JNuPfDEr7ibYiZdLD3cAuTVI30vxVEad8DH3/exec?q=' + encodeURIComponent(question);
+      var geminiUrl = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbySqbYid4QAkKYZ3LIiTxb5DoUPxZR8JNuPfDEr7ibYiZdLD3cAuTVI30vxVEad8DH3/exec?q=' + encodeURIComponent(question) + '&context=' + encodeURIComponent(systemPrompt);
       var response = await fetch(geminiUrl);
       var data = await response.json();
       var answer = data.answer || 'Sorry, I could not get a response. Please try again.';
