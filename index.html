@@ -2557,33 +2557,67 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   function isAdmin() { return hasPermission('admin'); }
   function isHr()    { return hasPermission('hr'); }
 
-  async function fetchIdentity() {
-    try {
-      var res = await fetch(IDENTITY_URL);
-      if (!res.ok) throw new Error('Identity request failed');
-      var data = await res.json();
+  function fetchIdentity() {
+    return new Promise(function(resolve) {
+      var callbackName = '__identityCb_' + Math.random().toString(36).slice(2);
+      var timeoutId;
+      var done = false;
 
-      // Non-Bernards consortium users get the landing page and nothing else.
-      // Only act on a definitive "not Bernards" — if the script returned an
-      // error/no_identity, leave the dashboard alone (staff view).
-      if (data && data.isBernards === false) {
-        showOutsideLanding();
-        return;
+      window[callbackName] = function(data) {
+        if (done) return;
+        done = true;
+        clearTimeout(timeoutId);
+
+        // Non-Bernards consortium users get the landing page and nothing else.
+        if (data && data.isBernards === false) {
+          showOutsideLanding();
+          return;
+        }
+
+        currentIdentity = {
+          email: data && data.email ? data.email : null,
+          permissions: data && Array.isArray(data.permissions) ? data.permissions : [],
+          loaded: true
+        };
+        cleanup();
+        applyIdentityUI();
+        resolve();
+      };
+
+      function cleanup() {
+        try { delete window[callbackName]; } catch(_) { window[callbackName] = undefined; }
+        if (script && script.parentNode) script.parentNode.removeChild(script);
       }
 
-      currentIdentity = {
-        email: data.email || null,
-        permissions: Array.isArray(data.permissions) ? data.permissions : [],
-        loaded: true
+      function applyIdentityUI() {
+        renderInChargeCard();
+        applyAdminVisibility();
+        enforceAdminPageAccess();
+      }
+
+      var script = document.createElement('script');
+      script.src = IDENTITY_URL + (IDENTITY_URL.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+      script.onerror = function() {
+        if (done) return;
+        done = true;
+        clearTimeout(timeoutId);
+        // On failure, default to least privilege (dashboard stays visible as staff)
+        currentIdentity = { email: null, permissions: [], loaded: true, error: 'script_error' };
+        cleanup();
+        applyIdentityUI();
+        resolve();
       };
-    } catch (err) {
-      // On failure, default to least privilege (but keep the dashboard visible)
-      currentIdentity = { email: null, permissions: [], loaded: true, error: err.message };
-    }
-    // Re-render any UI that depends on permissions
-    renderInChargeCard();
-    applyAdminVisibility();
-    enforceAdminPageAccess();
+      timeoutId = setTimeout(function() {
+        if (done) return;
+        done = true;
+        currentIdentity = { email: null, permissions: [], loaded: true, error: 'timeout' };
+        cleanup();
+        applyIdentityUI();
+        resolve();
+      }, 10000);
+
+      document.head.appendChild(script);
+    });
   }
 
   function getInChargeOverride() {
