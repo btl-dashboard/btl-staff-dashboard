@@ -2346,52 +2346,10 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
   // ── Statistics Page ──────────────────────────────────────────
-  const SENSOURCE_CLIENT_ID     = '63b39fa7-aa59-42dc-9231-760dfb97aa5f';
-  const SENSOURCE_CLIENT_SECRET = 'c0144905-4552-4f07-a4ce-94a932f580b8';
-  const SENSOURCE_AUTH_URL      = 'https://auth.sensourceinc.com/oauth/token';
-  const SENSOURCE_API_BASE      = 'https://vea.sensourceinc.com/api';
-
-  let sensourceToken = null;
-
-  async function getSensourceToken() {
-    if (sensourceToken) return sensourceToken;
-    const res = await fetch(SENSOURCE_AUTH_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        grant_type: 'client_credentials',
-        client_id: SENSOURCE_CLIENT_ID,
-        client_secret: SENSOURCE_CLIENT_SECRET
-      })
-    });
-    if (!res.ok) throw new Error('Failed to get access token');
-    const data = await res.json();
-    sensourceToken = data.access_token;
-    // Clear cached token after 55 minutes (expires_in is 3600s)
-    setTimeout(function() { sensourceToken = null; }, 55 * 60 * 1000);
-    return sensourceToken;
-  }
+  const SENSOURCE_PROXY_URL = 'https://script.google.com/macros/s/AKfycbyEJXej4GEqEqsaiPGpLuJ0SP5yhjJLtd6nwJlQ2YgsHKthpfi2rbJiV1YM0sFHQnSz/exec';
 
   function toDateStr(d) {
-    return d.toISOString().split('T')[0];
-  }
-
-  function getWeekRange() {
-    var now = new Date();
-    var day = now.getDay(); // 0=Sun
-    var mon = new Date(now); mon.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
-    var sun = new Date(mon); sun.setDate(mon.getDate() + 6);
-    return { start: toDateStr(mon), end: toDateStr(sun) };
-  }
-
-  function getMonthRange(offset) {
-    var now = new Date();
-    var y = now.getFullYear();
-    var m = now.getMonth() + (offset || 0);
-    if (m < 0) { m += 12; y -= 1; }
-    var start = new Date(y, m, 1);
-    var end   = new Date(y, m + 1, 0);
-    return { start: toDateStr(start), end: toDateStr(end) };
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
   }
 
   function friendlyRange(start, end) {
@@ -2400,67 +2358,36 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     return months[parseInt(s[1])-1] + ' ' + parseInt(s[2]) + ' – ' + months[parseInt(e[1])-1] + ' ' + parseInt(e[2]);
   }
 
-  async function fetchTraffic(token, startDate, endDate) {
-    var url = SENSOURCE_API_BASE + '/data/traffic?startDate=' + startDate + '&endDate=' + endDate + '&dateGroupings=day';
-    var res = await fetch(url, {
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
-    });
-    if (!res.ok) throw new Error('Traffic API error: ' + res.status);
-    return res.json();
-  }
-
   async function loadStatistics() {
     var loadingEl = document.getElementById('stat-loading');
     var errorEl   = document.getElementById('stat-error');
-    if (!loadingEl) return; // page not yet in DOM
+    if (!loadingEl) return;
     errorEl.style.display = 'none';
     loadingEl.textContent = 'Loading…';
 
     try {
-      var token = await getSensourceToken();
+      var res  = await fetch(SENSOURCE_PROXY_URL);
+      if (!res.ok) throw new Error('Proxy request failed');
+      var data = await res.json();
+      if (data.error) throw new Error(data.error);
 
-      var week      = getWeekRange();
-      var thisMonth = getMonthRange(0);
-      var lastMonth = getMonthRange(-1);
-
-      var [weekData, monthData, lastMonthData] = await Promise.all([
-        fetchTraffic(token, week.start, week.end),
-        fetchTraffic(token, thisMonth.start, thisMonth.end),
-        fetchTraffic(token, lastMonth.start, lastMonth.end)
-      ]);
-
-      // Sum ins for each period
-      function sumIns(data) {
-        return (data.results || []).reduce(function(acc, r) { return acc + (r.sumins || r.ins || 0); }, 0);
-      }
-
-      var weekTotal      = sumIns(weekData);
-      var monthTotal     = sumIns(monthData);
-      var lastMonthTotal = sumIns(lastMonthData);
-
-      document.getElementById('stat-week').textContent       = weekTotal.toLocaleString();
-      document.getElementById('stat-month').textContent      = monthTotal.toLocaleString();
-      document.getElementById('stat-lastmonth').textContent  = lastMonthTotal.toLocaleString();
-      document.getElementById('stat-week-range').textContent      = friendlyRange(week.start, week.end);
-      document.getElementById('stat-month-range').textContent     = friendlyRange(thisMonth.start, thisMonth.end);
-      document.getElementById('stat-lastmonth-range').textContent = friendlyRange(lastMonth.start, lastMonth.end);
+      document.getElementById('stat-week').textContent      = data.week.toLocaleString();
+      document.getElementById('stat-month').textContent     = data.month.toLocaleString();
+      document.getElementById('stat-lastmonth').textContent = data.lastMonth.toLocaleString();
+      document.getElementById('stat-week-range').textContent      = friendlyRange(data.weekStart, data.weekEnd);
+      document.getElementById('stat-month-range').textContent     = friendlyRange(data.monthStart, data.monthEnd);
+      document.getElementById('stat-lastmonth-range').textContent = friendlyRange(data.lastMonthStart, data.lastMonthEnd);
 
       // Build daily breakdown table for this week
-      var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-      var byDate = {};
-      (weekData.results || []).forEach(function(r) {
-        var d = (r.recordDate_day_1 || r.recordDate || '').split('T')[0];
-        if (!byDate[d]) byDate[d] = 0;
-        byDate[d] += (r.sumins || r.ins || 0);
-      });
-
+      var days  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var today = toDateStr(new Date());
       var tbody = document.getElementById('stat-daily-tbody');
-      var rows = '';
-      var d = new Date(week.start + 'T12:00:00');
+      var rows  = '';
+      var d     = new Date(data.weekStart + 'T12:00:00');
       for (var i = 0; i < 7; i++) {
-        var ds = toDateStr(d);
-        var count = byDate[ds] !== undefined ? byDate[ds].toLocaleString() : '—';
-        var isToday = ds === toDateStr(new Date());
+        var ds      = toDateStr(d);
+        var count   = data.weekDaily && data.weekDaily[ds] !== undefined ? data.weekDaily[ds].toLocaleString() : '—';
+        var isToday = ds === today;
         rows += '<tr style="border-bottom:1px solid #f0efe9;' + (isToday ? 'background:#E6F1FB;' : '') + '">' +
           '<td style="padding:8px 10px;font-size:13px;' + (isToday ? 'font-weight:600;color:#185FA5;' : '') + '">' +
             days[d.getDay()] + ' ' + (d.getMonth()+1) + '/' + d.getDate() + (isToday ? ' <span style="font-size:11px;">(today)</span>' : '') +
