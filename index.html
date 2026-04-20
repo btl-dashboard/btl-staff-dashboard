@@ -1835,18 +1835,10 @@ PROCEDURES (with links): Emergency/911: https://docs.google.com/document/d/1Xm5u
 DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromebooks, Printers, AV Equipment, Barcode Scanners, Self-Check) - all searchable and filterable.`;
 
     try {
-      var response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: question }]
-        })
-      });
+      var geminiUrl = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbySqbYid4QAkKYZ3LIiTxb5DoUPxZR8JNuPfDEr7ibYiZdLD3cAuTVI30vxVEad8DH3/exec?q=' + encodeURIComponent(question);
+      var response = await fetch(geminiUrl);
       var data = await response.json();
-      var answer = data.content && data.content[0] ? data.content[0].text : 'Sorry, I could not get a response. Please try again.';
+      var answer = data.answer || 'Sorry, I could not get a response. Please try again.';
       answer = answer.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color:#007681;text-decoration:underline;">$1</a>');
       answer = answer.replace(/\n/g, '<br>');
       loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:13px;color:#1a1a19;max-width:80%;line-height:1.5;">' + answer + '</div>';
