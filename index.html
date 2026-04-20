@@ -640,21 +640,49 @@
         <div class="page-sub">Patron traffic data</div>
       </div>
 
-      <!-- Stat cards row -->
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1.25rem;">
-        <div class="card" style="text-align:center;">
-          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Today</div>
-          <div id="stat-today" style="font-size:32px;font-weight:600;color:#185FA5;">—</div>
+      <!-- Stat cards row: Today / Yesterday / This Week / This Month -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem;">
+        <div class="card" style="padding:1rem 1.1rem;">
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Today</div>
+          <div id="stat-today" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
+          <div id="stat-today-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
         </div>
-        <div class="card" style="text-align:center;">
-          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Yesterday</div>
-          <div id="stat-yesterday" style="font-size:32px;font-weight:600;color:#185FA5;">—</div>
+        <div class="card" style="padding:1rem 1.1rem;">
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Yesterday</div>
+          <div id="stat-yesterday" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
+          <div id="stat-yesterday-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
+        </div>
+        <div class="card" style="padding:1rem 1.1rem;">
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Week</div>
+          <div id="stat-week" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
+          <div id="stat-week-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
+        </div>
+        <div class="card" style="padding:1rem 1.1rem;">
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Month</div>
+          <div id="stat-month" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
+          <div id="stat-month-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
         </div>
       </div>
 
-      <!-- Error message -->
+      <!-- Error + loading -->
       <div id="stat-error" style="display:none;font-size:13px;color:#A32D2D;background:#FCEBEB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;"></div>
       <div id="stat-loading" style="font-size:12px;color:#aaa;margin-bottom:1rem;"></div>
+
+      <!-- Daily breakdown chart -->
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div class="card-header" style="margin-bottom:1rem;">
+          <div class="card-title">
+            <div class="card-icon" style="background:#E6F1FB;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <span style="font-size:15px;font-weight:700;color:#1a1a19;">Daily traffic — this week</span>
+          </div>
+          <span id="stat-week-range" style="font-size:11px;color:#888;"></span>
+        </div>
+        <div id="stat-daily-chart" style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:12px;color:#aaa;">—</div>
+        </div>
+      </div>
 
       <!-- Outreach & Marketing Statistics card -->
       <div class="card" style="max-width:520px;">
@@ -2410,7 +2438,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
   // ── Statistics Page ──────────────────────────────────────────
-  const SENSOURCE_PROXY_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbw1CyTbmcDX3znUeYUUdhKV_-0dbyCS9lZNEoF0su2V6wB5GoM04SeZySqD28lNEMrl/exec';
+  const SENSOURCE_PROXY_URL = 'https://script.google.com/macros/s/AKfycbw1CyTbmcDX3znUeYUUdhKV_-0dbyCS9lZNEoF0su2V6wB5GoM04SeZySqD28lNEMrl/exec';
 
   function toDateStr(d) {
     return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -2435,8 +2463,42 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       var data = await res.json();
       if (data.error) throw new Error(data.error);
 
-      document.getElementById('stat-today').textContent     = data.today.toLocaleString();
-      document.getElementById('stat-yesterday').textContent = data.yesterday.toLocaleString();
+      // ── Top cards: main numbers ──────────────────────────────
+      document.getElementById('stat-today').textContent     = (data.today || 0).toLocaleString();
+      document.getElementById('stat-yesterday').textContent = (data.yesterday || 0).toLocaleString();
+      document.getElementById('stat-week').textContent      = (data.week || 0).toLocaleString();
+      document.getElementById('stat-month').textContent     = (data.month || 0).toLocaleString();
+
+      // ── Subtext + comparisons ────────────────────────────────
+      function deltaHtml(cur, prev) {
+        if (!prev || prev === 0) return '';
+        var diff = cur - prev;
+        var pct  = Math.round(diff / prev * 100);
+        if (diff > 0) return ' <span style="color:#3B6D11;">▲ ' + pct + '%</span>';
+        if (diff < 0) return ' <span style="color:#A32D2D;">▼ ' + Math.abs(pct) + '%</span>';
+        return ' <span style="color:#888;">— 0%</span>';
+      }
+
+      // Week card subtext
+      var weekSub = document.getElementById('stat-week-sub');
+      weekSub.innerHTML = 'vs. ' + (data.lastWeek || 0).toLocaleString() + ' last week' + deltaHtml(data.week, data.lastWeek);
+
+      // Month card subtext
+      var monthSub = document.getElementById('stat-month-sub');
+      monthSub.innerHTML = 'vs. ' + (data.lastMonth || 0).toLocaleString() + ' last month' + deltaHtml(data.month, data.lastMonth);
+
+      // Today / yesterday subtext — just friendly labels
+      document.getElementById('stat-today-sub').textContent     = 'Since open (10 AM)';
+      document.getElementById('stat-yesterday-sub').textContent = 'Full day';
+
+      // Week range label
+      if (data.weekStart && data.weekEnd) {
+        document.getElementById('stat-week-range').textContent = friendlyRange(data.weekStart, data.weekEnd);
+      }
+
+      // ── Daily chart ──────────────────────────────────────────
+      renderDailyChart(data);
+
       loadingEl.textContent = '';
 
     } catch (err) {
@@ -2444,6 +2506,55 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       errorEl.style.display = 'block';
       errorEl.textContent = 'Could not load statistics: ' + err.message;
     }
+  }
+
+  function renderDailyChart(data) {
+    var chartEl = document.getElementById('stat-daily-chart');
+    if (!chartEl) return;
+    var daily = data.weekDaily || {};
+
+    // Build ordered list of days Mon–Sun using weekStart
+    if (!data.weekStart) { chartEl.innerHTML = '<div style="font-size:12px;color:#aaa;">No weekly data</div>'; return; }
+    var parts = data.weekStart.split('-');
+    var start = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    var dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+    var todayStr = (function() {
+      var n = new Date();
+      return n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0') + '-' + String(n.getDate()).padStart(2,'0');
+    })();
+
+    // Find max for scaling
+    var max = 0;
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(start); d.setDate(start.getDate() + i);
+      var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      if ((daily[key] || 0) > max) max = daily[key];
+    }
+    if (max === 0) max = 1; // avoid divide-by-zero
+
+    var html = '';
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(start); d.setDate(start.getDate() + i);
+      var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      var val = daily[key] || 0;
+      var pct = (val / max) * 100;
+      var isToday = (key === todayStr);
+      var isFuture = (key > todayStr);
+      var barColor = isToday ? '#185FA5' : (isFuture ? '#e5e5e0' : '#7FB2E2');
+      var labelColor = isToday ? '#1a1a19' : '#666';
+      var weight = isToday ? '600' : '400';
+      var valText = isFuture ? '—' : val.toLocaleString();
+
+      html += '<div style="display:flex;align-items:center;gap:10px;font-size:13px;">'
+           +   '<div style="width:36px;color:' + labelColor + ';font-weight:' + weight + ';">' + dayNames[i] + '</div>'
+           +   '<div style="flex:1;background:#f0efe9;border-radius:4px;height:18px;overflow:hidden;">'
+           +     '<div style="width:' + pct + '%;height:100%;background:' + barColor + ';border-radius:4px;transition:width 0.3s;"></div>'
+           +   '</div>'
+           +   '<div style="width:60px;text-align:right;color:' + labelColor + ';font-weight:' + weight + ';font-variant-numeric:tabular-nums;">' + valText + '</div>'
+           + '</div>';
+    }
+    chartEl.innerHTML = html;
   }
 
   // Hook into showPage so stats load when the page is opened
