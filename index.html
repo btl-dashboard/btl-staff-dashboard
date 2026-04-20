@@ -599,45 +599,20 @@
       </div>
 
       <!-- Stat cards row -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem;">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1.25rem;">
         <div class="card" style="text-align:center;">
-          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">This Week</div>
-          <div id="stat-week" style="font-size:32px;font-weight:600;color:#185FA5;">—</div>
-          <div id="stat-week-range" style="font-size:11px;color:#aaa;margin-top:4px;"></div>
+          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Today</div>
+          <div id="stat-today" style="font-size:32px;font-weight:600;color:#185FA5;">—</div>
         </div>
         <div class="card" style="text-align:center;">
-          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">This Month</div>
-          <div id="stat-month" style="font-size:32px;font-weight:600;color:#185FA5;">—</div>
-          <div id="stat-month-range" style="font-size:11px;color:#aaa;margin-top:4px;"></div>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Last Month</div>
-          <div id="stat-lastmonth" style="font-size:32px;font-weight:600;color:#D85A30;">—</div>
-          <div id="stat-lastmonth-range" style="font-size:11px;color:#aaa;margin-top:4px;"></div>
+          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Yesterday</div>
+          <div id="stat-yesterday" style="font-size:32px;font-weight:600;color:#185FA5;">—</div>
         </div>
       </div>
 
       <!-- Error message -->
       <div id="stat-error" style="display:none;font-size:13px;color:#A32D2D;background:#FCEBEB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;"></div>
-
-      <!-- Daily breakdown table for current week -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title" style="font-size:14px;font-weight:700;color:#1a1a19;">Daily Breakdown — This Week</div>
-          <div id="stat-loading" style="font-size:12px;color:#aaa;">Loading…</div>
-        </div>
-        <table style="width:100%;border-collapse:collapse;font-size:13px;">
-          <thead>
-            <tr style="border-bottom:1px solid #e5e5e0;">
-              <th style="text-align:left;padding:7px 10px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;">Day</th>
-              <th style="text-align:right;padding:7px 10px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;">Patrons</th>
-            </tr>
-          </thead>
-          <tbody id="stat-daily-tbody">
-            <tr><td colspan="2" style="text-align:center;padding:1.5rem;color:#aaa;font-size:13px;">Loading traffic data…</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <div id="stat-loading" style="font-size:12px;color:#aaa;margin-bottom:1rem;"></div>
     </div><!-- end page-statistics -->
 
     <!-- ═══════════════════════════════════════════
@@ -2352,40 +2327,14 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       var data = await res.json();
       if (data.error) throw new Error(data.error);
 
-      document.getElementById('stat-week').textContent      = data.week.toLocaleString();
-      document.getElementById('stat-month').textContent     = data.month.toLocaleString();
-      document.getElementById('stat-lastmonth').textContent = data.lastMonth.toLocaleString();
-      document.getElementById('stat-week-range').textContent      = friendlyRange(data.weekStart, data.weekEnd);
-      document.getElementById('stat-month-range').textContent     = friendlyRange(data.monthStart, data.monthEnd);
-      document.getElementById('stat-lastmonth-range').textContent = friendlyRange(data.lastMonthStart, data.lastMonthEnd);
-
-      // Build daily breakdown table for this week
-      var days  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-      var today = toDateStr(new Date());
-      var tbody = document.getElementById('stat-daily-tbody');
-      var rows  = '';
-      var d     = new Date(data.weekStart + 'T12:00:00');
-      for (var i = 0; i < 7; i++) {
-        var ds      = toDateStr(d);
-        var count   = data.weekDaily && data.weekDaily[ds] !== undefined ? data.weekDaily[ds].toLocaleString() : '—';
-        var isToday = ds === today;
-        rows += '<tr style="border-bottom:1px solid #f0efe9;' + (isToday ? 'background:#E6F1FB;' : '') + '">' +
-          '<td style="padding:8px 10px;font-size:13px;' + (isToday ? 'font-weight:600;color:#185FA5;' : '') + '">' +
-            days[d.getDay()] + ' ' + (d.getMonth()+1) + '/' + d.getDate() + (isToday ? ' <span style="font-size:11px;">(today)</span>' : '') +
-          '</td>' +
-          '<td style="padding:8px 10px;font-size:13px;text-align:right;' + (isToday ? 'font-weight:600;color:#185FA5;' : '') + '">' + count + '</td>' +
-        '</tr>';
-        d.setDate(d.getDate() + 1);
-      }
-      tbody.innerHTML = rows;
+      document.getElementById('stat-today').textContent     = data.today.toLocaleString();
+      document.getElementById('stat-yesterday').textContent = data.yesterday.toLocaleString();
       loadingEl.textContent = '';
 
     } catch (err) {
       loadingEl.textContent = '';
       errorEl.style.display = 'block';
       errorEl.textContent = 'Could not load statistics: ' + err.message;
-      document.getElementById('stat-daily-tbody').innerHTML =
-        '<tr><td colspan="2" style="text-align:center;padding:1.5rem;color:#aaa;font-size:13px;">Data unavailable.</td></tr>';
     }
   }
 
