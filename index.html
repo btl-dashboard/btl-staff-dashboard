@@ -1905,17 +1905,41 @@ function hwApplySearch() {
     localStorage.setItem('btl_dept', val);
     var name = document.getElementById('staff-name').value.trim();
     if (name) localStorage.setItem('btl_name', name);
+
+    // Supervisor self-selection → sets permissions
+    var supSel = document.getElementById('supervisor-select');
+    if (supSel) {
+      var supIdEncoded = supSel.value;
+      if (supIdEncoded) {
+        var supId = decodeURIComponent(supIdEncoded);
+        var chosen = supervisorList.filter(function(s) { return s.id === supId; })[0];
+        if (chosen) {
+          localStorage.setItem('btl_supervisor_id', supId);
+          savePermissions(chosen.permissions || []);
+        } else {
+          clearPermissions();
+        }
+      } else {
+        clearPermissions();
+      }
+    }
+
     document.getElementById('dept-modal').style.display = 'none';
     updateGreeting();
     showCalendarContent();
     if (typeof renderInChargeCard === 'function') renderInChargeCard();
     if (typeof applyAdminVisibility === 'function') applyAdminVisibility();
+    if (typeof enforceAdminPageAccess === 'function') enforceAdminPageAccess();
   }
 
   function resetDepartment() {
     localStorage.removeItem('btl_dept');
     localStorage.removeItem('btl_name');
+    clearPermissions();
     document.getElementById('dept-modal').style.display = 'flex';
+    applyAdminVisibility();
+    enforceAdminPageAccess();
+    renderInChargeCard();
   }
 
   function updateGreeting() {
@@ -2546,78 +2570,84 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   // Default (fallback when no override is set or override has expired)
   var IN_CHARGE_DEFAULT = { name: 'Rachel', contact: 'x122' };
 
-  // ── Identity / Permissions ─────────────────────────────────
-  // Populated by fetchIdentity() on page load. Until it resolves, permissions is empty (least privilege).
-  var IDENTITY_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbxBlo6LNCcPfdDlWW1aIr8vyephDTlRi6b45DSctdhevg6tTJ1lfsdC9jb0B2zeWNrt/exec';
-  var currentIdentity = { email: null, permissions: [], loaded: false };
+  // ── Permissions (self-selected from modal; stored in localStorage) ──
+  var PERMISSIONS_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbxBlo6LNCcPfdDlWW1aIr8vyephDTlRi6b45DSctdhevg6tTJ1lfsdC9jb0B2zeWNrt/exec';
+  var supervisorList = []; // populated by fetchSupervisorList()
+
+  function getStoredPermissions() {
+    try {
+      var raw = localStorage.getItem('btl_permissions');
+      if (!raw) return [];
+      var arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    } catch(e) { return []; }
+  }
+  function savePermissions(perms) {
+    localStorage.setItem('btl_permissions', JSON.stringify(perms || []));
+  }
+  function clearPermissions() {
+    localStorage.removeItem('btl_permissions');
+    localStorage.removeItem('btl_supervisor_id');
+  }
 
   function hasPermission(perm) {
-    return currentIdentity.permissions.indexOf(perm) >= 0;
+    return getStoredPermissions().indexOf(perm) >= 0;
   }
   function isAdmin() { return hasPermission('admin'); }
   function isHr()    { return hasPermission('hr'); }
 
-  function fetchIdentity() {
+  function fetchSupervisorList() {
     return new Promise(function(resolve) {
-      var callbackName = '__identityCb_' + Math.random().toString(36).slice(2);
+      var callbackName = '__supCb_' + Math.random().toString(36).slice(2);
       var timeoutId;
       var done = false;
-
       window[callbackName] = function(data) {
         if (done) return;
         done = true;
         clearTimeout(timeoutId);
-
-        // Non-Bernards consortium users get the landing page and nothing else.
-        if (data && data.isBernards === false) {
-          showOutsideLanding();
-          return;
-        }
-
-        currentIdentity = {
-          email: data && data.email ? data.email : null,
-          permissions: data && Array.isArray(data.permissions) ? data.permissions : [],
-          loaded: true
-        };
-        cleanup();
-        applyIdentityUI();
-        resolve();
-      };
-
-      function cleanup() {
+        supervisorList = (data && Array.isArray(data.supervisors)) ? data.supervisors : [];
         try { delete window[callbackName]; } catch(_) { window[callbackName] = undefined; }
         if (script && script.parentNode) script.parentNode.removeChild(script);
-      }
-
-      function applyIdentityUI() {
-        renderInChargeCard();
-        applyAdminVisibility();
-        enforceAdminPageAccess();
-      }
-
+        populateSupervisorDropdown();
+        resolve();
+      };
       var script = document.createElement('script');
-      script.src = IDENTITY_URL + (IDENTITY_URL.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+      script.src = PERMISSIONS_URL + (PERMISSIONS_URL.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
       script.onerror = function() {
         if (done) return;
         done = true;
         clearTimeout(timeoutId);
-        // On failure, default to least privilege (dashboard stays visible as staff)
-        currentIdentity = { email: null, permissions: [], loaded: true, error: 'script_error' };
-        cleanup();
-        applyIdentityUI();
+        supervisorList = [];
+        populateSupervisorDropdown();
         resolve();
       };
       timeoutId = setTimeout(function() {
         if (done) return;
         done = true;
-        currentIdentity = { email: null, permissions: [], loaded: true, error: 'timeout' };
-        cleanup();
-        applyIdentityUI();
+        supervisorList = [];
+        populateSupervisorDropdown();
         resolve();
       }, 10000);
-
       document.head.appendChild(script);
     });
+  }
+
+  function populateSupervisorDropdown() {
+    var sel = document.getElementById('supervisor-select');
+    if (!sel) return;
+    var currentId = localStorage.getItem('btl_supervisor_id') || '';
+    var html = '<option value="">— Not a supervisor —</option>';
+    supervisorList.forEach(function(s) {
+      var selected = (s.id === currentId) ? ' selected' : '';
+      html += '<option value="' + encodeURIComponent(s.id) + '"' + selected + '>' + escapeHtml(s.name) + '</option>';
+    });
+    sel.innerHTML = html;
+  }
+
+  function applyIdentityUI() {
+    renderInChargeCard();
+    applyAdminVisibility();
+    enforceAdminPageAccess();
   }
 
   function getInChargeOverride() {
@@ -2777,23 +2807,28 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       if (page === 'statistics') loadStatistics();
     };
     renderInChargeCard();
-    applyAdminVisibility();  // applies initial (non-admin) state immediately
-    fetchIdentity();         // async — will re-apply once identity is known
+    applyAdminVisibility();          // applies current stored permissions immediately
+    enforceAdminPageAccess();
+    fetchSupervisorList();           // populate dropdown in background
   });
 </script>
 
 <!-- Department selector modal -->
 <div id="dept-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);z-index:999;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:12px;padding:1.5rem;width:320px;">
+  <div style="background:#fff;border-radius:12px;padding:1.5rem;width:340px;">
     <div style="font-size:15px;font-weight:500;margin-bottom:6px;">Welcome to the Staff Dashboard</div>
     <div style="font-size:13px;color:#666;margin-bottom:16px;">Enter your name and select your department to personalize your experience.</div>
     <input type="text" id="staff-name" placeholder="Your first name" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
-    <select id="dept-select" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;">
+    <select id="dept-select" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;">
       <option value="">— Select your department —</option>
       <option value="childrens">Children's Department</option>
       <option value="adult-teen">Adult & Teen Services</option>
       <option value="circulation">Circulation</option>
       <option value="administration">Administration</option>
+    </select>
+    <div style="font-size:11px;color:#888;margin-bottom:4px;padding-left:2px;">Supervisors only:</div>
+    <select id="supervisor-select" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;">
+      <option value="">— Not a supervisor —</option>
     </select>
     <button onclick="saveDepartment()" style="width:100%;background:#185FA5;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;">Save & continue</button>
   </div>
