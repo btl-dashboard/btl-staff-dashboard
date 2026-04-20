@@ -233,10 +233,10 @@
     </div>
     <div class="nav-section">
       <div class="nav-label">Public Services</div>
-      <div class="nav-item">
+      <div class="nav-item" onclick="showPage('adult-teen',this)">
         <div class="nav-dot" style="background:#BA7517"></div> Adult &amp; Teen
       </div>
-      <div class="nav-item">
+      <div class="nav-item" onclick="showPage('childrens',this)">
         <div class="nav-dot" style="background:#BA7517"></div> Children's
       </div>
       <div class="nav-item">
@@ -248,7 +248,7 @@
     </div>
     <div class="nav-section">
       <div class="nav-label">Metrics &amp; Tracking</div>
-      <div class="nav-item">
+      <div class="nav-item" onclick="showPage('statistics',this)">
         <div class="nav-dot" style="background:#D85A30"></div> Statistics
       </div>
       <div class="nav-item">
@@ -556,6 +556,107 @@
         <div id="offboard-tasks"></div>
       </div>
     </div>
+
+    <!-- ═══════════════════════════════════════════
+         ADULT & TEEN PAGE
+         ═══════════════════════════════════════════ -->
+    <div id="page-adult-teen" class="page-section">
+      <div style="margin-bottom:1.25rem;">
+        <div class="page-title">Adult &amp; Teen Services</div>
+        <div class="page-sub">Resources and tools for the Adult &amp; Teen Services department</div>
+      </div>
+
+      <!-- Teen Volunteer Card -->
+      <div class="card" style="max-width:520px;">
+        <div class="card-header" style="margin-bottom:0.75rem;">
+          <div class="card-title">
+            <div class="card-icon" style="background:#FAEEDA;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <span style="font-size:15px;font-weight:700;color:#1a1a19;">Teen Volunteers</span>
+          </div>
+          <span class="badge badge-amber">SignUp.com</span>
+        </div>
+        <p style="font-size:13px;color:#555;margin-bottom:1rem;line-height:1.6;">Manage teen volunteer sign-ups, view upcoming shifts, and track volunteer hours for the Adult &amp; Teen Services department. Click below to open the SignUp.com staff dashboard.</p>
+        <a href="https://signup.com/Dashboard#/" target="_blank" class="action-btn primary" style="font-size:13px;padding:8px 16px;display:inline-block;text-decoration:none;">Open SignUp.com Dashboard ↗</a>
+      </div>
+    </div><!-- end page-adult-teen -->
+
+    <!-- ═══════════════════════════════════════════
+         CHILDREN'S PAGE
+         ═══════════════════════════════════════════ -->
+    <div id="page-childrens" class="page-section">
+      <div style="margin-bottom:1.25rem;">
+        <div class="page-title">Children's Department</div>
+        <div class="page-sub">Resources and tools for the Children's Department</div>
+      </div>
+
+      <!-- Teen Volunteer Card -->
+      <div class="card" style="max-width:520px;">
+        <div class="card-header" style="margin-bottom:0.75rem;">
+          <div class="card-title">
+            <div class="card-icon" style="background:#FAEEDA;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <span style="font-size:15px;font-weight:700;color:#1a1a19;">Teen Volunteers</span>
+          </div>
+          <span class="badge badge-amber">SignUp.com</span>
+        </div>
+        <p style="font-size:13px;color:#555;margin-bottom:1rem;line-height:1.6;">Manage teen volunteer sign-ups, view upcoming shifts, and track volunteer hours for the Children's Department. Click below to open the SignUp.com staff dashboard.</p>
+        <a href="https://signup.com/Dashboard#/" target="_blank" class="action-btn primary" style="font-size:13px;padding:8px 16px;display:inline-block;text-decoration:none;">Open SignUp.com Dashboard ↗</a>
+      </div>
+    </div><!-- end page-childrens -->
+
+    <!-- ═══════════════════════════════════════════
+         STATISTICS PAGE
+         ═══════════════════════════════════════════ -->
+    <div id="page-statistics" class="page-section">
+      <div style="margin-bottom:1.25rem;">
+        <div class="page-title">Statistics</div>
+        <div class="page-sub">Patron traffic data from the Vea people counting system</div>
+      </div>
+
+      <!-- Stat cards row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">This Week</div>
+          <div id="stat-week" style="font-size:32px;font-weight:600;color:#185FA5;">—</div>
+          <div id="stat-week-range" style="font-size:11px;color:#aaa;margin-top:4px;"></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">This Month</div>
+          <div id="stat-month" style="font-size:32px;font-weight:600;color:#185FA5;">—</div>
+          <div id="stat-month-range" style="font-size:11px;color:#aaa;margin-top:4px;"></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Last Month</div>
+          <div id="stat-lastmonth" style="font-size:32px;font-weight:600;color:#D85A30;">—</div>
+          <div id="stat-lastmonth-range" style="font-size:11px;color:#aaa;margin-top:4px;"></div>
+        </div>
+      </div>
+
+      <!-- Error message -->
+      <div id="stat-error" style="display:none;font-size:13px;color:#A32D2D;background:#FCEBEB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;"></div>
+
+      <!-- Daily breakdown table for current week -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title" style="font-size:14px;font-weight:700;color:#1a1a19;">Daily Breakdown — This Week</div>
+          <div id="stat-loading" style="font-size:12px;color:#aaa;">Loading…</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="border-bottom:1px solid #e5e5e0;">
+              <th style="text-align:left;padding:7px 10px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;">Day</th>
+              <th style="text-align:right;padding:7px 10px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;">Patrons</th>
+            </tr>
+          </thead>
+          <tbody id="stat-daily-tbody">
+            <tr><td colspan="2" style="text-align:center;padding:1.5rem;color:#aaa;font-size:13px;">Loading traffic data…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!-- end page-statistics -->
 
     <!-- ═══════════════════════════════════════════
          HARDWARE INVENTORY PAGE
@@ -2243,6 +2344,152 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return months[parseInt(parts[1]) - 1] + ' ' + parseInt(parts[2]) + ', ' + parts[0];
   }
+
+  // ── Statistics Page ──────────────────────────────────────────
+  const SENSOURCE_CLIENT_ID     = '63b39fa7-aa59-42dc-9231-760dfb97aa5f';
+  const SENSOURCE_CLIENT_SECRET = 'c0144905-4552-4f07-a4ce-94a932f580b8';
+  const SENSOURCE_AUTH_URL      = 'https://auth.sensourceinc.com/oauth/token';
+  const SENSOURCE_API_BASE      = 'https://vea.sensourceinc.com/api';
+
+  let sensourceToken = null;
+
+  async function getSensourceToken() {
+    if (sensourceToken) return sensourceToken;
+    const res = await fetch(SENSOURCE_AUTH_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        grant_type: 'client_credentials',
+        client_id: SENSOURCE_CLIENT_ID,
+        client_secret: SENSOURCE_CLIENT_SECRET
+      })
+    });
+    if (!res.ok) throw new Error('Failed to get access token');
+    const data = await res.json();
+    sensourceToken = data.access_token;
+    // Clear cached token after 55 minutes (expires_in is 3600s)
+    setTimeout(function() { sensourceToken = null; }, 55 * 60 * 1000);
+    return sensourceToken;
+  }
+
+  function toDateStr(d) {
+    return d.toISOString().split('T')[0];
+  }
+
+  function getWeekRange() {
+    var now = new Date();
+    var day = now.getDay(); // 0=Sun
+    var mon = new Date(now); mon.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
+    var sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+    return { start: toDateStr(mon), end: toDateStr(sun) };
+  }
+
+  function getMonthRange(offset) {
+    var now = new Date();
+    var y = now.getFullYear();
+    var m = now.getMonth() + (offset || 0);
+    if (m < 0) { m += 12; y -= 1; }
+    var start = new Date(y, m, 1);
+    var end   = new Date(y, m + 1, 0);
+    return { start: toDateStr(start), end: toDateStr(end) };
+  }
+
+  function friendlyRange(start, end) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var s = start.split('-'), e = end.split('-');
+    return months[parseInt(s[1])-1] + ' ' + parseInt(s[2]) + ' – ' + months[parseInt(e[1])-1] + ' ' + parseInt(e[2]);
+  }
+
+  async function fetchTraffic(token, startDate, endDate) {
+    var url = SENSOURCE_API_BASE + '/data/traffic?startDate=' + startDate + '&endDate=' + endDate + '&dateGroupings=day';
+    var res = await fetch(url, {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) throw new Error('Traffic API error: ' + res.status);
+    return res.json();
+  }
+
+  async function loadStatistics() {
+    var loadingEl = document.getElementById('stat-loading');
+    var errorEl   = document.getElementById('stat-error');
+    if (!loadingEl) return; // page not yet in DOM
+    errorEl.style.display = 'none';
+    loadingEl.textContent = 'Loading…';
+
+    try {
+      var token = await getSensourceToken();
+
+      var week      = getWeekRange();
+      var thisMonth = getMonthRange(0);
+      var lastMonth = getMonthRange(-1);
+
+      var [weekData, monthData, lastMonthData] = await Promise.all([
+        fetchTraffic(token, week.start, week.end),
+        fetchTraffic(token, thisMonth.start, thisMonth.end),
+        fetchTraffic(token, lastMonth.start, lastMonth.end)
+      ]);
+
+      // Sum ins for each period
+      function sumIns(data) {
+        return (data.results || []).reduce(function(acc, r) { return acc + (r.sumins || r.ins || 0); }, 0);
+      }
+
+      var weekTotal      = sumIns(weekData);
+      var monthTotal     = sumIns(monthData);
+      var lastMonthTotal = sumIns(lastMonthData);
+
+      document.getElementById('stat-week').textContent       = weekTotal.toLocaleString();
+      document.getElementById('stat-month').textContent      = monthTotal.toLocaleString();
+      document.getElementById('stat-lastmonth').textContent  = lastMonthTotal.toLocaleString();
+      document.getElementById('stat-week-range').textContent      = friendlyRange(week.start, week.end);
+      document.getElementById('stat-month-range').textContent     = friendlyRange(thisMonth.start, thisMonth.end);
+      document.getElementById('stat-lastmonth-range').textContent = friendlyRange(lastMonth.start, lastMonth.end);
+
+      // Build daily breakdown table for this week
+      var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var byDate = {};
+      (weekData.results || []).forEach(function(r) {
+        var d = (r.recordDate_day_1 || r.recordDate || '').split('T')[0];
+        if (!byDate[d]) byDate[d] = 0;
+        byDate[d] += (r.sumins || r.ins || 0);
+      });
+
+      var tbody = document.getElementById('stat-daily-tbody');
+      var rows = '';
+      var d = new Date(week.start + 'T12:00:00');
+      for (var i = 0; i < 7; i++) {
+        var ds = toDateStr(d);
+        var count = byDate[ds] !== undefined ? byDate[ds].toLocaleString() : '—';
+        var isToday = ds === toDateStr(new Date());
+        rows += '<tr style="border-bottom:1px solid #f0efe9;' + (isToday ? 'background:#E6F1FB;' : '') + '">' +
+          '<td style="padding:8px 10px;font-size:13px;' + (isToday ? 'font-weight:600;color:#185FA5;' : '') + '">' +
+            days[d.getDay()] + ' ' + (d.getMonth()+1) + '/' + d.getDate() + (isToday ? ' <span style="font-size:11px;">(today)</span>' : '') +
+          '</td>' +
+          '<td style="padding:8px 10px;font-size:13px;text-align:right;' + (isToday ? 'font-weight:600;color:#185FA5;' : '') + '">' + count + '</td>' +
+        '</tr>';
+        d.setDate(d.getDate() + 1);
+      }
+      tbody.innerHTML = rows;
+      loadingEl.textContent = '';
+
+    } catch (err) {
+      loadingEl.textContent = '';
+      errorEl.style.display = 'block';
+      errorEl.textContent = 'Could not load statistics: ' + err.message;
+      document.getElementById('stat-daily-tbody').innerHTML =
+        '<tr><td colspan="2" style="text-align:center;padding:1.5rem;color:#aaa;font-size:13px;">Data unavailable.</td></tr>';
+    }
+  }
+
+  // Hook into showPage so stats load when the page is opened
+  var _origShowPage = typeof showPage === 'function' ? showPage : null;
+  document.addEventListener('DOMContentLoaded', function() {
+    var origShow = showPage;
+    showPage = function(page, el) {
+      origShow(page, el);
+      if (page === 'statistics') loadStatistics();
+    };
+  });
 </script>
 
 <!-- Department selector modal -->
