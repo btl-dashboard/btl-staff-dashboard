@@ -2889,6 +2889,12 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     enforceAdminPageAccess();
     fetchSupervisorList();           // populate dropdown in background
     loadWeather();                   // fetch weather for the In-Charge card
+
+    // Defensive: reparent modals to body so they can't get trapped inside a hidden page-section
+    ['dept-modal','in-charge-modal'].forEach(function(id){
+      var m = document.getElementById(id);
+      if (m && m.parentElement !== document.body) document.body.appendChild(m);
+    });
   });
 </script>
 
