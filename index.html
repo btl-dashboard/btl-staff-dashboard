@@ -191,8 +191,8 @@
     </div>
   </div>
   <div class="topbar-right">
-    <div class="topbar-name">Welcome back, Library Director</div>
-    <div class="avatar">LD</div>
+    <div class="topbar-name" id="topbar-name">Welcome back</div>
+    <div class="avatar" id="topbar-avatar">BTL</div>
   </div>
 </div>
 
@@ -1950,6 +1950,12 @@ function hwApplySearch() {
     var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
     var name = localStorage.getItem('btl_name');
     document.getElementById('greeting').textContent = name ? greeting + ', ' + name + '!' : greeting + '!';
+
+    // Topbar greeting + avatar
+    var topName = document.getElementById('topbar-name');
+    var topAvatar = document.getElementById('topbar-avatar');
+    if (topName)   topName.textContent   = name ? 'Welcome back, ' + name : 'Welcome back';
+    if (topAvatar) topAvatar.textContent = name ? name.charAt(0).toUpperCase() : 'BTL';
   }
 
   window.addEventListener('DOMContentLoaded', function() {
@@ -2638,7 +2644,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     var sel = document.getElementById('supervisor-select');
     if (!sel) return;
     var currentId = localStorage.getItem('btl_supervisor_id') || '';
-    var html = '<option value="">— Not a supervisor —</option>';
+    var html = '<option value="">— Not an admin —</option>';
     supervisorList.forEach(function(s) {
       var selected = (s.id === currentId) ? ' selected' : '';
       html += '<option value="' + encodeURIComponent(s.id) + '"' + selected + '>' + escapeHtml(s.name) + '</option>';
@@ -2911,9 +2917,9 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       <option value="circulation">Circulation</option>
       <option value="administration">Administration</option>
     </select>
-    <div style="font-size:11px;color:#888;margin-bottom:4px;padding-left:2px;">Supervisors only:</div>
+    <div style="font-size:11px;color:#888;margin-bottom:4px;padding-left:2px;">For admin access, select your name from the dropdown menu:</div>
     <select id="supervisor-select" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;">
-      <option value="">— Not a supervisor —</option>
+      <option value="">— Not an admin —</option>
     </select>
     <button onclick="saveDepartment()" style="width:100%;background:#185FA5;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;">Save & continue</button>
   </div>
