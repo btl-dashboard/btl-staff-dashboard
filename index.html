@@ -347,7 +347,9 @@
           </div>
           <button id="in-charge-edit-btn" class="action-btn" style="display:none;font-size:11px;padding:4px 8px;" onclick="openInChargeModal()">Edit</button>
         </div>
-        <div id="in-charge-display" style="padding:4px 0 16px;"></div>
+        <div id="in-charge-display" style="padding:4px 0 14px;"></div>
+        <div style="border-top:1px solid #f0efe9;margin:0 -1.25rem;"></div>
+        <div id="hours-display" style="padding:14px 0;font-size:12px;color:#aaa;">Loading hours…</div>
         <div style="border-top:1px solid #f0efe9;margin:0 -1.25rem;"></div>
         <div id="weather-display" style="padding-top:14px;font-size:12px;color:#aaa;">Loading weather…</div>
       </div>
@@ -2569,6 +2571,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         try { delete window[callbackName]; } catch(_) { window[callbackName] = undefined; }
         if (script && script.parentNode) script.parentNode.removeChild(script);
         populateSupervisorDropdown();
+        renderHours(data && data.hours ? data.hours : null);
         resolve();
       };
       var script = document.createElement('script');
@@ -2602,6 +2605,78 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       html += '<option value="' + encodeURIComponent(s.id) + '"' + selected + '>' + escapeHtml(s.name) + '</option>';
     });
     sel.innerHTML = html;
+  }
+
+  // ── Library Hours (today's hours + open/closed status) ──
+  function renderHours(hours) {
+    var el = document.getElementById('hours-display');
+    if (!el) return;
+
+    if (!hours || (!hours.open && !hours.close)) {
+      // Closed all day
+      el.innerHTML = '<div style="display:flex;align-items:center;gap:8px;">'
+                   +   '<span style="width:8px;height:8px;background:#A32D2D;border-radius:50%;display:inline-block;"></span>'
+                   +   '<span style="font-size:13px;color:#1a1a19;font-weight:500;">Closed today</span>'
+                   + '</div>';
+      return;
+    }
+
+    var now = new Date();
+    var nowMins = now.getHours() * 60 + now.getMinutes();
+    var openMins  = parseTimeToMins(hours.open);
+    var closeMins = parseTimeToMins(hours.close);
+
+    var status, color, statusText;
+    if (openMins === null || closeMins === null) {
+      status = 'unknown';
+      color = '#888';
+      statusText = 'Hours unavailable';
+    } else if (nowMins < openMins) {
+      status = 'before_open';
+      color = '#888';
+      statusText = 'Opens at ' + formatTimeDisplay(hours.open);
+    } else if (nowMins >= closeMins) {
+      status = 'closed';
+      color = '#A32D2D';
+      statusText = 'Closed';
+    } else if (closeMins - nowMins <= 30) {
+      status = 'closing_soon';
+      color = '#EF9F27';
+      statusText = 'Closing soon · ' + formatTimeDisplay(hours.close);
+    } else {
+      status = 'open';
+      color = '#1D9E75';
+      statusText = 'Open until ' + formatTimeDisplay(hours.close);
+    }
+
+    var todayHours = formatTimeDisplay(hours.open) + ' – ' + formatTimeDisplay(hours.close);
+
+    el.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">'
+                 +   '<div style="display:flex;align-items:center;gap:8px;">'
+                 +     '<span style="width:8px;height:8px;background:' + color + ';border-radius:50%;display:inline-block;flex-shrink:0;"></span>'
+                 +     '<span style="font-size:13px;color:#1a1a19;font-weight:500;">' + statusText + '</span>'
+                 +   '</div>'
+                 +   '<div style="font-size:12px;color:#888;">' + todayHours + '</div>'
+                 + '</div>';
+  }
+
+  function parseTimeToMins(s) {
+    if (!s) return null;
+    var m = String(s).trim().match(/^(\d{1,2}):(\d{2})/);
+    if (!m) return null;
+    return parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+  }
+
+  function formatTimeDisplay(s) {
+    if (!s) return '';
+    var m = String(s).trim().match(/^(\d{1,2}):(\d{2})/);
+    if (!m) return String(s);
+    var h = parseInt(m[1], 10);
+    var min = parseInt(m[2], 10);
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    var dispH = h % 12;
+    if (dispH === 0) dispH = 12;
+    return min === 0 ? dispH + ' ' + ampm : dispH + ':' + (min < 10 ? '0' : '') + min + ' ' + ampm;
   }
 
   // ── Weather (Open-Meteo, Basking Ridge NJ) ────────────────
