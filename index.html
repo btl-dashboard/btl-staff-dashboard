@@ -1957,12 +1957,12 @@ function hwApplySearch() {
 
     var userMsg = document.createElement('div');
     userMsg.style.cssText = 'display:flex;justify-content:flex-end;';
-    userMsg.innerHTML = '<div style="background:#007681;color:white;padding:8px 12px;border-radius:12px 12px 2px 12px;font-size:13px;max-width:80%;">' + question + '</div>';
+    userMsg.innerHTML = '<div style="background:#007681;color:white;padding:8px 12px;border-radius:12px 12px 2px 12px;font-size:16px;max-width:80%;">' + question + '</div>';
     messages.appendChild(userMsg);
 
     var loadingMsg = document.createElement('div');
     loadingMsg.style.cssText = 'display:flex;justify-content:flex-start;';
-    loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:13px;color:#888;">Thinking...</div>';
+    loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:16px;color:#888;">Thinking...</div>';
     messages.appendChild(loadingMsg);
     messages.scrollTop = messages.scrollHeight;
 
@@ -1983,9 +1983,9 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       var answer = data.answer || (data.error ? 'Error: ' + data.error : 'Sorry, I could not get a response. Please try again.');
       answer = answer.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color:#007681;text-decoration:underline;">$1</a>');
       answer = answer.replace(/\n/g, '<br>');
-      loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:13px;color:#1a1a19;max-width:80%;line-height:1.5;">' + answer + '</div>';
+      loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:16px;color:#1a1a19;max-width:80%;line-height:1.5;">' + answer + '</div>';
     } catch(err) {
-      loadingMsg.innerHTML = '<div style="background:#FCEBEB;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:13px;color:#A32D2D;max-width:80%;">Sorry, something went wrong. Please try again.</div>';
+      loadingMsg.innerHTML = '<div style="background:#FCEBEB;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:16px;color:#A32D2D;max-width:80%;">Sorry, something went wrong. Please try again.</div>';
     }
     messages.scrollTop = messages.scrollHeight;
   }
