@@ -2463,41 +2463,19 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
 
       // Week card subtext — compare same days elapsed in last week
       var weekSub = document.getElementById('stat-week-sub');
-      var now = new Date();
-      var dayOfWeek = now.getDay(); // 0=Sun…6=Sat
-      var daysElapsed = dayOfWeek === 0 ? 7 : dayOfWeek; // days since Mon (Mon=1…Sun=7)
-      // Build last-week-to-same-point from weekDaily keys shifted back 7 days
-      var lastWeekToDate = 0;
-      if (data.weekStart) {
-        var wParts = data.weekStart.split('-');
-        var wStart = new Date(parseInt(wParts[0]), parseInt(wParts[1])-1, parseInt(wParts[2]));
-        for (var wi = 0; wi < daysElapsed; wi++) {
-          var wd = new Date(wStart); wd.setDate(wStart.getDate() - 7 + wi);
-          var wKey = wd.getFullYear() + '-' + String(wd.getMonth()+1).padStart(2,'0') + '-' + String(wd.getDate()).padStart(2,'0');
-          lastWeekToDate += (data.weekDaily && data.weekDaily[wKey]) || 0;
-        }
-      }
-      if (lastWeekToDate > 0) {
-        weekSub.innerHTML = 'vs. ' + lastWeekToDate.toLocaleString() + ' same days last week' + deltaHtml(data.week, lastWeekToDate);
+      if (data.lastWeekToDate > 0) {
+        weekSub.innerHTML = 'vs. ' + data.lastWeekToDate.toLocaleString() + ' same days last week' + deltaHtml(data.week, data.lastWeekToDate);
       } else {
-        weekSub.innerHTML = 'Mon – ' + ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dayOfWeek] + ' this week';
+        weekSub.innerHTML = friendlyRange(data.weekStart, data.weekEnd);
       }
 
       // Month card subtext — compare same day-of-month in last month
       var monthSub = document.getElementById('stat-month-sub');
-      var dayOfMonth = now.getDate();
-      // Compute last month's to-same-date total from lastMonthStart + dayOfMonth days
-      var lastMonthToDate = 0;
-      if (data.lastMonthStart) {
-        var lmParts = data.lastMonthStart.split('-');
-        var lmStart = new Date(parseInt(lmParts[0]), parseInt(lmParts[1])-1, parseInt(lmParts[2]));
-        // last month may have fewer days — cap at its last day
-        var lmMaxDay = new Date(lmStart.getFullYear(), lmStart.getMonth()+1, 0).getDate();
-        var lmEndDay = Math.min(dayOfMonth, lmMaxDay);
-        // We only have the full lastMonth total, not daily breakdown — use data.lastMonth as fallback label
-        lastMonthToDate = data.lastMonth || 0;
+      if (data.lastMonthToDate > 0) {
+        monthSub.innerHTML = 'vs. ' + data.lastMonthToDate.toLocaleString() + ' same date last month' + deltaHtml(data.month, data.lastMonthToDate);
+      } else {
+        monthSub.innerHTML = friendlyRange(data.monthStart, data.monthEnd);
       }
-      monthSub.innerHTML = 'vs. ' + (data.lastMonth || 0).toLocaleString() + ' full last month' + deltaHtml(data.month, data.lastMonth);
 
       // Today / yesterday subtext — just friendly labels
       document.getElementById('stat-today-sub').textContent     = 'Since open (10 AM)';
