@@ -360,8 +360,7 @@
         </div>
         <div id="in-charge-display" style="padding:4px 0 14px;"></div>
         <div style="border-top:1px solid #f0efe9;margin:0 -1.25rem;"></div>
-        <div style="padding-top:12px;padding-bottom:4px;font-size:14px;font-weight:700;color:#1a1a19;">Today's Hours</div>
-        <div id="hours-display" style="padding-bottom:14px;font-size:12px;color:#aaa;">Loading hours…</div>
+        <div id="hours-display" style="padding:14px 0;font-size:12px;color:#aaa;">Loading hours…</div>
         <div style="border-top:1px solid #f0efe9;margin:0 -1.25rem;"></div>
         <div id="weather-display" style="padding-top:14px;font-size:12px;color:#aaa;">Loading weather…</div>
       </div>
@@ -668,12 +667,12 @@
           <div id="stat-yesterday-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
         </div>
         <div class="card" style="padding:1rem 1.1rem;">
-          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Week</div>
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Week to Date</div>
           <div id="stat-week" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
           <div id="stat-week-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
         </div>
         <div class="card" style="padding:1rem 1.1rem;">
-          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Month</div>
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Month to Date</div>
           <div id="stat-month" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
           <div id="stat-month-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
         </div>
@@ -2421,7 +2420,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
   // ── Statistics Page ──────────────────────────────────────────
-  const SENSOURCE_PROXY_URL = 'https://script.google.com/macros/s/AKfycbw1CyTbmcDX3znUeYUUdhKV_-0dbyCS9lZNEoF0su2V6wB5GoM04SeZySqD28lNEMrl/exec';
+  const SENSOURCE_PROXY_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbw1CyTbmcDX3znUeYUUdhKV_-0dbyCS9lZNEoF0su2V6wB5GoM04SeZySqD28lNEMrl/exec';
 
   function toDateStr(d) {
     return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -2462,13 +2461,43 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         return ' <span style="color:#888;">— 0%</span>';
       }
 
-      // Week card subtext
+      // Week card subtext — compare same days elapsed in last week
       var weekSub = document.getElementById('stat-week-sub');
-      weekSub.innerHTML = 'vs. ' + (data.lastWeek || 0).toLocaleString() + ' last week' + deltaHtml(data.week, data.lastWeek);
+      var now = new Date();
+      var dayOfWeek = now.getDay(); // 0=Sun…6=Sat
+      var daysElapsed = dayOfWeek === 0 ? 7 : dayOfWeek; // days since Mon (Mon=1…Sun=7)
+      // Build last-week-to-same-point from weekDaily keys shifted back 7 days
+      var lastWeekToDate = 0;
+      if (data.weekStart) {
+        var wParts = data.weekStart.split('-');
+        var wStart = new Date(parseInt(wParts[0]), parseInt(wParts[1])-1, parseInt(wParts[2]));
+        for (var wi = 0; wi < daysElapsed; wi++) {
+          var wd = new Date(wStart); wd.setDate(wStart.getDate() - 7 + wi);
+          var wKey = wd.getFullYear() + '-' + String(wd.getMonth()+1).padStart(2,'0') + '-' + String(wd.getDate()).padStart(2,'0');
+          lastWeekToDate += (data.weekDaily && data.weekDaily[wKey]) || 0;
+        }
+      }
+      if (lastWeekToDate > 0) {
+        weekSub.innerHTML = 'vs. ' + lastWeekToDate.toLocaleString() + ' same days last week' + deltaHtml(data.week, lastWeekToDate);
+      } else {
+        weekSub.innerHTML = 'Mon – ' + ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dayOfWeek] + ' this week';
+      }
 
-      // Month card subtext
+      // Month card subtext — compare same day-of-month in last month
       var monthSub = document.getElementById('stat-month-sub');
-      monthSub.innerHTML = 'vs. ' + (data.lastMonth || 0).toLocaleString() + ' last month' + deltaHtml(data.month, data.lastMonth);
+      var dayOfMonth = now.getDate();
+      // Compute last month's to-same-date total from lastMonthStart + dayOfMonth days
+      var lastMonthToDate = 0;
+      if (data.lastMonthStart) {
+        var lmParts = data.lastMonthStart.split('-');
+        var lmStart = new Date(parseInt(lmParts[0]), parseInt(lmParts[1])-1, parseInt(lmParts[2]));
+        // last month may have fewer days — cap at its last day
+        var lmMaxDay = new Date(lmStart.getFullYear(), lmStart.getMonth()+1, 0).getDate();
+        var lmEndDay = Math.min(dayOfMonth, lmMaxDay);
+        // We only have the full lastMonth total, not daily breakdown — use data.lastMonth as fallback label
+        lastMonthToDate = data.lastMonth || 0;
+      }
+      monthSub.innerHTML = 'vs. ' + (data.lastMonth || 0).toLocaleString() + ' full last month' + deltaHtml(data.month, data.lastMonth);
 
       // Today / yesterday subtext — just friendly labels
       document.getElementById('stat-today-sub').textContent     = 'Since open (10 AM)';
