@@ -651,51 +651,7 @@
     <div id="page-statistics" class="page-section">
       <div style="margin-bottom:1.25rem;">
         <div class="page-title">Statistics</div>
-        <div class="page-sub">Patron traffic data</div>
-      </div>
-
-      <!-- Stat cards row: Today / Yesterday / This Week / This Month -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem;">
-        <div class="card" style="padding:1rem 1.1rem;">
-          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Today</div>
-          <div id="stat-today" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
-          <div id="stat-today-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
-        </div>
-        <div class="card" style="padding:1rem 1.1rem;">
-          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Yesterday</div>
-          <div id="stat-yesterday" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
-          <div id="stat-yesterday-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
-        </div>
-        <div class="card" style="padding:1rem 1.1rem;">
-          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Week to Date</div>
-          <div id="stat-week" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
-          <div id="stat-week-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
-        </div>
-        <div class="card" style="padding:1rem 1.1rem;">
-          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Month to Date</div>
-          <div id="stat-month" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
-          <div id="stat-month-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
-        </div>
-      </div>
-
-      <!-- Error + loading -->
-      <div id="stat-error" style="display:none;font-size:13px;color:#A32D2D;background:#FCEBEB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;"></div>
-      <div id="stat-loading" style="font-size:12px;color:#aaa;margin-bottom:1rem;"></div>
-
-      <!-- Daily breakdown chart -->
-      <div class="card" style="margin-bottom:1.25rem;">
-        <div class="card-header" style="margin-bottom:1rem;">
-          <div class="card-title">
-            <div class="card-icon" style="background:#E6F1FB;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            </div>
-            <span style="font-size:15px;font-weight:700;color:#1a1a19;">Daily traffic — this week</span>
-          </div>
-          <span id="stat-week-range" style="font-size:11px;color:#888;"></span>
-        </div>
-        <div id="stat-daily-chart" style="display:flex;flex-direction:column;gap:8px;">
-          <div style="font-size:12px;color:#aaa;">—</div>
-        </div>
+        <div class="page-sub">Outreach, marketing &amp; program statistics</div>
       </div>
 
       <!-- Outreach & Marketing Statistics card -->
@@ -1957,12 +1913,12 @@ function hwApplySearch() {
 
     var userMsg = document.createElement('div');
     userMsg.style.cssText = 'display:flex;justify-content:flex-end;';
-    userMsg.innerHTML = '<div style="background:#007681;color:white;padding:8px 12px;border-radius:12px 12px 2px 12px;font-size:16px;max-width:80%;">' + question + '</div>';
+    userMsg.innerHTML = '<div style="background:#007681;color:white;padding:8px 12px;border-radius:12px 12px 2px 12px;font-size:13px;max-width:80%;">' + question + '</div>';
     messages.appendChild(userMsg);
 
     var loadingMsg = document.createElement('div');
     loadingMsg.style.cssText = 'display:flex;justify-content:flex-start;';
-    loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:16px;color:#888;">Thinking...</div>';
+    loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:13px;color:#888;">Thinking...</div>';
     messages.appendChild(loadingMsg);
     messages.scrollTop = messages.scrollHeight;
 
@@ -1977,15 +1933,15 @@ PROCEDURES (with links): Emergency/911: https://docs.google.com/document/d/1Xm5u
 DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromebooks, Printers, AV Equipment, Barcode Scanners, Self-Check) - all searchable and filterable.`;
 
     try {
-      var geminiUrl = 'https://script.google.com/macros/s/AKfycbySqbYid4QAkKYZ3LIiTxb5DoUPxZR8JNuPfDEr7ibYiZdLD3cAuTVI30vxVEad8DH3/exec?q=' + encodeURIComponent(question);
-      var response = await fetch(geminiUrl, { redirect: 'follow' });
+      var geminiUrl = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbySqbYid4QAkKYZ3LIiTxb5DoUPxZR8JNuPfDEr7ibYiZdLD3cAuTVI30vxVEad8DH3/exec?q=' + encodeURIComponent(question);
+      var response = await fetch(geminiUrl);
       var data = await response.json();
-      var answer = data.answer || (data.error ? 'Error: ' + data.error : 'Sorry, I could not get a response. Please try again.');
+      var answer = data.answer || 'Sorry, I could not get a response. Please try again.';
       answer = answer.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color:#007681;text-decoration:underline;">$1</a>');
       answer = answer.replace(/\n/g, '<br>');
-      loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:16px;color:#1a1a19;max-width:80%;line-height:1.5;">' + answer + '</div>';
+      loadingMsg.innerHTML = '<div style="background:#f5f5f3;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:13px;color:#1a1a19;max-width:80%;line-height:1.5;">' + answer + '</div>';
     } catch(err) {
-      loadingMsg.innerHTML = '<div style="background:#FCEBEB;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:16px;color:#A32D2D;max-width:80%;">Sorry, something went wrong. Please try again.</div>';
+      loadingMsg.innerHTML = '<div style="background:#FCEBEB;padding:8px 12px;border-radius:12px 12px 12px 2px;font-size:13px;color:#A32D2D;max-width:80%;">Sorry, something went wrong. Please try again.</div>';
     }
     messages.scrollTop = messages.scrollHeight;
   }
@@ -2420,7 +2376,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
   // ── Statistics Page ──────────────────────────────────────────
-  const SENSOURCE_PROXY_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbw1CyTbmcDX3znUeYUUdhKV_-0dbyCS9lZNEoF0su2V6wB5GoM04SeZySqD28lNEMrl/exec';
+  const SENSOURCE_PROXY_URL = 'https://script.google.com/macros/s/AKfycbw1CyTbmcDX3znUeYUUdhKV_-0dbyCS9lZNEoF0su2V6wB5GoM04SeZySqD28lNEMrl/exec';
 
   function toDateStr(d) {
     return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -2461,21 +2417,13 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         return ' <span style="color:#888;">— 0%</span>';
       }
 
-      // Week card subtext — compare same days elapsed in last week
+      // Week card subtext
       var weekSub = document.getElementById('stat-week-sub');
-      if (data.lastWeekToDate > 0) {
-        weekSub.innerHTML = 'vs. ' + data.lastWeekToDate.toLocaleString() + ' same days last week' + deltaHtml(data.week, data.lastWeekToDate);
-      } else {
-        weekSub.innerHTML = friendlyRange(data.weekStart, data.weekEnd);
-      }
+      weekSub.innerHTML = 'vs. ' + (data.lastWeek || 0).toLocaleString() + ' last week' + deltaHtml(data.week, data.lastWeek);
 
-      // Month card subtext — compare same day-of-month in last month
+      // Month card subtext
       var monthSub = document.getElementById('stat-month-sub');
-      if (data.lastMonthToDate > 0) {
-        monthSub.innerHTML = 'vs. ' + data.lastMonthToDate.toLocaleString() + ' same date last month' + deltaHtml(data.month, data.lastMonthToDate);
-      } else {
-        monthSub.innerHTML = friendlyRange(data.monthStart, data.monthEnd);
-      }
+      monthSub.innerHTML = 'vs. ' + (data.lastMonth || 0).toLocaleString() + ' last month' + deltaHtml(data.month, data.lastMonth);
 
       // Today / yesterday subtext — just friendly labels
       document.getElementById('stat-today-sub').textContent     = 'Since open (10 AM)';
