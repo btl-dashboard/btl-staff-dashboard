@@ -651,7 +651,51 @@
     <div id="page-statistics" class="page-section">
       <div style="margin-bottom:1.25rem;">
         <div class="page-title">Statistics</div>
-        <div class="page-sub">Outreach, marketing &amp; program statistics</div>
+        <div class="page-sub">Patron traffic data</div>
+      </div>
+
+      <!-- Stat cards row: Today / Yesterday / This Week / This Month -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem;">
+        <div class="card" style="padding:1rem 1.1rem;">
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Today</div>
+          <div id="stat-today" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
+          <div id="stat-today-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
+        </div>
+        <div class="card" style="padding:1rem 1.1rem;">
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Yesterday</div>
+          <div id="stat-yesterday" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
+          <div id="stat-yesterday-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
+        </div>
+        <div class="card" style="padding:1rem 1.1rem;">
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Week</div>
+          <div id="stat-week" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
+          <div id="stat-week-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
+        </div>
+        <div class="card" style="padding:1rem 1.1rem;">
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">This Month</div>
+          <div id="stat-month" style="font-size:26px;font-weight:600;color:#185FA5;line-height:1.1;">—</div>
+          <div id="stat-month-sub" style="font-size:11px;color:#888;margin-top:4px;">&nbsp;</div>
+        </div>
+      </div>
+
+      <!-- Error + loading -->
+      <div id="stat-error" style="display:none;font-size:13px;color:#A32D2D;background:#FCEBEB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;"></div>
+      <div id="stat-loading" style="font-size:12px;color:#aaa;margin-bottom:1rem;"></div>
+
+      <!-- Daily breakdown chart -->
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div class="card-header" style="margin-bottom:1rem;">
+          <div class="card-title">
+            <div class="card-icon" style="background:#E6F1FB;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <span style="font-size:15px;font-weight:700;color:#1a1a19;">Daily traffic — this week</span>
+          </div>
+          <span id="stat-week-range" style="font-size:11px;color:#888;"></span>
+        </div>
+        <div id="stat-daily-chart" style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:12px;color:#aaa;">—</div>
+        </div>
       </div>
 
       <!-- Outreach & Marketing Statistics card -->
@@ -1464,6 +1508,10 @@ function hwApplySearch() {
 </script>
 
 <script>
+  // ── Google Sheets CSV URLs ───────────────────────────────────────────────
+  var POLICIES_CSV_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTn-UO2MLmk23sYKffHURGyDHm0r4HKODfXilPmWnc43C08nlL1Hxb7OMVXpJwFjHrX7gML-lOHMs0B/pub?gid=0&single=true&output=csv';
+  var PROCEDURES_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxAcFnS3pPXOJSb4To7qHFG3n8bzwgg1NQ89e8HmQJGOKEKTY4Dlh9fsCjNs9sFtku0ld3VZzVDFCK/pub?gid=0&single=true&output=csv';
+
   var policies = [
     { name: "Vision & Mission Statements", tag: "general", url: "https://docs.google.com/document/d/1Kq7sIJbOqI7e2EhZ_jxfHtjnDDnsYrvy/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
     { name: "1.0 Hours of Operation", tag: "staff", url: "https://docs.google.com/document/d/1U6mqphls6nLjtxqiBhbIqLAiyRgze56K/edit?usp=drive_link&ouid=114904708134914114332&rtpof=true&sd=true" },
@@ -1879,6 +1927,29 @@ function hwApplySearch() {
     if (topAvatar) topAvatar.textContent = name ? name.charAt(0).toUpperCase() : 'BTL';
   }
 
+  // ── CSV parser ───────────────────────────────────────────────────────────
+  function parseCSV(text) {
+    var rows = [], lines = text.split('\n');
+    var headers = lines[0].split(',').map(function(h){ return h.trim().replace(/^"|"$/g,''); });
+    for (var i = 1; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line) continue;
+      // Handle quoted fields (e.g. "circulation,childrens")
+      var fields = [], cur = '', inQuote = false;
+      for (var c = 0; c < line.length; c++) {
+        var ch = line[c];
+        if (ch === '"') { inQuote = !inQuote; }
+        else if (ch === ',' && !inQuote) { fields.push(cur); cur = ''; }
+        else { cur += ch; }
+      }
+      fields.push(cur);
+      var obj = {};
+      headers.forEach(function(h, idx){ obj[h] = (fields[idx] || '').trim(); });
+      rows.push(obj);
+    }
+    return rows;
+  }
+
   window.addEventListener('DOMContentLoaded', function() {
     var now = new Date();
     var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -1892,14 +1963,35 @@ function hwApplySearch() {
     } else {
       showCalendarContent();
     }
-    renderPolicies();
-    renderProcedures();
     renderActiveHires();
     renderActiveTerms();
     renderHomeOnboardCard();
-    // Init hardware tab
     hwShowTab('staff-pcs', document.querySelector('.hw-tab'));
     applyCardVisibility();
+
+    // ── Fetch policies from Google Sheets ──────────────────────
+    fetch(POLICIES_CSV_URL)
+      .then(function(r){ return r.text(); })
+      .then(function(text){
+        var rows = parseCSV(text);
+        policies = rows.map(function(r){ return { name: r.name, tag: r.tag, url: r.url }; });
+        renderPolicies();
+        renderPoliciesPage();
+      })
+      .catch(function(){ renderPolicies(); renderPoliciesPage(); }); // fall back to hardcoded
+
+    // ── Fetch procedures from Google Sheets ────────────────────
+    fetch(PROCEDURES_CSV_URL)
+      .then(function(r){ return r.text(); })
+      .then(function(text){
+        var rows = parseCSV(text);
+        procedures = rows.map(function(r){
+          return { name: r.name, tags: r.tags.split(',').map(function(t){ return t.trim(); }), url: r.url };
+        });
+        renderProcedures();
+        renderProceduresPage();
+      })
+      .catch(function(){ renderProcedures(); renderProceduresPage(); }); // fall back to hardcoded
   });
 
   // PAGE NAVIGATION
