@@ -1969,6 +1969,9 @@ function hwApplySearch() {
     hwShowTab('staff-pcs', document.querySelector('.hw-tab'));
     applyCardVisibility();
 
+    // ── Fetch dashboard config (in-charge default + supervisors) ──
+    loadDashboardConfig();
+
     // ── Fetch policies from Google Sheets ──────────────────────
     fetch(POLICIES_CSV_URL)
       .then(function(r){ return r.text(); })
@@ -2588,8 +2591,46 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
   // ── In-Charge Today ────────────────────────────────────────
-  // Default (fallback when no override is set or override has expired)
+  var CONFIG_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSfjFVGGg7YixLTcOOdTT1WgGD5wXMfzC0bECwORpUqlE3lxOFtSlIX8POGfERYtJtW-truWAez1UTl/pub?gid=0&single=true&output=csv';
+
+  // Default fallback — overwritten by config sheet on load
   var IN_CHARGE_DEFAULT = { name: 'Rachel', contact: 'x122' };
+
+  // Supervisor list for the override dropdown — populated from config sheet
+  var SUPERVISOR_LIST = [];
+
+  function loadDashboardConfig() {
+    fetch(CONFIG_CSV_URL)
+      .then(function(r){ return r.text(); })
+      .then(function(text){
+        var rows = parseCSV(text);
+        var config = {};
+        rows.forEach(function(r){ config[r.key] = r.value; });
+
+        // Set default in-charge from sheet
+        if (config.ic_default_name) {
+          IN_CHARGE_DEFAULT = {
+            name:    config.ic_default_name,
+            contact: config.ic_default_contact || ''
+          };
+        }
+
+        // Build supervisor list from supervisor_N_name / supervisor_N_contact pairs
+        SUPERVISOR_LIST = [];
+        var i = 1;
+        while (config['supervisor_' + i + '_name']) {
+          SUPERVISOR_LIST.push({
+            name:    config['supervisor_' + i + '_name'],
+            contact: config['supervisor_' + i + '_contact'] || ''
+          });
+          i++;
+        }
+
+        // Re-render the card in case it loaded before config was ready
+        renderInChargeCard();
+      })
+      .catch(function(){ /* silently fall back to hardcoded default */ });
+  }
 
   // ── Permissions (self-selected from modal; stored in localStorage) ──
   var PERMISSIONS_URL = 'https://script.google.com/a/macros/bernardslibrary.org/s/AKfycbxBlo6LNCcPfdDlWW1aIr8vyephDTlRi6b45DSctdhevg6tTJ1lfsdC9jb0B2zeWNrt/exec';
@@ -2879,7 +2920,27 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     var today = new Date();
     var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
 
-    document.getElementById('ic-name').value    = override ? override.name    : IN_CHARGE_DEFAULT.name;
+    // Build supervisor dropdown
+    var nameSelect = document.getElementById('ic-name');
+    nameSelect.innerHTML = '';
+    var allSups = [IN_CHARGE_DEFAULT].concat(SUPERVISOR_LIST);
+    var currentName = override ? override.name : IN_CHARGE_DEFAULT.name;
+    allSups.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s.name;
+      opt.textContent = s.name;
+      opt.dataset.contact = s.contact || '';
+      if (s.name === currentName) opt.selected = true;
+      nameSelect.appendChild(opt);
+    });
+
+    // Auto-fill contact when dropdown changes
+    nameSelect.onchange = function() {
+      var selected = nameSelect.options[nameSelect.selectedIndex];
+      document.getElementById('ic-contact').value = selected.dataset.contact || '';
+    };
+
+    // Set contact field
     document.getElementById('ic-contact').value = override ? override.contact : IN_CHARGE_DEFAULT.contact;
     document.getElementById('ic-end-date').value = override && override.endDate ? override.endDate : todayStr;
     document.getElementById('ic-end-date').min = todayStr;
@@ -2892,12 +2953,12 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
   function saveInChargeFromModal() {
-    var name = document.getElementById('ic-name').value.trim();
+    var nameSelect = document.getElementById('ic-name');
+    var name = nameSelect.value.trim();
     var contact = document.getElementById('ic-contact').value.trim();
     var endDate = document.getElementById('ic-end-date').value;
     if (!name) { alert('Name is required'); return; }
     if (!endDate) { alert('End date is required'); return; }
-    // If the values match the default and there's no meaningful override, just clear
     if (name === IN_CHARGE_DEFAULT.name && contact === IN_CHARGE_DEFAULT.contact) {
       clearInChargeOverride();
     } else {
@@ -3017,7 +3078,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     <div style="font-size:15px;font-weight:500;margin-bottom:6px;">Set In-Charge</div>
     <div style="font-size:13px;color:#666;margin-bottom:16px;">This will override the default in-charge staff member through the end date you choose.</div>
     <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Name</label>
-    <input type="text" id="ic-name" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
+    <select id="ic-name" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;"></select>
     <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Contact (ext. or office)</label>
     <input type="text" id="ic-contact" placeholder="e.g. x122 or Office B" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
     <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Through (end date)</label>
