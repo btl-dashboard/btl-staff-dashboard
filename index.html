@@ -2462,9 +2462,10 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         }
 
         // Re-render the card in case it loaded before config was ready
+        console.log('Dashboard config loaded. Default:', IN_CHARGE_DEFAULT, 'Supervisors:', SUPERVISOR_LIST);
         renderInChargeCard();
       })
-      .catch(function(){ /* silently fall back to hardcoded default */ });
+      .catch(function(err){ console.warn('Dashboard config fetch failed:', err); /* silently fall back to hardcoded default */ });
   }
 
   // ── Permissions (self-selected from modal; stored in localStorage) ──
