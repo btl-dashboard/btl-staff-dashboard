@@ -1105,187 +1105,61 @@
      HARDWARE DATA
      ════════════════════════════════════════════════════ -->
 <script>
-var hwData = {
 
-  'staff-pcs': {
-    cols: ['PC Name','Location','User','Make / Model','Service Tag','Ship Year','Processor','RAM','HD','OS','Data Jack','MS Office'],
-    filters: ['All','Downstairs','Upstairs'],
-    filterKey: 'floor',
-    rows: [
-      { name:'ADMIN-PC', loc:'Outer Admin Area', user:'Greg, DPW', model:'Dell Optiplex 7020', tag:'6VXBN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 12-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-100', loc:'Outer Admin Area', user:'Lori', model:'Dell Optiplex 7020', tag:'HWXBN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-101', loc:'Tech Services', user:'TS', model:'Dell Optiplex 7010', tag:'6N7ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-09D', office:'Office 2016', floor:'Downstairs' },
-      { name:'BER-103', loc:'Tech Services', user:'Carolyn', model:'Dell Optiplex 7010', tag:'CH4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-08D', office:'Office 2016', floor:'Downstairs' },
-      { name:'BER-104', loc:'Tech Services', user:'Carol', model:'Dell Optiplex 7010', tag:'8H4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-10D', office:'Office 2016', floor:'Downstairs' },
-      { name:'BER-115', loc:'ILL', user:'ILL', model:'Dell Pro Micro QCM1250', tag:'HON5V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-06D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-116', loc:'ILL', user:'ILL', model:'Dell Pro Micro QCM1250', tag:'87K2V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-05D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-117', loc:'ILL', user:'Amy', model:'Dell Pro Micro QCM1250', tag:'91N5V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 14-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-106', loc:"Program Coordinator's Office", user:'Maureen N.', model:'Dell Optiplex 7020', tag:'201CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 13-01D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-107', loc:'Admin Office', user:'Nicole', model:'Dell Optiplex 7020', tag:'DTXBN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 11-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-108', loc:'Admin Office', user:'Mary Ann', model:'Dell Optiplex 7020', tag:'501CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-109', loc:"Director's Office", user:'Rachel', model:'Dell Optiplex 7020', tag:'521CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 10-01D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-110', loc:"Children's Office", user:'Staff', model:'Dell Optiplex 3090', tag:'7HV4RN3', year:'2022', cpu:'i5-10500T', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 02-01D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-111', loc:"Children's Office", user:'Anne', model:'Dell Optiplex 3090', tag:'2W15RN3', year:'2022', cpu:'i5-10500T', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 02-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-199', loc:"Children's Office", user:'Ellen R.', model:'Dell Optiplex 3090', tag:'JRY4RN3', year:'2022', cpu:'i5-10500T', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 02-03D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-112', loc:"Children's Desk", user:'Staff', model:'Dell Optiplex 3090', tag:'5RY4RN3', year:'2022', cpu:'i5-6500 3.20GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-02D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-113', loc:"Children's Desk", user:'Staff', model:'Dell Optiplex 3090', tag:'GMY4RN3', year:'2022', cpu:'i5-6500 3.20GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-03D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-114', loc:"Children's Desk", user:'Staff', model:'Dell Optiplex 3090', tag:'9JV4RN3', year:'2022', cpu:'i5-6500 3.20GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-01D', office:'Office Pro Plus 2016', floor:'Downstairs' },
-      { name:'BER-201', loc:'Circ Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'5P7ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 01-01D', office:'Office 2016', floor:'Upstairs' },
-      { name:'BER-202', loc:'Circ Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'FH4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 01-02D', office:'Office 2016', floor:'Upstairs' },
-      { name:'BER-203', loc:'Circ Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'3J4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 01-03D', office:'Office 2016', floor:'Upstairs' },
-      { name:'BER-204', loc:'Circ Alcove', user:'Athena', model:'Dell Optiplex 3090', tag:'8JV4RN3', year:'2022', cpu:'i5-6500 3.20GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 02-01D', office:'Office Pro Plus 2016', floor:'Upstairs' },
-      { name:'BER-205', loc:'Circ Alcove', user:'Staff', model:'Dell Optiplex 7010', tag:'2H4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 02-03D', office:'Office 2016', floor:'Upstairs' },
-      { name:'BER-206', loc:'Reference Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'DG4ZMW#', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 09-19D', office:'Office 2016', floor:'Upstairs' },
-      { name:'BER-207', loc:'Reference Desk', user:'Staff', model:'Dell Optiplex 7010', tag:'9H4ZMW3', year:'2023', cpu:'i5-13500 @ 4.8GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 09-20D', office:'Office 2016', floor:'Upstairs' },
-      { name:'BER-208', loc:'Teen Space', user:'Maura Crouch', model:'Dell Pro Micro QCM1250', tag:'DZM5V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F2 05-01D', office:'Office Pro Plus 2016', floor:'Upstairs' },
-      { name:'BER-210', loc:'Reference Office', user:'Karen Andriolo', model:'Dell Pro Micro QCM1250', tag:'QCM1250', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F2 07-18D', office:'Office Pro Plus 2016', floor:'Upstairs' },
-      { name:'BER-211', loc:'Reference Office', user:'Karen Vaias', model:'Dell Optiplex 7020', tag:'431CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F2 07-29D', office:'Office Pro Plus 2016', floor:'Upstairs' },
-      { name:'BER-212', loc:'Reference Office', user:'Lynn Hilf', model:'Dell Pro Micro QCM1250', tag:'JS53V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F2 07-30D', office:'Office Pro Plus 2016', floor:'Upstairs' }
-    ]
-  },
-
-  'public-pcs': {
-    cols: ['PC Name','Location','Make / Model','Service Tag','Purchase Year','Processor','RAM','HD','OS','Data Jack','MS Office'],
-    filters: ['All','Downstairs','Upstairs'],
-    filterKey: 'floor',
-    rows: [
-      { name:'CHILD1PC', loc:"Children's", model:'Dell Optiplex 7020', tag:'401CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-04D', office:'Professional 2016', floor:'Downstairs' },
-      { name:'CHILD2PC', loc:"Children's", model:'Dell Optiplex 7020', tag:'611CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-05D', office:'Professional 2016', floor:'Downstairs' },
-      { name:'CHILD3PC', loc:'Catalog Only', model:'Dell Optiplex 3090', tag:'DKB61M3', year:'2020', cpu:'i5-10500T', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/1 01-07D', office:'None', floor:'Downstairs' },
-      { name:'BTL-201', loc:'Catalog Computer', model:'Dell Optiplex 7490', tag:'DGTLMH3', year:'2021', cpu:'i5-9500 @ 4.4GHz', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'Wi-Fi', office:'Professional 2016', floor:'Upstairs' },
-      { name:'BTL-202', loc:'Student Corner', model:'Dell Optiplex 7020', tag:'HRXBN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 09-16D', office:'Professional 2016', floor:'Upstairs' },
-      { name:'BTL-203', loc:'Group Study', model:'Dell Pro Micro QCM1250', tag:'95K2V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 09-15D', office:'Professional 2016', floor:'Upstairs' },
-      { name:'BTL-204', loc:'Outside Teen Space', model:'Dell Pro Micro QCM1250', tag:'FX53V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Professional 2016', floor:'Upstairs' },
-      { name:'BTL-205', loc:'Outside Teen Space', model:'Dell Pro Micro QCM1250', tag:'4P83V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Professional 2016', floor:'Upstairs' },
-      { name:'BTL-206', loc:'Cactus Garden', model:'Dell Pro Micro QCM1250', tag:'FS53V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'—', office:'Professional 2016', floor:'Upstairs' },
-      { name:'BTL-207', loc:'Quiet Study', model:'Dell Pro Micro QCM1250', tag:'7M83V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 08-07F', office:'Professional 2016', floor:'Upstairs' },
-      { name:'TEEN-01', loc:'Teen Room', model:'Dell Pro Micro QCM1250', tag:'JXM5V94', year:'2025', cpu:'i5-45500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 07-26D', office:'Professional 2016', floor:'Upstairs' },
-      { name:'TEEN-02', loc:'Teen Room', model:'Dell Optiplex 7020', tag:'601CN34', year:'2024', cpu:'i5-13500T', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', jack:'F/2 07-32D', office:'Professional 2016', floor:'Upstairs' }
-    ]
-  },
-
-  'laptops': {
-    cols: ['PC Name','Type','Make / Model','Service Tag','Ship Year','Processor','RAM','HD','OS','Used By','Notes'],
-    filters: ['All','Laptops','Chromebooks'],
-    filterKey: 'type',
-    rows: [
-      { name:'BTL-Laptop1', type:'Laptops', model:'Dell Latitude 3540', tag:'5SB6LY3', year:'2023', cpu:'i5-10210U', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', user:'Nicole', notes:'Has Edmunds' },
-      { name:'BTL-Laptop2', type:'Laptops', model:'Dell Latitude 3540', tag:'B4D6LY3', year:'2023', cpu:'i5-10210U', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', user:'Program Room', notes:'Has Edmunds' },
-      { name:'BTL-Laptop4', type:'Laptops', model:'Dell Latitude 3550', tag:'J1QKG74', year:'2025', cpu:'i5-1335U', ram:'8GB', hd:'256GB SSD', os:'Win 11 Pro', user:'Mary Ann', notes:'Has Edmunds' },
-      { name:'BTL-Laptop5', type:'Laptops', model:'Dell Latitude 3520', tag:'BST85B3', year:'2021', cpu:'i7', ram:'8GB', hd:'256GB SSD', os:'Win 10 Pro', user:'Poster Printer', notes:'Has Edmunds' },
-      { name:'JVBYP94', type:'Laptops', model:'Dell Pro 16 BTX Base', tag:'—', year:'2025', cpu:'Intel Core 5', ram:'16GB', hd:'256GB SSD', os:'Win 11 Pro', user:'Rachel', notes:'Has Edmunds' },
-      { name:'Chrome1', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'38PF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome2', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'J5PF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome3', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'BGPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome4', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'HFPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'Ellen', notes:'' },
-      { name:'Chrome5', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'9GPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome6', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'4GPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome7', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'FJPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome8', type:'Chromebooks', model:'Dell Chromebook 3380', tag:'BBPF1P2', year:'2019', cpu:'Celeron 3855U / 1.6GHz', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome9', type:'Chromebooks', model:'Dell Chromebook 3110', tag:'FGR6DF3', year:'2023', cpu:'Celeron N4500', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome10', type:'Chromebooks', model:'Dell Chromebook 3110', tag:'2FD7DF3', year:'2023', cpu:'Celeron N4500', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome11', type:'Chromebooks', model:'Dell Chromebook 3110', tag:'70Q7DF3', year:'2023', cpu:'Celeron N4500', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' },
-      { name:'Chrome12', type:'Chromebooks', model:'Dell Chromebook 3110', tag:'5WR6DF3', year:'2023', cpu:'Celeron N4500', ram:'4GB', hd:'32GB SSD', os:'Chrome OS', user:'—', notes:'' }
-    ]
-  },
-
-  'printers': {
-    cols: ['Device','Color','Location','Use','Data Jack','IP Address','Workstation / Notes'],
-    filters: ['All','Downstairs','Upstairs'],
-    filterKey: 'floor',
-    rows: [
-      { name:'HP Color LaserJet Pro M452dw', color:'Color', loc:"Program Coordinator's Office", use:'Staff', jack:'F/1 13-02D', ip:'10.51.2.171', notes:'BER-106', floor:'Downstairs' },
-      { name:'HP LaserJet 1200 Series', color:'B&W', loc:'Administration', use:'Staff', jack:'USB', ip:'—', notes:'BER-108', floor:'Downstairs' },
-      { name:'HP LaserJet 1012', color:'B&W', loc:'Tech Services', use:'Staff', jack:'USB', ip:'—', notes:'—', floor:'Downstairs' },
-      { name:'HP LaserJet 1020', color:'B&W', loc:'Tech Services', use:'Staff', jack:'USB', ip:'—', notes:'—', floor:'Downstairs' },
-      { name:'HP LaserJet 1320', color:'B&W', loc:'ILL', use:'Staff', jack:'USB', ip:'—', notes:'—', floor:'Downstairs' },
-      { name:'Epson TM-T88V', color:'Receipt', loc:'ILL', use:'Staff', jack:'F/1 14-06V', ip:'10.51.2.19', notes:'BER 116', floor:'Downstairs' },
-      { name:'Epson TM-T88V', color:'Receipt', loc:'ILL', use:'Staff', jack:'F/1 14-05V', ip:'10.51.2.20', notes:'BER 115', floor:'Downstairs' },
-      { name:'Konica Minolta Bizhub C301i', color:'Color', loc:'Outer Admin Area', use:'Staff', jack:'F/1 12-01P', ip:'10.51.2.181', notes:'ID: ADXK013013892', floor:'Downstairs' },
-      { name:'Brother HL-L8260CDW', color:'Color', loc:"Children's Desk", use:'Both', jack:'F/1 01-01P', ip:'10.51.3.251', notes:'—', floor:'Downstairs' },
-      { name:'Star TSP-743IIL', color:'Receipt', loc:"Children's Desk", use:'Staff', jack:'F/1 01-03P', ip:'10.51.2.14', notes:'BER 114', floor:'Downstairs' },
-      { name:'Star TSP-743IIL', color:'Receipt', loc:"Children's Desk", use:'Staff', jack:'F/1 01-02P', ip:'10.51.2.18', notes:'BER 113', floor:'Downstairs' },
-      { name:'Star TSP-743IIL', color:'Receipt', loc:"Children's Desk", use:'Staff', jack:'F/1 01-01P', ip:'10.51.2.16', notes:'BER 112', floor:'Downstairs' },
-      { name:'Star TSP-700II', color:'Receipt', loc:'Circ Desk', use:'Staff', jack:'F/2 01-01D (S)', ip:'10.51.2.12', notes:'BER 201', floor:'Upstairs' },
-      { name:'Star TSP-700II', color:'Receipt', loc:'Circ Desk', use:'Staff', jack:'F/2 01-02P', ip:'10.51.2.13', notes:'BER 202', floor:'Upstairs' },
-      { name:'Star TSP-700II', color:'Receipt', loc:'Circ Desk', use:'Staff', jack:'F/2 01-03P', ip:'10.51.2.17', notes:'BER 203', floor:'Upstairs' },
-      { name:'Star TSP-700II', color:'Receipt', loc:'Circ Alcove', use:'Staff', jack:'F/2 02-03D', ip:'10.51.2.11', notes:'BER 205', floor:'Upstairs' },
-      { name:'HP LaserJet 1020', color:'B&W', loc:'Circ Alcove', use:'Staff', jack:'USB', ip:'—', notes:'—', floor:'Upstairs' },
-      { name:'HP Color LaserJet Pro MFP M277dw', color:'Color', loc:'Reference Office', use:'Staff', jack:'F2 07-23D', ip:'10.51.2.237', notes:'—', floor:'Upstairs' },
-      { name:'HP Color LaserJet Pro M255dw', color:'Color', loc:'Reference Desk', use:'Both', jack:'WiFi', ip:'10.51.4.82', notes:'—', floor:'Upstairs' },
-      { name:'Konica Minolta Bizhub C301i', color:'Color', loc:'Reference Desk Area', use:'Both', jack:'Upstairs Pillar-1', ip:'10.51.3.116', notes:'ID: ADXK013014226', floor:'Upstairs' }
-    ]
-  },
-
-  'av': {
-    cols: ['Device','Room','Device Type','MAC Address','IP Address','Hostname','Credentials','Notes'],
-    filters: ['All','Room A','Room B','Teen Space','Tech Center'],
-    filterKey: 'room',
-    rows: [
-      { name:'Dell Optiplex 3050', room:'Room A', type:'MicroPC', mac:'9C-DA-3E-99-58-09', ip:'10.51.5.12', host:'ROOM-A-PC', creds:'Staff; no password', notes:'Needs MS Office Key' },
-      { name:'Vizio TV', room:'Room A', type:'TV Display', mac:'04:5D:4B:F9:62:12', ip:'10.51.5.13', host:'XBR-65X750D', creds:'NONE', notes:'Purchased 5/2025' },
-      { name:'Google Chromecast', room:'Room A', type:'Streaming', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
-      { name:'Blu-Ray DVD Player', room:'Room A', type:'Player', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
-      { name:'Cable TV (Optimum)', room:'Room A', type:'Cable', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
-      { name:'Crestron AirMedia 101', room:'Room B', type:'Presentation', mac:'00:12:5F:18:4D:D5', ip:'10.51.5.21', host:'AM184dd5-RmB', creds:'admin, M****####!', notes:'Firmware 2.6.0.12' },
-      { name:'Dell Optiplex 3050', room:'Room B', type:'MicroPC', mac:'14-B3-1F-26-20-70', ip:'10.51.5.22', host:'Room-B-PC', creds:'Staff; no password', notes:'Needs MS Office Key' },
-      { name:'Sony Projector', room:'Room B', type:'Projector', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
-      { name:'Apple TV (A1842)', room:'Room B', type:'Streaming', mac:'dc:56:e7:46:f0:fd', ip:'10.51.5.24', host:'Rm B Apple TV', creds:'NONE', notes:'S/N: C1MVXDPSJ1WF · tvOS 11.2.6' },
-      { name:'Google Chromecast', room:'Room B', type:'Streaming', mac:'48:D6:D5:08:C8:38', ip:'10.51.5.25', host:'RoomBChromeCastU', creds:'bernardstownshiplibrary@gmail.com', notes:'Firmware 1.29.106401' },
-      { name:'Blu-Ray DVD Player', room:'Room B', type:'Player', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
-      { name:'Cable TV (FiOS)', room:'Room B', type:'Cable', mac:'—', ip:'—', host:'—', creds:'—', notes:'No Network Connectivity' },
-      { name:'Crestron AirMedia 101', room:'Teen Space', type:'Presentation', mac:'00:12:5F:18:45:B4', ip:'10.51.5.31', host:'AM1845b4-Teen', creds:'admin, M****####!', notes:'Firmware 2.6.0.12' },
-      { name:'Dell Optiplex 3050', room:'Teen Space', type:'MicroPC', mac:'AC-ED-5C-A0-A0-A0', ip:'10.51.5.32', host:'Teen-TV-PC', creds:'Admin / Staff / Visitor', notes:'Needs MS Office Key' },
-      { name:'Sony TV', room:'Teen Space', type:'TV Display', mac:'D8:0F:99:2E:03:83', ip:'10.51.5.33', host:'XBR-65X750D', creds:'NONE', notes:'—' },
-      { name:'Apple TV (A1842)', room:'Teen Space', type:'Streaming', mac:'40:cb:c0:c3:cb:d8', ip:'10.51.5.34', host:'Teen Apple TV', creds:'bernardstownshiplibrary@gmail.com', notes:'S/N: C07V446MJ1WF · tvOS 11.3' },
-      { name:'Google Chromecast', room:'Teen Space', type:'Streaming', mac:'F4:F5:D8:FF:6E:6F', ip:'10.51.5.35', host:'TeenSpaceChromecastU', creds:'bernardstownshiplibrary@gmail.com', notes:'Firmware 1.29.106401' },
-      { name:'Crestron AirMedia 101', room:'Tech Center', type:'Presentation', mac:'00:12:5F:18:45:C2', ip:'10.51.5.41', host:'AM1845c2-Tech', creds:'admin', notes:'Firmware 2.6.0.12' },
-      { name:'Dell Optiplex 3050', room:'Tech Center', type:'MicroPC', mac:'34-f6-4b-f2-8a-c8', ip:'10.51.5.42', host:'TECHCENTER-PC', creds:'Admin / Visitor', notes:'Needs MS Office Key' },
-      { name:'Sony TV', room:'Tech Center', type:'TV Display', mac:'D8:0F:99:13:12:F5', ip:'10.51.5.43', host:'XBR-65X750D', creds:'NONE', notes:'—' },
-      { name:'Apple TV (A1842)', room:'Tech Center', type:'Streaming', mac:'40:cb:c0:c3:a6:80', ip:'10.51.5.44', host:'Tech Apple TV', creds:'NONE', notes:'S/N: DY3V8177J1WF · tvOS 11.1' },
-      { name:'Google Chromecast', room:'Tech Center', type:'Streaming', mac:'F4:F5:D8:FF:6E:7B', ip:'10.51.5.45', host:'TechCenterChromecastU', creds:'bernardstownshiplibrary@gmail.com', notes:'—' }
-    ]
-  },
-
-  'scanners': {
-    cols: ['Workstation','User / Location','Scanner Model','Date Purchased','Floor'],
-    filters: ['All','Downstairs','Upstairs'],
-    filterKey: 'floor',
-    rows: [
-      { ws:'BER-101', user:'TS Shared', model:'Honeywell Xenon XP 1950', date:'2025', floor:'Downstairs' },
-      { ws:'BER-103', user:'Carolyn', model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
-      { ws:'BER-104', user:'Carol', model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
-      { ws:'BER-115', user:'ILL', model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
-      { ws:'BER-116', user:'ILL', model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
-      { ws:'BER-117', user:'Amy', model:'Metrologic', date:'—', floor:'Downstairs' },
-      { ws:'BER-111', user:'Anne', model:'Metrologic', date:'—', floor:'Downstairs' },
-      { ws:'BER-112', user:"Children's Desk", model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
-      { ws:'BER-113', user:"Children's Desk", model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
-      { ws:'BER-114', user:"Children's Desk", model:'Honeywell Xenon XP 1900', date:'—', floor:'Downstairs' },
-      { ws:'BER-201', user:'Circ Desk', model:'Honeywell Xenon XP 1900', date:'—', floor:'Upstairs' },
-      { ws:'BER-202', user:'Circ Desk', model:'Honeywell Xenon XP 1900', date:'—', floor:'Upstairs' },
-      { ws:'BER-203', user:'Circ Desk', model:'Honeywell Xenon XP 1900', date:'—', floor:'Upstairs' },
-      { ws:'BER-204', user:'Circ Alcove — Athena', model:'Metrologic', date:'—', floor:'Upstairs' },
-      { ws:'BER-205', user:'Circ Alcove', model:'Metrologic', date:'—', floor:'Upstairs' },
-      { ws:'—', user:'Circ Alcove — Outreach Kit', model:'Metrologic', date:'—', floor:'Upstairs' },
-      { ws:'BER-208', user:'Teen Space — Maura', model:'Metrologic', date:'—', floor:'Upstairs' },
-      { ws:'BER-206', user:'Reference Desk', model:'Metrologic', date:'—', floor:'Upstairs' },
-      { ws:'BER-207', user:'Reference Desk', model:'Metrologic', date:'—', floor:'Upstairs' },
-      { ws:'BER-211', user:'Reference Office — Karen Vaias', model:'Metrologic', date:'—', floor:'Upstairs' },
-      { ws:'—', user:'Reference Office — Storage', model:'Metrologic', date:'—', floor:'Upstairs' }
-    ]
-  },
-
-  'selfcheck': {
-    cols: ['Location','Model','Serial Number','Data Jack'],
-    filters: [],
-    filterKey: null,
-    rows: [
-      { loc:"Children's", model:'3M SelfCheck 500', serial:'B18104', jack:'F/1 01-06D' },
-      { loc:'Upstairs', model:'3M SelfCheck 500', serial:'B18099', jack:'Upstairs Pillar-2' }
-    ]
-  }
+// ── Google Sheets CSV URLs ───────────────────────────────────────────────
+var HW_SHEET_URLS = {
+  'staff-pcs':  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYWDqal3ouBnTvXtg8ihhsRSZeNAAAAi5HZsU7H2U9tnOOHOdJKsrNXmPMqPR8qZcgoyXrVO6gMgBk/pub?gid=1312449925&single=true&output=csv',
+  'public-pcs': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYWDqal3ouBnTvXtg8ihhsRSZeNAAAAi5HZsU7H2U9tnOOHOdJKsrNXmPMqPR8qZcgoyXrVO6gMgBk/pub?gid=0&single=true&output=csv',
+  'laptops':    'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYWDqal3ouBnTvXtg8ihhsRSZeNAAAAi5HZsU7H2U9tnOOHOdJKsrNXmPMqPR8qZcgoyXrVO6gMgBk/pub?gid=1018484359&single=true&output=csv',
+  'printers':   'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYWDqal3ouBnTvXtg8ihhsRSZeNAAAAi5HZsU7H2U9tnOOHOdJKsrNXmPMqPR8qZcgoyXrVO6gMgBk/pub?gid=247405091&single=true&output=csv',
+  'av':         'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYWDqal3ouBnTvXtg8ihhsRSZeNAAAAi5HZsU7H2U9tnOOHOdJKsrNXmPMqPR8qZcgoyXrVO6gMgBk/pub?gid=646156477&single=true&output=csv',
+  'scanners':   'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYWDqal3ouBnTvXtg8ihhsRSZeNAAAAi5HZsU7H2U9tnOOHOdJKsrNXmPMqPR8qZcgoyXrVO6gMgBk/pub?gid=1001482584&single=true&output=csv',
+  'selfcheck':  'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYWDqal3ouBnTvXtg8ihhsRSZeNAAAAi5HZsU7H2U9tnOOHOdJKsrNXmPMqPR8qZcgoyXrVO6gMgBk/pub?gid=300580691&single=true&output=csv'
 };
+
+// ── Tab metadata (columns, filters) ─────────────────────────────────────
+var hwData = {
+  'staff-pcs':  { cols: ['PC Name','Location','User','Make / Model','Service Tag','Ship Year','Processor','RAM','HD','OS','Data Jack','MS Office'], filters: ['All','Downstairs','Upstairs'], filterKey: 'floor', rows: [] },
+  'public-pcs': { cols: ['PC Name','Location','Make / Model','Service Tag','Purchase Year','Processor','RAM','HD','OS','Data Jack','MS Office'], filters: ['All','Downstairs','Upstairs'], filterKey: 'floor', rows: [] },
+  'laptops':    { cols: ['PC Name','Type','Make / Model','Service Tag','Ship Year','Processor','RAM','HD','OS','Used By','Notes'], filters: ['All','Laptops','Chromebooks'], filterKey: 'type', rows: [] },
+  'printers':   { cols: ['Device','Color','Location','Use','Data Jack','IP Address','Workstation / Notes'], filters: ['All','Downstairs','Upstairs'], filterKey: 'floor', rows: [] },
+  'av':         { cols: ['Device','Room','Device Type','MAC Address','IP Address','Hostname','Notes'], filters: ['All','Room A','Room B','Teen Space','Tech Center'], filterKey: 'room', rows: [] },
+  'scanners':   { cols: ['Workstation','User / Location','Scanner Model','Date Purchased','Floor'], filters: ['All','Downstairs','Upstairs'], filterKey: 'floor', rows: [] },
+  'selfcheck':  { cols: ['Location','Model','Serial Number','Data Jack'], filters: [], filterKey: null, rows: [] }
+};
+
+// Track which tabs have been loaded
+var hwLoaded = {};
+
+// ── Load a tab's data from Google Sheets ─────────────────────────────────
+function hwLoadTab(tabKey, callback) {
+  if (hwLoaded[tabKey]) { if (callback) callback(); return; }
+  var url = HW_SHEET_URLS[tabKey];
+  if (!url) { if (callback) callback(); return; }
+
+  fetch(url)
+    .then(function(r) { return r.text(); })
+    .then(function(text) {
+      var rows = parseCSV(text);
+      // Map CSV rows to the field names the render functions expect
+      hwData[tabKey].rows = rows.map(function(r) {
+        if (tabKey === 'staff-pcs')  return { name:r.name, loc:r.loc, user:r.user, model:r.model, tag:r.tag, year:r.year, cpu:r.cpu, ram:r.ram, hd:r.hd, os:r.os, jack:r.jack, office:r.office, floor:r.floor };
+        if (tabKey === 'public-pcs') return { name:r.name, loc:r.loc, model:r.model, tag:r.tag, year:r.year, cpu:r.cpu, ram:r.ram, hd:r.hd, os:r.os, jack:r.jack, office:r.office, floor:r.floor };
+        if (tabKey === 'laptops')    return { name:r.name, type:r.type, model:r.model, tag:r.tag, year:r.year, cpu:r.cpu, ram:r.ram, hd:r.hd, os:r.os, user:r.user, notes:r.notes };
+        if (tabKey === 'printers')   return { name:r.name, color:r.color, loc:r.loc, use:r.use, jack:r.jack, ip:r.ip, notes:r.notes, floor:r.floor };
+        if (tabKey === 'av')         return { name:r.name, room:r.room, type:r.type, mac:r.mac, ip:r.ip, host:r.host, notes:r.notes };
+        if (tabKey === 'scanners')   return { ws:r.ws, user:r.user, model:r.model, date:r.date, floor:r.floor };
+        if (tabKey === 'selfcheck')  return { loc:r.loc, model:r.model, serial:r.serial, jack:r.jack };
+        return r;
+      });
+      hwLoaded[tabKey] = true;
+      if (callback) callback();
+    })
+    .catch(function() {
+      hwLoaded[tabKey] = true; // mark as attempted even on failure
+      if (callback) callback();
+    });
+}
 
 // ── Render helpers ──────────────────────────────────────────
 var hwCurrentTab = 'staff-pcs';
@@ -1449,7 +1323,9 @@ function hwShowTab(tabId, btn) {
     });
   }
 
-  hwRender();
+  // Show loading state then fetch and render
+  document.getElementById('hw-tbody').innerHTML = '<tr><td colspan="12" style="text-align:center;color:#aaa;padding:2rem;font-size:13px;">Loading…</td></tr>';
+  hwLoadTab(tabId, function() { hwRender(); });
 }
 
 function hwApplySearch() {
