@@ -255,6 +255,9 @@
       <div class="nav-item" onclick="showPage('statistics',this)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2" style="flex-shrink:0;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Statistics
       </div>
+      <div class="nav-item" onclick="showPage('projects',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2" style="flex-shrink:0;"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Projects
+      </div>
       <div class="nav-item" onclick="showPage('hardware',this)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2" style="flex-shrink:0;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Hardware Inventory
       </div>
@@ -671,6 +674,46 @@
         <a href="https://docs.google.com/spreadsheets/d/1SVMaxkdJcK1AYQpTE922zU-w1jChVGUJ/edit?usp=sharing" target="_blank" class="action-btn primary" style="font-size:13px;padding:8px 16px;display:inline-block;text-decoration:none;">Open Sheet ↗</a>
       </div>
     </div><!-- end page-statistics -->
+
+    <!-- ═══════════════════════════════════════════
+         PROJECTS PAGE
+         ═══════════════════════════════════════════ -->
+    <div id="page-projects" class="page-section">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div class="page-title">Projects</div>
+          <div class="page-sub">Collaborative staff projects and shared resources</div>
+        </div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPhcbAo_TuiGCdLKnPK6rQVBoDMKW82CEOTyPYkwtlNMY3_w/viewform?usp=header" target="_blank" class="action-btn primary" style="font-size:14px;padding:8px 16px;text-decoration:none;display:inline-block;white-space:nowrap;">+ Submit a Project</a>
+      </div>
+
+      <!-- Filters -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;align-items:center;">
+        <div class="filter-row" id="project-dept-filters" style="margin-bottom:0;">
+          <button class="filter-btn badge-blue" onclick="setProjectFilter('dept','all',this)">All Departments</button>
+          <button class="filter-btn badge-gray" onclick="setProjectFilter('dept','Administration',this)">Administration</button>
+          <button class="filter-btn badge-gray" onclick="setProjectFilter('dept','Adult &amp; Teen',this)">Adult &amp; Teen</button>
+          <button class="filter-btn badge-gray" onclick="setProjectFilter('dept','Children\'s',this)">Children's</button>
+          <button class="filter-btn badge-gray" onclick="setProjectFilter('dept','Circulation',this)">Circulation</button>
+          <button class="filter-btn badge-gray" onclick="setProjectFilter('dept','Reference',this)">Reference</button>
+          <button class="filter-btn badge-gray" onclick="setProjectFilter('dept','Library-wide',this)">Library-wide</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;">
+        <button class="filter-btn badge-blue" onclick="setProjectFilter('status','all',this)" id="proj-status-all">All Statuses</button>
+        <button class="filter-btn badge-gray" onclick="setProjectFilter('status','Active',this)">Active</button>
+        <button class="filter-btn badge-gray" onclick="setProjectFilter('status','On Hold',this)">On Hold</button>
+        <button class="filter-btn badge-gray" onclick="setProjectFilter('status','Complete',this)">Complete</button>
+      </div>
+
+      <!-- Loading / error / empty states -->
+      <div id="projects-loading" style="font-size:13px;color:#aaa;padding:1rem 0;">Loading projects…</div>
+      <div id="projects-error" style="display:none;font-size:13px;color:#A32D2D;background:#FCEBEB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;"></div>
+      <div id="projects-empty" style="display:none;font-size:13px;color:#aaa;padding:1rem 0;text-align:center;">No projects match your filters.</div>
+
+      <!-- Project cards grid -->
+      <div id="projects-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;"></div>
+    </div><!-- end page-projects -->
 
     <!-- ═══════════════════════════════════════════
          HARDWARE INVENTORY PAGE
@@ -1872,6 +1915,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     if (page === 'policies')   renderPoliciesPage();
     if (page === 'procedures') renderProceduresPage();
     if (page === 'procedures') renderProceduresPage();
+    if (page === 'projects')   loadProjects();
   }
 
   // ONBOARDING TASK DEFINITIONS
@@ -2288,7 +2332,116 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     return months[parseInt(parts[1]) - 1] + ' ' + parseInt(parts[2]) + ', ' + parts[0];
   }
 
-  // ── Statistics Page ──────────────────────────────────────────
+  // ── Projects Page ─────────────────────────────────────────────────────────
+  var PROJECTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYBY9MbyuGDHM6sWZNeSozcSH00kI9IZGB9KqBYuT3EZhQk6DejT0krSU9n7M8-YtAH8iFpvqxLPk5/pub?gid=1971432038&single=true&output=csv';
+  var projectDeptFilter   = 'all';
+  var projectStatusFilter = 'all';
+  var projectsData = [];
+
+  var statusStyles = {
+    'Active':    { cls: 'badge-green',  label: 'Active' },
+    'On Hold':   { cls: 'badge-amber',  label: 'On Hold' },
+    'Complete':  { cls: 'badge-gray',   label: 'Complete' }
+  };
+
+  var deptStyles = {
+    'Administration':  'badge-purple',
+    'Adult & Teen':    'badge-amber',
+    "Children's":      'badge-red',
+    'Circulation':     'badge-blue',
+    'Reference':       'badge-teal',
+    'Library-wide':    'badge-green'
+  };
+
+  function loadProjects() {
+    var loading = document.getElementById('projects-loading');
+    var error   = document.getElementById('projects-error');
+    var empty   = document.getElementById('projects-empty');
+    var grid    = document.getElementById('projects-grid');
+    if (!loading) return;
+
+    loading.style.display = 'block';
+    error.style.display   = 'none';
+    empty.style.display   = 'none';
+    grid.innerHTML        = '';
+
+    fetch(PROJECTS_CSV_URL)
+      .then(function(r) { return r.text(); })
+      .then(function(text) {
+        var rows = parseCSV(text);
+        // Map columns — skip Timestamp (col 0) and Score (col 1)
+        projectsData = rows.map(function(r) {
+          return {
+            name:   r['Project Name'] || '',
+            desc:   r['Description'] || '',
+            link:   r['Link to what you\'re working on (Google Doc, Sheets, etc)'] || '',
+            dept:   r['Department'] || '',
+            status: r['Status'] || ''
+          };
+        }).filter(function(p) { return p.name; }); // skip empty rows
+
+        loading.style.display = 'none';
+        renderProjects();
+      })
+      .catch(function(err) {
+        loading.style.display = 'none';
+        error.style.display   = 'block';
+        error.textContent     = 'Could not load projects. Please try again later.';
+      });
+  }
+
+  function renderProjects() {
+    var empty = document.getElementById('projects-empty');
+    var grid  = document.getElementById('projects-grid');
+    if (!grid) return;
+
+    var filtered = projectsData.filter(function(p) {
+      var matchDept   = projectDeptFilter === 'all' || p.dept === projectDeptFilter;
+      var matchStatus = projectStatusFilter === 'all' || p.status === projectStatusFilter;
+      return matchDept && matchStatus;
+    });
+
+    if (!filtered.length) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    grid.innerHTML = filtered.map(function(p) {
+      var statusStyle = statusStyles[p.status] || { cls: 'badge-gray', label: p.status };
+      var deptCls     = deptStyles[p.dept] || 'badge-gray';
+      var linkHtml    = p.link
+        ? '<a href="' + p.link + '" target="_blank" style="display:inline-block;margin-top:10px;font-size:12px;padding:5px 12px;background:#185FA5;color:white;border-radius:7px;text-decoration:none;font-weight:500;" onmouseover="this.style.background=\'#0C447C\'" onmouseout="this.style.background=\'#185FA5\'">Open ↗</a>'
+        : '';
+      return '<div style="background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:8px;">'
+           +   '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">'
+           +     '<div style="font-size:14px;font-weight:600;color:#1a1a19;flex:1;">' + escapeHtml(p.name) + '</div>'
+           +     '<span class="badge ' + statusStyle.cls + '" style="flex-shrink:0;">' + statusStyle.label + '</span>'
+           +   '</div>'
+           +   (p.desc ? '<div style="font-size:13px;color:#555;line-height:1.5;">' + escapeHtml(p.desc) + '</div>' : '')
+           +   '<span class="badge ' + deptCls + '" style="align-self:flex-start;">' + escapeHtml(p.dept) + '</span>'
+           +   linkHtml
+           + '</div>';
+    }).join('');
+  }
+
+  function setProjectFilter(type, value, btn) {
+    if (type === 'dept') {
+      projectDeptFilter = value;
+      document.querySelectorAll('#project-dept-filters .filter-btn').forEach(function(b) { b.className = 'filter-btn badge-gray'; });
+    } else {
+      projectStatusFilter = value;
+      document.querySelectorAll('#page-projects .filter-row + div .filter-btn, #page-projects > div:nth-child(3) .filter-btn').forEach(function(b) { b.className = 'filter-btn badge-gray'; });
+      // Reset all status buttons then highlight selected
+      ['proj-status-all'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.className = 'filter-btn badge-gray';
+      });
+    }
+    if (btn) btn.className = 'filter-btn badge-blue';
+    renderProjects();
+  }
 
   function toDateStr(d) {
     return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
