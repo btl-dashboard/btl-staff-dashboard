@@ -2368,17 +2368,38 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     fetch(PROJECTS_CSV_URL)
       .then(function(r) { return r.text(); })
       .then(function(text) {
-        var rows = parseCSV(text);
-        // Map columns — skip Timestamp (col 0) and Score (col 1)
-        projectsData = rows.map(function(r) {
+        // Parse CSV rows into objects keyed by header name
+        var lines = text.split('\n');
+        var headers = lines[0].split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
+        var rows = [];
+        for (var i = 1; i < lines.length; i++) {
+          var line = lines[i].trim();
+          if (!line) continue;
+          var fields = [], cur = '', inQuote = false;
+          for (var c = 0; c < line.length; c++) {
+            var ch = line[c];
+            if (ch === '"') { inQuote = !inQuote; }
+            else if (ch === ',' && !inQuote) { fields.push(cur); cur = ''; }
+            else { cur += ch; }
+          }
+          fields.push(cur);
+          var obj = {};
+          headers.forEach(function(h, idx) { obj[h] = (fields[idx] || '').trim(); });
+          rows.push(obj);
+        }
+
+        projectsData = rows.map(function(r, idx) {
+          // Try header-based lookup first, fall back to column index
+          // Columns: 0=Timestamp, 1=Score, 2=Project Name, 3=Description, 4=Link, 5=Department, 6=Status
+          var vals = Object.values(r);
           return {
-            name:   r['Project Name'] || '',
-            desc:   r['Description'] || '',
-            link:   r['Link to what you\'re working on (Google Doc, Sheets, etc)'] || '',
-            dept:   r['Department'] || '',
-            status: r['Status'] || ''
+            name:   r['Project Name'] || vals[2] || '',
+            desc:   r['Description'] || vals[3] || '',
+            link:   r['Link to what you\'re working on (Google Doc, Sheets, etc)'] || vals[4] || '',
+            dept:   r['Department'] || vals[5] || '',
+            status: r['Status'] || vals[6] || ''
           };
-        }).filter(function(p) { return p.name; }); // skip empty rows
+        }).filter(function(p) { return p.name; });
 
         loading.style.display = 'none';
         renderProjects();
