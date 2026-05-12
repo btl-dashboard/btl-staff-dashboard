@@ -704,6 +704,7 @@
         <button class="filter-btn badge-gray" onclick="setProjectFilter('status','Active',this)">Active</button>
         <button class="filter-btn badge-gray" onclick="setProjectFilter('status','On Hold',this)">On Hold</button>
         <button class="filter-btn badge-gray" onclick="setProjectFilter('status','Complete',this)">Complete</button>
+        <button class="filter-btn badge-gray" onclick="setProjectFilter('status','Archived',this)">Archived</button>
       </div>
 
       <!-- Loading / error / empty states -->
@@ -2337,7 +2338,8 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   var statusStyles = {
     'Active':    { cls: 'badge-green',  label: 'Active' },
     'On Hold':   { cls: 'badge-amber',  label: 'On Hold' },
-    'Complete':  { cls: 'badge-gray',   label: 'Complete' }
+    'Complete':  { cls: 'badge-gray',   label: 'Complete' },
+    'Archived':  { cls: 'badge-red',    label: 'Archived' }
   };
 
   var deptStyles = {
@@ -2394,7 +2396,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
             status:   r['Status'] || vals[6] || '',
             deadline: r['Target Deadline (optional)'] || vals[7] || ''
           };
-        }).filter(function(p) { return p.name; });
+        }).filter(function(p) { return p.name; }).reverse();
 
         loading.style.display = 'none';
         renderProjects();
@@ -2429,17 +2431,17 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       var deptCls     = deptStyles[p.dept] || 'badge-gray';
       var deadline    = p.deadline ? '<span style="font-size:12px;color:#888;">Due: ' + p.deadline + '</span>' : '';
       var linkHtml    = p.link
-        ? '<a href="' + p.link + '" target="_blank" style="flex-shrink:0;font-size:12px;padding:5px 12px;background:#185FA5;color:white;border-radius:7px;text-decoration:none;font-weight:500;white-space:nowrap;" onmouseover="this.style.background=\'#0C447C\'" onmouseout="this.style.background=\'#185FA5\'">Open ↗</a>'
+        ? '<a href="' + p.link + '" target="_blank" style="flex-shrink:0;font-size:12px;padding:5px 12px;background:#185FA5;color:white;border-radius:7px;text-decoration:none;font-weight:500;white-space:nowrap;" onmouseover="this.style.background=\'#0C447C\'" onmouseout="this.style.background=\'#185FA5\'">Open Project ↗</a>'
         : '';
       return '<div style="background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:0.875rem 1.25rem;display:flex;align-items:center;gap:16px;">'
            +   '<div style="flex:1;min-width:0;">'
            +     '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">'
-           +       '<span style="font-size:14px;font-weight:600;color:#1a1a19;">' + escapeHtml(p.name) + '</span>'
+           +       '<span style="font-size:15px;font-weight:600;color:#1a1a19;">' + escapeHtml(p.name) + '</span>'
            +       '<span class="badge ' + statusStyle.cls + '">' + statusStyle.label + '</span>'
            +       '<span class="badge ' + deptCls + '">' + escapeHtml(p.dept) + '</span>'
            +       deadline
            +     '</div>'
-           +     (p.desc ? '<div style="font-size:13px;color:#555;line-height:1.5;">' + escapeHtml(p.desc) + '</div>' : '')
+           +     (p.desc ? '<div style="font-size:14px;color:#555;line-height:1.5;">' + escapeHtml(p.desc) + '</div>' : '')
            +   '</div>'
            +   linkHtml
            + '</div>';
