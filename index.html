@@ -711,8 +711,8 @@
       <div id="projects-error" style="display:none;font-size:13px;color:#A32D2D;background:#FCEBEB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;"></div>
       <div id="projects-empty" style="display:none;font-size:13px;color:#aaa;padding:1rem 0;text-align:center;">No projects match your filters.</div>
 
-      <!-- Project cards grid -->
-      <div id="projects-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;"></div>
+      <!-- Project cards list -->
+      <div id="projects-grid" style="display:flex;flex-direction:column;gap:10px;"></div>
     </div><!-- end page-projects -->
 
     <!-- ═══════════════════════════════════════════
@@ -2385,15 +2385,14 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         }
 
         projectsData = rows.map(function(r, idx) {
-          // Try header-based lookup first, fall back to column index
-          // Columns: 0=Timestamp, 1=Score, 2=Project Name, 3=Description, 4=Link, 5=Department, 6=Status
           var vals = Object.values(r);
           return {
-            name:   r['Project Name'] || vals[2] || '',
-            desc:   r['Description'] || vals[3] || '',
-            link:   r['Link to what you\'re working on (Google Doc, Sheets, etc)'] || vals[4] || '',
-            dept:   r['Department'] || vals[5] || '',
-            status: r['Status'] || vals[6] || ''
+            name:     r['Project Name'] || vals[2] || '',
+            desc:     r['Description'] || vals[3] || '',
+            link:     r['Link to what you\'re working on (Google Doc, Sheets, etc)'] || vals[4] || '',
+            dept:     r['Department'] || vals[5] || '',
+            status:   r['Status'] || vals[6] || '',
+            deadline: r['Target Deadline (optional)'] || vals[7] || ''
           };
         }).filter(function(p) { return p.name; });
 
@@ -2428,16 +2427,20 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     grid.innerHTML = filtered.map(function(p) {
       var statusStyle = statusStyles[p.status] || { cls: 'badge-gray', label: p.status };
       var deptCls     = deptStyles[p.dept] || 'badge-gray';
+      var deadline    = p.deadline ? '<span style="font-size:12px;color:#888;">Due: ' + p.deadline + '</span>' : '';
       var linkHtml    = p.link
-        ? '<a href="' + p.link + '" target="_blank" style="display:inline-block;margin-top:10px;font-size:12px;padding:5px 12px;background:#185FA5;color:white;border-radius:7px;text-decoration:none;font-weight:500;" onmouseover="this.style.background=\'#0C447C\'" onmouseout="this.style.background=\'#185FA5\'">Open ↗</a>'
+        ? '<a href="' + p.link + '" target="_blank" style="flex-shrink:0;font-size:12px;padding:5px 12px;background:#185FA5;color:white;border-radius:7px;text-decoration:none;font-weight:500;white-space:nowrap;" onmouseover="this.style.background=\'#0C447C\'" onmouseout="this.style.background=\'#185FA5\'">Open ↗</a>'
         : '';
-      return '<div style="background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:8px;">'
-           +   '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">'
-           +     '<div style="font-size:14px;font-weight:600;color:#1a1a19;flex:1;">' + escapeHtml(p.name) + '</div>'
-           +     '<span class="badge ' + statusStyle.cls + '" style="flex-shrink:0;">' + statusStyle.label + '</span>'
+      return '<div style="background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:0.875rem 1.25rem;display:flex;align-items:center;gap:16px;">'
+           +   '<div style="flex:1;min-width:0;">'
+           +     '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">'
+           +       '<span style="font-size:14px;font-weight:600;color:#1a1a19;">' + escapeHtml(p.name) + '</span>'
+           +       '<span class="badge ' + statusStyle.cls + '">' + statusStyle.label + '</span>'
+           +       '<span class="badge ' + deptCls + '">' + escapeHtml(p.dept) + '</span>'
+           +       deadline
+           +     '</div>'
+           +     (p.desc ? '<div style="font-size:13px;color:#555;line-height:1.5;">' + escapeHtml(p.desc) + '</div>' : '')
            +   '</div>'
-           +   (p.desc ? '<div style="font-size:13px;color:#555;line-height:1.5;">' + escapeHtml(p.desc) + '</div>' : '')
-           +   '<span class="badge ' + deptCls + '" style="align-self:flex-start;">' + escapeHtml(p.dept) + '</span>'
            +   linkHtml
            + '</div>';
     }).join('');
