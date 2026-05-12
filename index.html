@@ -1886,7 +1886,7 @@ PROCEDURES (with links): Emergency/911: https://docs.google.com/document/d/1Xm5u
 DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromebooks, Printers, AV Equipment, Barcode Scanners, Self-Check) - all searchable and filterable.`;
 
     try {
-      var geminiUrl = 'https://script.google.com/macros/s/AKfycbysJXV0opbaexVPdFej1TQkC_oImZ-6hGkqg5Bg4E1o_qgHB9LS73VD3-xTRNxjnBwx/exec?q=' + encodeURIComponent(question);
+      var geminiUrl = 'https://script.google.com/macros/s/AKfycbwTKkbNQFJpwShrR9oKPhMlBZQv29oRmzY0PIwNp_fZPCszbxJ-z1IjifDuE_sLdscy/exec?q=' + encodeURIComponent(question);
       var response = await fetch(geminiUrl, { redirect: 'follow' });
       var data = await response.json();
       var answer = data.answer || (data.error ? 'Error: ' + data.error : 'Sorry, I could not get a response. Please try again.');
