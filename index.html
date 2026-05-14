@@ -365,8 +365,11 @@
           </button>
         </div>
         <div id="in-charge-display" style="padding:4px 0 14px;"></div>
+        <div id="holiday-message" style="display:none;background:#FAEEDA;border:1px solid #EF9F27;border-radius:8px;padding:8px 12px;font-size:13px;color:#854F0B;font-weight:500;margin-bottom:14px;">
+        </div>
         <div style="border-top:1px solid #f0efe9;margin:0 -1.25rem;"></div>
-        <div id="hours-display" style="padding:14px 0;font-size:12px;color:#aaa;">Loading hours…</div>
+        <div style="padding-top:12px;padding-bottom:4px;font-size:14px;font-weight:700;color:#1a1a19;">Today's Hours</div>
+        <div id="hours-display" style="padding-bottom:14px;font-size:12px;color:#aaa;">Loading hours…</div>
         <div style="border-top:1px solid #f0efe9;margin:0 -1.25rem;"></div>
         <div id="weather-display" style="padding-top:14px;font-size:12px;color:#aaa;">Loading weather…</div>
       </div>
@@ -2529,6 +2532,54 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
             contact: config['supervisor_' + i + '_contact'] || ''
           });
           i++;
+        }
+
+        // ── Build today's hours from config ──────────────────
+        var now = new Date();
+        var todayStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+        var dayKeys = ['sun','mon','tue','wed','thu','fri','sat'];
+        var dayKey = dayKeys[now.getDay()];
+
+        // Check if today is a holiday
+        var holidayVal = config['holiday_' + todayStr];
+
+        // Check if we're in summer hours period
+        var isSummer = false;
+        if (config.summer_start && config.summer_end) {
+          isSummer = (todayStr >= config.summer_start && todayStr <= config.summer_end);
+        }
+
+        var hoursVal;
+        if (holidayVal) {
+          // Holiday overrides everything
+          hoursVal = holidayVal;
+        } else if (isSummer && config['hours_' + dayKey + '_summer'] !== undefined) {
+          hoursVal = config['hours_' + dayKey + '_summer'];
+        } else {
+          hoursVal = config['hours_' + dayKey] || null;
+        }
+
+        // Parse hoursVal into open/close or closed
+        var hoursObj = null;
+        if (hoursVal && hoursVal.toLowerCase() !== 'closed') {
+          var parts = hoursVal.split('-');
+          if (parts.length === 2) {
+            hoursObj = { open: parts[0].trim(), close: parts[1].trim() };
+          }
+        }
+
+        renderHours(hoursObj);
+
+        // ── Holiday message ───────────────────────────────────
+        var messageEl = document.getElementById('holiday-message');
+        var holidayMessage = config['holiday_message_' + todayStr];
+        if (messageEl) {
+          if (holidayMessage) {
+            messageEl.style.display = 'block';
+            messageEl.textContent = holidayMessage;
+          } else {
+            messageEl.style.display = 'none';
+          }
         }
 
         // Re-render the card in case it loaded before config was ready
