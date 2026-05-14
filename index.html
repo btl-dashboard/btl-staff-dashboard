@@ -1886,7 +1886,12 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
     document.getElementById('page-' + page).classList.add('active');
     if (el) el.classList.add('active');
-    if (page === 'policies')   renderPoliciesPage();
+    if (page === 'hardware') {
+      // Preload all tabs in background so stats populate
+      ['staff-pcs','public-pcs','laptops','printers','av','scanners','selfcheck'].forEach(function(tab) {
+        hwLoadTab(tab, function() {});
+      });
+    }
     if (page === 'procedures') renderProceduresPage();
     if (page === 'procedures') renderProceduresPage();
     if (page === 'projects')   loadProjects();
