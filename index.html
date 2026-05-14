@@ -748,23 +748,23 @@
       <!-- Summary stats -->
       <div class="hw-stats-row">
         <div class="hw-stat">
-          <div class="hw-stat-val" style="color:#185FA5;">28</div>
+          <div class="hw-stat-val" id="hw-stat-staff-pcs" style="color:#185FA5;">—</div>
           <div class="hw-stat-label">Staff PCs</div>
         </div>
         <div class="hw-stat">
-          <div class="hw-stat-val" style="color:#185FA5;">10</div>
+          <div class="hw-stat-val" id="hw-stat-public-pcs" style="color:#185FA5;">—</div>
           <div class="hw-stat-label">Public PCs</div>
         </div>
         <div class="hw-stat">
-          <div class="hw-stat-val" style="color:#185FA5;">17</div>
+          <div class="hw-stat-val" id="hw-stat-laptops" style="color:#185FA5;">—</div>
           <div class="hw-stat-label">Laptops &amp; Chromebooks</div>
         </div>
         <div class="hw-stat">
-          <div class="hw-stat-val" style="color:#BA7517;">19</div>
+          <div class="hw-stat-val" id="hw-stat-printers" style="color:#BA7517;">—</div>
           <div class="hw-stat-label">Printers</div>
         </div>
         <div class="hw-stat">
-          <div class="hw-stat-val" style="color:#534AB7;">68</div>
+          <div class="hw-stat-val" id="hw-stat-other" style="color:#534AB7;">—</div>
           <div class="hw-stat-label">Other Devices</div>
         </div>
       </div>
@@ -1207,6 +1207,29 @@ function hwLoadTab(tabKey, callback) {
         return r;
       });
       hwLoaded[tabKey] = true;
+      // Update summary stat for this tab
+      var statMap = {
+        'staff-pcs':  'hw-stat-staff-pcs',
+        'public-pcs': 'hw-stat-public-pcs',
+        'laptops':    'hw-stat-laptops',
+        'printers':   'hw-stat-printers'
+      };
+      if (statMap[tabKey]) {
+        var statEl = document.getElementById(statMap[tabKey]);
+        if (statEl) statEl.textContent = hwData[tabKey].rows.length;
+      }
+      // Recalculate "Other Devices" (av + scanners + selfcheck)
+      var otherKeys = ['av', 'scanners', 'selfcheck'];
+      var otherTotal = 0;
+      var otherAllLoaded = true;
+      otherKeys.forEach(function(k) {
+        if (hwLoaded[k]) { otherTotal += hwData[k].rows.length; }
+        else { otherAllLoaded = false; }
+      });
+      if (otherAllLoaded) {
+        var otherEl = document.getElementById('hw-stat-other');
+        if (otherEl) otherEl.textContent = otherTotal;
+      }
       if (callback) callback();
     })
     .catch(function() {
@@ -1392,82 +1415,8 @@ function hwApplySearch() {
   var POLICIES_CSV_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTn-UO2MLmk23sYKffHURGyDHm0r4HKODfXilPmWnc43C08nlL1Hxb7OMVXpJwFjHrX7gML-lOHMs0B/pub?gid=0&single=true&output=csv';
   var PROCEDURES_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxAcFnS3pPXOJSb4To7qHFG3n8bzwgg1NQ89e8HmQJGOKEKTY4Dlh9fsCjNs9sFtku0ld3VZzVDFCK/pub?gid=0&single=true&output=csv';
 
-  var policies = [
-    { name: "Vision & Mission Statements", tag: "general", url: "https://docs.google.com/document/d/1Kq7sIJbOqI7e2EhZ_jxfHtjnDDnsYrvy/edit" },
-    { name: "1.0 Hours of Operation", tag: "staff", url: "https://docs.google.com/document/d/1U6mqphls6nLjtxqiBhbIqLAiyRgze56K/edit" },
-    { name: "1.1 Closings – Inclement Weather and Emergency", tag: "staff", url: "https://docs.google.com/document/d/1LXIb21n1AWAyZtspyBzFKkRZKihj_UE7/edit" },
-    { name: "1.2 Delegation of Responsibility Policy", tag: "staff", url: "https://docs.google.com/document/d/1M0B_58SrozA7qxmTjsx6yJh17kxPZds8/edit" },
-    { name: "1.3 Display Case Policy", tag: "patrons", url: "https://docs.google.com/document/d/1LSLY1pCOBSinc7JveIuwgtrPyG6txAKv/edit" },
-    { name: "1.4 Sale of Items", tag: "patrons", url: "https://docs.google.com/document/d/1LONjtB5bdeg6UWaySYaV23bq1qERHV2w/edit" },
-    { name: "1.5 Exhibit Policy", tag: "patrons", url: "https://docs.google.com/document/d/1LSxBNbLTbEXYXaePgXZTRnf2tdqQuDBt/edit" },
-    { name: "1.6 Program Room Use by Community Groups & Organizations", tag: "patrons", url: "https://docs.google.com/document/d/1LTzpkbT7XNKEOWdz4i2wRGeKwRrV0PDL/edit" },
-    { name: "1.7 Tangible Gifts Policy", tag: "patrons", url: "https://docs.google.com/document/d/1K5BX8TlMhOiZbN7adT93cwAr2eN4R994/edit" },
-    { name: "1.8 Public Comments at Library Board Meetings", tag: "patrons", url: "https://docs.google.com/document/d/1LsfpmMxlrQ0c0fEMgqlPcv9KJLN6jsLL/edit" },
-    { name: "1.9 Confidentiality of Library Records", tag: "patrons", url: "https://docs.google.com/document/d/1LNi_LerwzFvktC72MYW-ALcgq6_AtysK/edit" },
-    { name: "2.1 Patron Service Policy", tag: "services", url: "https://docs.google.com/document/d/1KWhPL12f1kKyWGCCg4Lyg8J_NlAJwES6/edit" },
-    { name: "2.2 Circulation Policy", tag: "services", url: "https://docs.google.com/document/d/1YXsVJpGG-K8suMOUVF3VMfoVpD_zE2IC/edit" },
-    { name: "2.3 Fines", tag: "services", url: "https://docs.google.com/document/d/1qA5vXqrkP9ty5U1cH31JGLACxbPMR9bh/edit" },
-    { name: "2.4 Collection Development, Deselection & Reconsideration Policy", tag: "services", url: "https://docs.google.com/document/d/1TSgLtFVq73p8QeSA8DcKmUOSRdDJgK0w/edit" },
-    { name: "2.5 Notary Services Policy", tag: "services", url: "https://docs.google.com/document/d/1M4wzr5R8-seUowV0G1R8hdo-JJp-KEHd/edit" },
-    { name: "2.6 Computer, Internet & Printing Acceptable Use Policy", tag: "services", url: "https://docs.google.com/document/d/1KORiK6f4clirpx2eEudCUuCiu2pcYpuY/edit" },
-    { name: "2.7 Copyright Policy", tag: "services", url: "https://docs.google.com/document/d/1LYl6VUHly-dyiKPK0235Fuymo3Q2N6Y1/edit" },
-    { name: "2.8 Hotspot Policy", tag: "services", url: "https://docs.google.com/document/d/1L7Xk8QGU_-GAQaLQtr9S2aC5RaAtK3Xy/edit" },
-    { name: "3.0 Programming Policy", tag: "services", url: "https://docs.google.com/document/d/1M5_oRvDp_eXYLlcN-RAFBe7jAYbEQg7f/edit" },
-    { name: "4.0 Patron Behavior Policy", tag: "patrons", url: "https://docs.google.com/document/d/1Lrwc_DeGMG2_cKrEZ-TJA08roTK0TpR_/edit" },
-    { name: "5.0 Unattended Child Policy", tag: "patrons", url: "https://docs.google.com/document/d/1LXdhfcJhF1a6DiAI-u6-heg1NdmygCUf/edit" },
-    { name: "6.0 Public Health Crisis/Pandemic Policy", tag: "patrons", url: "https://docs.google.com/document/d/1Lc6EQQ-L5zq4bMWlpuFbFUpUc5Gv_ed3/edit" },
-    { name: "7.0 Digital Video Surveillance Policy", tag: "patrons", url: "https://docs.google.com/document/d/1S7Y1BK9xmEv8UYwS5SbKHaEu4G8wgR7A/edit" },
-    { name: "8.1 HR Resources and Organizational Design/Staffing Policies", tag: "staff", url: "https://docs.google.com/document/d/1LqInjYnlL_FwcrrVz3iC8EqAlFCkTToN/edit" },
-    { name: "8.2 General Personnel Policy", tag: "staff", url: "https://docs.google.com/document/d/1TkguL_ta-BlKVz4cg0fi0zWmEKus3GVu/edit" },
-    { name: "8.3 Vacation Leave Policy", tag: "staff", url: "https://docs.google.com/document/d/1ZDzSZ873hk-uaKC68IQSMo07Jw5wcldD/edit" },
-    { name: "8.4 Sick Leave Policy", tag: "staff", url: "https://docs.google.com/document/d/1v2K5sEXzKrsQ9dSi5dlDZIJVoJmBS1Ny/edit" },
-    { name: "8.5 Personal Time", tag: "staff", url: "https://docs.google.com/document/d/1kb27FyvzEUxiRNMrbOUWAECVe5LalKhC/edit" },
-    { name: "8.6 Bereavement Leave", tag: "staff", url: "https://docs.google.com/document/d/1sOOKmvadL1OXShsTWnI1brtaKoAoN3-c/edit" },
-    { name: "8.7 Jury Duty", tag: "staff", url: "https://docs.google.com/document/d/1H-GFriwh80iocAy_ZMdrnSCYxnctutZt/edit" },
-    { name: "8.8 Attendance, Punctuality & Dependability", tag: "staff", url: "https://docs.google.com/document/d/1e2A4uG6qRec17oFKzJiktMElYARTAFkV/edit" },
-    { name: "9.0 Staff Device Use Policy", tag: "staff", url: "https://docs.google.com/document/d/1Y-kDT64_8Daeix6UN5rlYtnTkdXwYkbt/edit" },
-    { name: "9.1 Device Use Guidelines", tag: "staff", url: "https://docs.google.com/document/d/1I2fksnx6MEPYQCjGClNRMbsoK4XaamfE/edit" },
-    { name: "10.0 Board of Trustees – Roles & Responsibilities", tag: "board", url: "https://docs.google.com/document/d/1byKAZMbNuhV63UZkDwaLnH8f3ckoOgDi/edit" },
-    { name: "10.1 Bylaws", tag: "board", url: "https://docs.google.com/document/d/1jPOmZWbO8ATi4_og5fK5dXf_mcdG8tu0/edit" },
-    { name: "10.2 Trustee Job Description", tag: "board", url: "https://docs.google.com/document/d/1KfXUv6Vz20R7WHRlH2bTMQ8L3Xwypfss/edit" },
-    { name: "10.3 Financial Matters – Library Board & Library Director", tag: "board", url: "https://docs.google.com/document/d/1lPqG9r9vCysOE3jyXP0TqOYZnv3rRJSW/edit" },
-    { name: "10.4 Standing Committees", tag: "board", url: "https://docs.google.com/document/d/1VZwvKVUVRccD61CM4X_q_Raj97bWygk3/edit" }
-  ];
-
-  var tagBadges = {
-    general:  { cls: 'badge-blue',   label: 'General' },
-    staff:    { cls: 'badge-purple', label: 'Staff' },
-    services: { cls: 'badge-green',  label: 'Services' },
-    patrons:  { cls: 'badge-amber',  label: 'Patrons' },
-    board:    { cls: 'badge-red',    label: 'Board' }
-  };
-
-  var procedures = [
-    { name: "Contact Information: Director / Board President / DPW", tags: ["contact"], url: "https://docs.google.com/document/d/1xkDbRKnJmOaTrGCDTXDbyrheSVcrEW2U/edit" },
-    { name: "Emergency Situations: Calling 911 / Police", tags: ["incharge"], url: "https://docs.google.com/document/d/1Xm5uunDSPvmg7Kv_ONqAeEnTb3SChVX-/edit" },
-    { name: "Problem Situations — What To Do / Who To Contact", tags: ["incharge"], url: "https://docs.google.com/document/d/1i2GvGVtz92YpnEUGlZHO2tXYN59iRfqn/edit" },
-    { name: "Inclement Weather and Other Emergency Closing Procedures", tags: ["incharge"], url: "https://docs.google.com/document/d/1vtBt4bsActXMsX9DGCY8tb38Z6SEaLve/edit" },
-    { name: "Inclement Weather — Staff Contact List", tags: ["contact"], url: "https://docs.google.com/document/d/1jCTeq3BFaZwic7GBBNBugrPlJN5gCTqP/edit" },
-    { name: "Unexpected Library Closing: Updating the Website", tags: ["website"], url: "https://docs.google.com/document/d/1fQKYbpeA9h509JUdKFnXkCEK44KVZITo/edit" },
-    { name: "Changing Library Phone System Attendant Announcements", tags: ["phones"], url: "https://docs.google.com/document/d/1gW26J0zexEm5Gxb_gHSNf-5bxiBXxzBq/edit" },
-    { name: "Self-Check Machines: Turning On", tags: ["technical"], url: "https://docs.google.com/document/d/1B1uO8L58gtu4BSJwQ_Zwbw0PrneP7W1L/edit" },
-    { name: "Technical Issues", tags: ["technical"], url: "https://docs.google.com/document/d/1MavQhcuGZ3Y1OP0-goMnybIcbUDTosOd/edit" },
-    { name: "Main Staff Contact Info", tags: ["contact"], url: "https://docs.google.com/document/d/1CPqpb2J6LPJ-L-u72ZhDGy768BAEK1zQ/edit" },
-    { name: "Main: After-Hours Technical Support", tags: ["contact"], url: "https://docs.google.com/document/d/1rOVT7n8HcFT3enkqFxXaL_q5Fxc3AQ5P/edit" },
-    { name: "Inappropriate Content on Public PCs: What To Do", tags: ["incharge"], url: "https://docs.google.com/document/d/1CSvDJXlNSm6ejWMzC3hO9yqij5lGVryS/edit" },
-    { name: "Opening Procedures: Circulation Department", tags: ["circulation"], url: "https://docs.google.com/document/d/1mSCTAEzBOeZbXQAgn0i9SQgDNOnCsWDo/edit" },
-    { name: "Till Currency Amounts", tags: ["circulation","childrens"], url: "https://docs.google.com/document/d/1aGPaNlv30TDTsJ0zYaQgWTJFRgTmA2fV/edit" },
-    { name: "Opening Procedures: Reference Department", tags: ["reference"], url: "https://docs.google.com/document/d/1w74sLhqR2873vhs0ZpZKDMiDKkWKLdzj/edit" },
-    { name: "Opening Procedures: Children's Department", tags: ["childrens"], url: "https://docs.google.com/document/d/1WHm1hqA_pubzMpyLRIlE0E_aV6yECxQt/edit" },
-    { name: "Closing Procedures: Circulation Department", tags: ["circulation"], url: "https://docs.google.com/document/d/1GCHQWRHnvJ1YYkpsJFpWJqhEEMYitKph/edit" },
-    { name: "Closing Procedures: Reference Department", tags: ["reference"], url: "https://docs.google.com/document/d/1dPcmAEauiUGq5xGkvIorh1zo4Sxx483J/edit" },
-    { name: "Closing Procedures: Children's Department", tags: ["childrens"], url: "https://docs.google.com/document/d/1LLKmAVWwV6eYhL5sALZ1lSlt4U1XYWSC/edit" },
-    { name: "Unattended Children at Closing Time", tags: ["incharge"], url: "https://docs.google.com/document/d/1z-Bmy_HOmp2aKsRKosTyjZa7hsgSQD4K/edit" },
-    { name: "Child Proof Fire Alarm Covers and Emergency Exit Door Alarm", tags: ["incharge"], url: "https://docs.google.com/document/d/1zY2jSaCIrfLZQ1J5ZIg23eYWKZmcb2iA/edit" },
-    { name: "Fire: Alarm / Emergency / Evacuation", tags: ["incharge"], url: "https://docs.google.com/document/d/1SDdt3v6XZXiIERz0HAlVKiBiEXcNNopj/edit" },
-    { name: "Fire Alarm Boxes, Extinguishers, AEDs, and Emergency Exits", tags: ["incharge"], url: "https://docs.google.com/document/d/1T4xm5SwLOwrQGZ9p2uiEe1WLZ-UE3XDY/edit" },
-    { name: "Gas Odor: Procedure", tags: ["incharge"], url: "https://docs.google.com/document/d/1kLriWvab2cZ6vUXYpgnA5GvaAcT64FFM/edit" }
-  ];
+  var policies = [];
+  var procedures = [];
 
   var procedureTagBadges = {
     incharge:    { cls: 'badge-blue',   label: 'In-Charge' },
@@ -1857,7 +1806,12 @@ function hwApplySearch() {
         renderPolicies();
         renderPoliciesPage();
       })
-      .catch(function(){ renderPolicies(); renderPoliciesPage(); }); // fall back to hardcoded
+      .catch(function(){ 
+        document.getElementById('policy-none').style.display = 'block';
+        document.getElementById('policy-none').textContent = 'Could not load policies. Please try again later.';
+        document.getElementById('policy-page-none').style.display = 'block';
+        document.getElementById('policy-page-none').textContent = 'Could not load policies. Please try again later.';
+      });
 
     // ── Fetch procedures from Google Sheets ────────────────────
     fetch(PROCEDURES_CSV_URL)
@@ -1870,7 +1824,12 @@ function hwApplySearch() {
         renderProcedures();
         renderProceduresPage();
       })
-      .catch(function(){ renderProcedures(); renderProceduresPage(); }); // fall back to hardcoded
+      .catch(function(){ 
+        document.getElementById('procedure-none').style.display = 'block';
+        document.getElementById('procedure-none').textContent = 'Could not load procedures. Please try again later.';
+        document.getElementById('procedure-page-none').style.display = 'block';
+        document.getElementById('procedure-page-none').textContent = 'Could not load procedures. Please try again later.';
+      });
   });
 
   // PAGE NAVIGATION
