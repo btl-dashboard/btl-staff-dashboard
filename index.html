@@ -1508,35 +1508,6 @@ function hwApplySearch() {
     bar.style.display = hidden.length > 0 ? 'flex' : 'none';
   }
 
-  var hwCardItems = [
-    { name: 'Staff PCs', loc: 'All depts', count: '29 units' },
-    { name: 'Public PCs', loc: 'Public areas', count: '12 units' },
-    { name: 'Laptops & Chromebooks', loc: 'Various', count: '17 units' },
-    { name: 'Printers', loc: 'All depts', count: '20 units' },
-    { name: 'AV Equipment', loc: 'Program rooms', count: '22 units' },
-    { name: 'Barcode Scanners', loc: 'All depts', count: '21 units' },
-    { name: 'Self-Check Machines', loc: 'Circ / Children\'s', count: '2 units' }
-  ];
-
-  function filterHwCard() {
-    var q = document.getElementById('hw-card-search').value.trim().toLowerCase();
-    var container = document.getElementById('hw-card-rows');
-    var none = document.getElementById('hw-card-none');
-    var items = q ? hwCardItems.filter(function(i) {
-      return (i.name + ' ' + i.loc).toLowerCase().indexOf(q) !== -1;
-    }) : hwCardItems.slice(0, 4);
-
-    if (!items.length) {
-      container.innerHTML = '';
-      none.style.display = 'block';
-      return;
-    }
-    none.style.display = 'none';
-    container.innerHTML = items.map(function(i) {
-      return '<div class="hw-row"><div class="hw-name">' + i.name + '</div><div class="hw-loc">' + i.loc + '</div><span class="badge badge-blue">' + i.count + '</span></div>';
-    }).join('');
-  }
-
   // ── Full Policies Page ──────────────────────────────────────────────────
   var currentPolicyPageFilter = 'all';
 
