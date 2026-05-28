@@ -1349,7 +1349,6 @@ function hwRender() {
         '<td>' + (r.mac !== '—' ? '<span class="hw-tag-mono">' + r.mac + '</span>' : '—') + '</td>',
         '<td>' + (r.ip !== '—' ? '<span class="hw-tag-mono">' + r.ip + '</span>' : '—') + '</td>',
         '<td>' + r.host + '</td>',
-        '<td>' + r.creds + '</td>',
         '<td>' + r.notes + '</td>'
       ].join('');
     } else if (hwCurrentTab === 'scanners') {
@@ -1417,6 +1416,14 @@ function hwApplySearch() {
 
   var policies = [];
   var procedures = [];
+
+  var tagBadges = {
+    patrons:  { cls: 'badge-blue',   label: 'Patrons' },
+    staff:    { cls: 'badge-green',  label: 'Staff' },
+    services: { cls: 'badge-purple', label: 'Services' },
+    board:    { cls: 'badge-amber',  label: 'Board' },
+    general:  { cls: 'badge-gray',   label: 'General' }
+  };
 
   var procedureTagBadges = {
     incharge:    { cls: 'badge-blue',   label: 'In-Charge' },
