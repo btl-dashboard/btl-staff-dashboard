@@ -196,6 +196,7 @@
   <div class="topbar-right">
     <div class="topbar-name" id="topbar-name">Welcome back</div>
     <div class="avatar" id="topbar-avatar">BTL</div>
+
   </div>
 </div>
 
@@ -213,15 +214,7 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" style="flex-shrink:0;"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg> Home
       </div>
     </div>
-    <div class="nav-section">
-      <div class="nav-label" style="border-color:#534AB7;">Administration</div>
-      <div class="nav-item" onclick="showPage('onboarding',this)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" style="flex-shrink:0;"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg> <span>Onboarding</span><span id="nav-onboard-count" style="margin-left:4px;color:#888;font-size:12px;"></span>
-      </div>
-      <div class="nav-item" onclick="showPage('offboarding',this)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" style="flex-shrink:0;"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="22" y1="11" x2="16" y2="11"/></svg> <span>Offboarding</span><span id="nav-offboard-count" style="margin-left:4px;color:#888;font-size:12px;"></span>
-      </div>
-    </div>
+
     <div class="nav-section">
       <div class="nav-label" style="border-color:#1D9E75;">Resources</div>
       <div class="nav-item" onclick="showPage('policies',this)">
@@ -322,13 +315,21 @@
             </div>
             <div>
               <div id="today-date" style="font-size:15px;font-weight:500;color:white;"></div>
-              <div id="calendar-content" style="font-size:13px;color:white;">Open your department's calendar</div>
+              <div id="calendar-content" style="font-size:13px;color:white;margin-top:4px;">Select your department below</div>
             </div>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
-          <a href="https://calendar.google.com" target="_blank" style="font-size:13px;padding:5px 12px;border:1px solid rgba(255,255,255,0.6);border-radius:7px;background:rgba(255,255,255,0.15);color:white;text-decoration:none;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">Open Calendar ↗</a>
-          <span id="change-dept" style="font-size:13px;color:rgba(255,255,255,0.8);cursor:pointer;text-decoration:underline;" onclick="resetDepartment()">Change department</span>
+        <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+          <select id="inline-dept-select" onchange="saveInlineDept(this.value)" style="width:100%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.5);border-radius:7px;padding:5px 10px;font-size:13px;color:white;font-family:inherit;outline:none;cursor:pointer;">
+            <option value="" style="color:#1a1a19;">— Select your department —</option>
+            <option value="childrens" style="color:#1a1a19;">Children's Department</option>
+            <option value="adult-teen" style="color:#1a1a19;">Adult &amp; Teen Services</option>
+            <option value="circulation" style="color:#1a1a19;">Circulation</option>
+            <option value="administration" style="color:#1a1a19;">Administration</option>
+          </select>
+          <div id="calendar-open-link" style="display:none;">
+            <a id="calendar-direct-link" href="https://calendar.google.com" target="_blank" style="font-size:13px;padding:5px 12px;border:1px solid rgba(255,255,255,0.6);border-radius:7px;background:rgba(255,255,255,0.15);color:white;text-decoration:none;text-align:center;display:inline-block;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">Open Calendar ↗</a>
+          </div>
         </div>
       </div>
       <div class="metric" style="display:flex;flex-direction:column;justify-content:space-between;background:#4d7600;border-radius:8px;padding:0.875rem 1rem;">
@@ -453,99 +454,8 @@
 
     </div><!-- end page-home -->
 
-    <!-- ONBOARDING PAGE -->
-    <div id="page-onboarding" class="page-section">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
-        <div>
-          <div class="page-title">Onboarding</div>
-          <div class="page-sub">Manage new hire checklists</div>
-        </div>
-        <button class="action-btn primary" onclick="showNewHireForm()">+ New hire</button>
-      </div>
-      <div id="new-hire-form" style="display:none;" class="hire-card">
-        <div style="font-size:14px;font-weight:500;margin-bottom:12px;">New hire details</div>
-        <div class="hire-form">
-          <label>First and last name</label>
-          <input type="text" id="hire-name" placeholder="e.g. Sarah Martinez">
-          <label>Date of hire</label>
-          <input type="date" id="hire-dateofhire">
-          <label>Start date</label>
-          <input type="date" id="hire-startdate">
-          <label>Employment type</label>
-          <select id="hire-type">
-            <option value="">— Select type —</option>
-            <option value="ft">Full-time permanent</option>
-            <option value="pt">Part-time permanent</option>
-            <option value="student">Student shelver</option>
-            <option value="temp">Temporary/Call-in/Summer</option>
-          </select>
-          <div style="display:flex;gap:8px;margin-top:4px;">
-            <button class="action-btn primary" onclick="createHire()">Create checklist</button>
-            <button class="action-btn" onclick="document.getElementById('new-hire-form').style.display='none'">Cancel</button>
-          </div>
-        </div>
-      </div>
-      <div id="active-hires-list" style="margin-bottom:1.25rem;"></div>
-      <div id="onboard-checklist-area" style="display:none;" class="hire-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-          <div>
-            <div id="checklist-hire-name" style="font-size:15px;font-weight:500;"></div>
-            <div id="checklist-hire-meta" style="font-size:12px;color:#888;margin-top:2px;"></div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <div id="checklist-progress-label" style="font-size:12px;color:#888;"></div>
-            <button class="action-btn" onclick="printHireSummary()">Print summary</button>
-            <button id="delete-hire-btn" class="action-btn" style="color:#A32D2D;border-color:#A32D2D;" onclick="confirmDelete('onboard')">Delete</button>
-            <span id="delete-hire-confirm" style="display:none;font-size:12px;color:#A32D2D;">Are you sure? <a href="#" onclick="deleteHire(currentHireId,'onboard');return false;" style="color:#A32D2D;font-weight:500;">Yes, delete</a> · <a href="#" onclick="document.getElementById('delete-hire-confirm').style.display='none';document.getElementById('delete-hire-btn').style.display='inline-block';return false;" style="color:#888;">Cancel</a></span>
-          </div>
-        </div>
-        <div class="progress-bar" style="margin-bottom:1rem;"><div id="checklist-progress-bar" class="progress-fill" style="width:0%"></div></div>
-        <div id="onboard-tasks"></div>
-      </div>
-    </div>
 
-    <!-- OFFBOARDING PAGE -->
-    <div id="page-offboarding" class="page-section">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
-        <div>
-          <div class="page-title">Employee Termination</div>
-          <div class="page-sub">Manage offboarding checklists</div>
-        </div>
-        <button class="action-btn" style="background:#FAEEDA;border-color:#EF9F27;color:#854F0B;" onclick="showTermForm()">+ Employee Term</button>
-      </div>
-      <div id="term-form" style="display:none;" class="hire-card">
-        <div style="font-size:14px;font-weight:500;margin-bottom:12px;">Employee termination details</div>
-        <div class="hire-form">
-          <label>First and last name</label>
-          <input type="text" id="term-name" placeholder="e.g. John Smith">
-          <label>Last day</label>
-          <input type="date" id="term-lastday">
-          <div style="display:flex;gap:8px;margin-top:4px;">
-            <button class="action-btn" style="background:#FAEEDA;border-color:#EF9F27;color:#854F0B;" onclick="createTerm()">Create checklist</button>
-            <button class="action-btn" onclick="document.getElementById('term-form').style.display='none'">Cancel</button>
-          </div>
-        </div>
-      </div>
-      <div id="active-terms-list" style="margin-bottom:1.25rem;"></div>
-      <div id="offboard-checklist-area" style="display:none;" class="hire-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-          <div>
-            <div id="offboard-hire-name" style="font-size:15px;font-weight:500;"></div>
-            <div id="offboard-hire-meta" style="font-size:12px;color:#888;margin-top:2px;"></div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <div id="offboard-progress-label" style="font-size:12px;color:#888;"></div>
-            <button class="action-btn" onclick="printTermSummary()">Print summary</button>
-            <button id="delete-term-btn" class="action-btn" style="color:#A32D2D;border-color:#A32D2D;" onclick="confirmDelete('offboard')">Delete</button>
-            <span id="delete-term-confirm" style="display:none;font-size:12px;color:#A32D2D;">Are you sure? <a href="#" onclick="deleteHire(currentTermId,'offboard');return false;" style="color:#A32D2D;font-weight:500;">Yes, delete</a> · <a href="#" onclick="document.getElementById('delete-term-confirm').style.display='none';document.getElementById('delete-term-btn').style.display='inline-block';return false;" style="color:#888;">Cancel</a></span>
-          </div>
-        </div>
-        <div class="progress-bar" style="margin-bottom:1rem;"><div id="offboard-progress-bar" class="progress-fill" style="width:0%"></div></div>
-        <div id="offboard-tasks"></div>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════
+        <!-- ═══════════════════════════════════════════
          CIRCULATION PAGE
          ═══════════════════════════════════════════ -->
     <div id="page-circulation" class="page-section">
@@ -699,7 +609,7 @@
     <div id="page-projects" class="page-section">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;">
         <div>
-          <div class="page-title">Projects / Shared Spreadsheets</div>
+          <div class="page-title">Projects</div>
           <div class="page-sub">Collaborative staff projects and shared resources</div>
         </div>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPhcbAo_TuiGCdLKnPK6rQVBoDMKW82CEOTyPYkwtlNMY3_w/viewform?usp=header" target="_blank" class="action-btn primary" style="font-size:14px;padding:8px 16px;text-decoration:none;display:inline-block;white-space:nowrap;">+ Submit a Project</a>
@@ -1669,65 +1579,29 @@ function hwApplySearch() {
 
   function showCalendarContent() {
     var dept = localStorage.getItem('btl_dept');
-    var content = document.getElementById('calendar-content');
+    var sel = document.getElementById('inline-dept-select');
+    var openLink = document.getElementById('calendar-open-link');
+    var directLink = document.getElementById('calendar-direct-link');
+    if (sel && dept) sel.value = dept;
     if (dept && DEPT_CALENDARS[dept]) {
-      content.innerHTML = '<iframe src="' + DEPT_CALENDARS[dept] + '" style="width:100%;height:160px;border:none;border-radius:6px;" frameborder="0" scrolling="no"></iframe>';
-    } else {
-      content.innerHTML = '<div style="font-size:13px;color:white;margin-top:4px;">Open your department\'s calendar</div>';
+      if (openLink) openLink.style.display = 'block';
+      if (directLink) directLink.href = DEPT_CALENDARS[dept];
+    } else if (openLink) {
+      openLink.style.display = 'none';
     }
   }
 
-  function saveDepartment() {
-    var val = document.getElementById('dept-select').value;
+  function saveInlineDept(val) {
     if (!val) return;
     localStorage.setItem('btl_dept', val);
-    var name = document.getElementById('staff-name').value.trim();
-    if (name) localStorage.setItem('btl_name', name);
-
-    // Supervisor self-selection → sets permissions
-    var supSel = document.getElementById('supervisor-select');
-    if (supSel) {
-      var supName = supSel.value;
-      if (supName) {
-        localStorage.setItem('btl_supervisor_id', supName);
-        var hrUsers = ['Rachel', 'Mary Ann'];
-        var isHrUser = hrUsers.indexOf(supName) >= 0;
-        savePermissions(isHrUser ? ['admin', 'hr'] : ['admin']);
-      } else {
-        clearPermissions();
-      }
-    }
-
-    document.getElementById('dept-modal').style.display = 'none';
-    updateGreeting();
     showCalendarContent();
-    if (typeof renderInChargeCard === 'function') renderInChargeCard();
-    if (typeof applyAdminVisibility === 'function') applyAdminVisibility();
-    if (typeof enforceAdminPageAccess === 'function') enforceAdminPageAccess();
-  }
-
-  function resetDepartment() {
-    localStorage.removeItem('btl_dept');
-    localStorage.removeItem('btl_name');
-    clearPermissions();
-    document.getElementById('dept-modal').style.display = 'flex';
-    applyAdminVisibility();
-    enforceAdminPageAccess();
-    renderInChargeCard();
   }
 
   function updateGreeting() {
     var now = new Date();
     var hour = now.getHours();
     var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-    var name = localStorage.getItem('btl_name');
-    document.getElementById('greeting').textContent = name ? greeting + ', ' + name + '!' : greeting + '!';
-
-    // Topbar greeting + avatar
-    var topName = document.getElementById('topbar-name');
-    var topAvatar = document.getElementById('topbar-avatar');
-    if (topName)   topName.textContent   = name ? 'Welcome back, ' + name : 'Welcome back';
-    if (topAvatar) topAvatar.textContent = name ? name.charAt(0).toUpperCase() : 'BTL';
+    document.getElementById('greeting').textContent = greeting + '!';
   }
 
   // ── CSV parser ───────────────────────────────────────────────────────────
@@ -1761,14 +1635,7 @@ function hwApplySearch() {
     var fullDate = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
     document.getElementById('today-full-date').textContent = fullDate;
     document.getElementById('today-date').textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
-    if (!localStorage.getItem('btl_dept')) {
-      document.getElementById('dept-modal').style.display = 'flex';
-    } else {
-      showCalendarContent();
-    }
-    renderActiveHires();
-    renderActiveTerms();
-    renderHomeOnboardCard();
+    showCalendarContent();
     hwShowTab('staff-pcs', document.querySelector('.hw-tab'));
     applyCardVisibility();
 
@@ -1873,420 +1740,6 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     if (page === 'procedures') renderProceduresPage();
     if (page === 'procedures') renderProceduresPage();
     if (page === 'projects')   loadProjects();
-  }
-
-  // ONBOARDING TASK DEFINITIONS
-  var onboardTasks = [
-    { id: 'pf',    section: 'Administrative Coordinator', text: 'Set up library personnel folder', flag: null },
-    { id: 'nt',    section: 'Administrative Coordinator', text: 'Order name tag via Bookkeeper (Demco)', flag: null },
-    { id: 'eaf',   section: 'Administrative Coordinator', text: 'Prepare Employee Advice Form', flag: null },
-    { id: 'ol',    section: 'Administrative Coordinator', text: 'Prepare Offer Letter', flag: 'not-student' },
-    { id: 'nhid',  section: 'Administrative Coordinator', text: 'Prepare New Hire Information Document (signed by employee)', flag: 'not-student' },
-    { id: 'jd',    section: 'Administrative Coordinator', text: 'Job Description (signed by employee)', flag: null },
-    { id: 'hrnec', section: 'Administrative Coordinator', text: 'HR New Employee Checklist', flag: null },
-    { id: 'wp',    section: 'Employee Forms', text: 'Working Papers — must be completed online', flag: 'student' },
-    { id: 'bgc',   section: 'Employee Forms', text: 'Authorization to Obtain a Background Check', flag: 'not-student' },
-    { id: 'mvc',   section: 'Employee Forms', text: 'Consent for Motor Vehicle Check', flag: 'not-student' },
-    { id: 'taf',   section: 'Employee Forms', text: 'Township Application Form', flag: null },
-    { id: 'edr',   section: 'Employee Forms', text: 'Employee Data Record', flag: null },
-    { id: 'i9',    section: 'Employee Forms', text: 'I-9 Form', flag: null },
-    { id: 'w4f',   section: 'Employee Forms', text: 'W-4 Form – Federal', flag: null },
-    { id: 'w4nj',  section: 'Employee Forms', text: 'W-4 Form – NJ State', flag: null },
-    { id: 'dd',    section: 'Employee Forms', text: 'Direct Deposit Form', flag: null },
-    { id: 'njsl',  section: 'Employee Forms', text: 'Receipt of NJ Sick Leave (give copy of policy)', flag: 'pt-student' },
-    { id: 'eh',    section: 'Employee Forms', text: 'Receipt of Employee Handbook Form', flag: null },
-    { id: 'adf',   section: 'Employee Forms', text: 'Receipt of Alcohol & Drug Free Policy (give copy)', flag: null },
-    { id: 'rtk',   section: 'Employee Forms', text: 'Receipt of Right To Know Pamphlet (give pamphlet)', flag: null },
-    { id: 'oef',   section: 'Employee Forms', text: 'Request for Outside Employment (optional)', flag: null },
-    { id: 'med',   section: 'Full-Time Only — Town Hall', text: 'Medical/Dental Enrollment', flag: 'ft' },
-    { id: 'pers',  section: 'Full-Time Only — Town Hall', text: 'PERS Enrollment/Transfer', flag: 'ft' },
-    { id: 'db',    section: 'Full-Time Only — Town Hall', text: 'Death Benefit Enrollment', flag: 'ft' },
-    { id: 'dcrp',  section: 'Full-Time Only — Town Hall', text: 'DCRP Enrollment/Transfer', flag: 'ft' },
-    { id: 'em1',   section: 'System Access', text: 'Email Karen Andriolo to set up email, blog access & Google Drive', flag: null },
-    { id: 'em2',   section: 'System Access', text: "Email Judy O'Connell to set up Edmunds & ESS access", flag: null },
-    { id: 'em3',   section: 'System Access', text: 'Email IT to add email to Township distribution lists', flag: null },
-    { id: 'add1',  section: 'Add to Lists', text: 'Staff List', flag: null },
-    { id: 'add2',  section: 'Add to Lists', text: 'Birthday List', flag: null },
-    { id: 'add3',  section: 'Add to Lists', text: 'Staff by Department List', flag: null },
-    { id: 'add4',  section: 'Add to Lists', text: 'Organizational Charts', flag: null },
-    { id: 'add5',  section: 'Add to Lists', text: 'Edmunds ID List', flag: null },
-    { id: 'gv1',   section: 'Give Copies To Employee', text: 'Holiday & Closings Schedule', flag: null },
-    { id: 'gv2',   section: 'Give Copies To Employee', text: 'Staff List', flag: null },
-    { id: 'gv3',   section: 'Give Copies To Employee', text: 'Birthday List', flag: null },
-    { id: 'gv4',   section: 'Give Copies To Employee', text: 'Staff By Department List', flag: null },
-    { id: 'gv5',   section: 'Give Copies To Employee', text: 'Key (if necessary)', flag: null }
-  ];
-
-  var offboardTasks = [
-    { id: 'ohr',   section: 'HR & Administration', text: 'Advise HR of employee termination', flag: null },
-    { id: 'oeaf',  section: 'HR & Administration', text: 'Complete Employee Advice Form (attach letter)', flag: null },
-    { id: 'oprf',  section: 'HR & Administration', text: 'Complete Position Requisition Form — send to HR', flag: null },
-    { id: 'odpw',  section: 'HR & Administration', text: 'Email DPW — deactivate gas code', flag: null },
-    { id: 'oweb',  section: 'HR & Administration', text: 'Remove employee contact information from dept. website', flag: null },
-    { id: 'owl',   section: 'HR & Administration', text: 'Request website login be disabled (email Jen Gander)', flag: null },
-    { id: 'okey',  section: 'Security & Township Property', text: 'Collect building keys', flag: null },
-    { id: 'odev',  section: 'Security & Township Property', text: 'Collect Township issued cell phone/computer', flag: null },
-    { id: 'obad',  section: 'Security & Township Property', text: 'Collect Township photo ID badge', flag: null },
-    { id: 'ounif', section: 'Security & Township Property', text: 'Collect uniform', flag: null },
-    { id: 'ovm',   section: 'Security & Township Property', text: 'Obtain/change employee voicemail password', flag: null },
-    { id: 'otc',   section: 'Security & Township Property', text: 'Remove employee from timeclock', flag: null },
-    { id: 'odb',   section: 'Security & Township Property', text: 'Remove access to external company databases', flag: null },
-    { id: 'oitp',  section: 'IT Requests', text: 'Return Township issued cell phone to IT', flag: null },
-    { id: 'oem',   section: 'IT Requests', text: 'Deactivate employee email', flag: null },
-    { id: 'ocl',   section: 'IT Requests', text: 'Deactivate employee computer login', flag: null },
-    { id: 'oel',   section: 'IT Requests', text: 'Remove employee email from Township "Everyone" list and BTL "All Staff" list', flag: null },
-    { id: 'oph',   section: 'IT Requests', text: 'Remove employee from phone system/caller ID', flag: null }
-  ];
-
-  var currentHireId = null;
-  var currentTermId = null;
-
-  function getHires() { try { return JSON.parse(localStorage.getItem('btl_hires') || '[]'); } catch(e) { return []; } }
-  function saveHires(h) { localStorage.setItem('btl_hires', JSON.stringify(h)); }
-  function getTerms() { try { return JSON.parse(localStorage.getItem('btl_terms') || '[]'); } catch(e) { return []; } }
-  function saveTerms(t) { localStorage.setItem('btl_terms', JSON.stringify(t)); }
-
-  function showNewHireForm() {
-    document.getElementById('new-hire-form').style.display = 'block';
-    document.getElementById('hire-name').focus();
-  }
-
-  function showTermForm() {
-    document.getElementById('term-form').style.display = 'block';
-    document.getElementById('term-name').focus();
-  }
-
-  function createHire() {
-    var name = document.getElementById('hire-name').value.trim();
-    var dateofhire = document.getElementById('hire-dateofhire').value;
-    var start = document.getElementById('hire-startdate').value;
-    var type = document.getElementById('hire-type').value;
-    if (!name || !start || !type) { alert('Please fill in all required fields.'); return; }
-    var hires = getHires();
-    var id = 'hire_' + Date.now();
-    var statuses = {};
-    onboardTasks.forEach(function(t) { statuses[t.id] = 'pending'; });
-    hires.push({ id: id, name: name, dateofhire: dateofhire, start: start, type: type, statuses: statuses });
-    saveHires(hires);
-    document.getElementById('new-hire-form').style.display = 'none';
-    document.getElementById('hire-name').value = '';
-    document.getElementById('hire-dateofhire').value = '';
-    document.getElementById('hire-startdate').value = '';
-    document.getElementById('hire-type').value = '';
-    renderActiveHires();
-    loadHireChecklist(id);
-    renderHomeOnboardCard();
-  }
-
-  function createTerm() {
-    var name = document.getElementById('term-name').value.trim();
-    var last = document.getElementById('term-lastday').value;
-    if (!name || !last) { alert('Please fill in all fields.'); return; }
-    var terms = getTerms();
-    var id = 'term_' + Date.now();
-    var statuses = {};
-    offboardTasks.forEach(function(t) { statuses[t.id] = 'pending'; });
-    terms.push({ id: id, name: name, lastDay: last, statuses: statuses });
-    saveTerms(terms);
-    document.getElementById('term-form').style.display = 'none';
-    document.getElementById('term-name').value = '';
-    document.getElementById('term-lastday').value = '';
-    renderActiveTerms();
-    loadTermChecklist(id);
-    renderHomeOnboardCard();
-  }
-
-  function renderActiveHires() {
-    var hires = getHires();
-    var el = document.getElementById('active-hires-list');
-    if (!hires.length) { el.innerHTML = '<div style="font-size:13px;color:#888;padding:8px 0;">No active onboarding checklists.</div>'; return; }
-    el.innerHTML = hires.map(function(h) {
-      var visibleTasks = onboardTasks.filter(function(t) { return taskVisible(t, h.type); });
-      var done = visibleTasks.filter(function(t) { return h.statuses[t.id] !== 'pending'; }).length;
-      var total = visibleTasks.length;
-      var pct = Math.round(done / total * 100);
-      var isOpen = currentHireId === h.id;
-      var chevron = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition:transform 0.2s;transform:rotate(' + (isOpen ? '180' : '0') + 'deg);flex-shrink:0;"><polyline points="6,9 12,15 18,9"/></svg>';
-      return '<div class="active-hire-tab' + (isOpen ? ' selected' : '') + '" onclick="loadHireChecklist(\'' + h.id + '\')">' +
-        '<div style="flex:1"><div style="font-weight:500;">' + h.name + '</div><div style="font-size:11px;color:#888;">Starts ' + formatDate(h.start) + ' · ' + typeLabel(h.type) + '</div></div>' +
-        '<div class="hire-progress">' + pct + '% complete</div>' + chevron + '</div>';
-    }).join('');
-  }
-
-  function renderActiveTerms() {
-    var terms = getTerms();
-    var el = document.getElementById('active-terms-list');
-    if (!terms.length) { el.innerHTML = '<div style="font-size:13px;color:#888;padding:8px 0;">No active termination checklists.</div>'; return; }
-    el.innerHTML = terms.map(function(t) {
-      var done = Object.values(t.statuses).filter(function(s) { return s !== 'pending'; }).length;
-      var pct = Math.round(done / offboardTasks.length * 100);
-      var isOpen = currentTermId === t.id;
-      var chevron = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition:transform 0.2s;transform:rotate(' + (isOpen ? '180' : '0') + 'deg);flex-shrink:0;"><polyline points="6,9 12,15 18,9"/></svg>';
-      return '<div class="active-hire-tab' + (isOpen ? ' selected' : '') + '" onclick="loadTermChecklist(\'' + t.id + '\')">' +
-        '<div style="flex:1"><div style="font-weight:500;">' + t.name + '</div><div style="font-size:11px;color:#888;">Last day ' + formatDate(t.lastDay) + '</div></div>' +
-        '<div class="hire-progress">' + pct + '% complete</div>' + chevron + '</div>';
-    }).join('');
-  }
-
-  function taskVisible(task, type) {
-    if (!task.flag) return true;
-    if (task.flag === 'ft' && type !== 'ft') return false;
-    if (task.flag === 'student' && type !== 'student') return false;
-    if (task.flag === 'not-student' && type === 'student') return false;
-    if (task.flag === 'pt-student' && type !== 'pt' && type !== 'student') return false;
-    return true;
-  }
-
-  function flagLabel(flag) {
-    if (flag === 'ft') return '<span class="checklist-flag flag-ft">FT only</span>';
-    if (flag === 'student') return '<span class="checklist-flag flag-student">Student only</span>';
-    if (flag === 'pt-student') return '<span class="checklist-flag flag-pt">PT/Student only</span>';
-    if (flag === 'not-student') return '<span class="checklist-flag flag-na">Not for students</span>';
-    return '';
-  }
-
-  function loadHireChecklist(id) {
-    if (currentHireId === id) {
-      currentHireId = null;
-      document.getElementById('onboard-checklist-area').style.display = 'none';
-      renderActiveHires();
-      return;
-    }
-    currentHireId = id;
-    var hires = getHires();
-    var hire = hires.find(function(h) { return h.id === id; });
-    if (!hire) return;
-    document.getElementById('onboard-checklist-area').style.display = 'block';
-    document.getElementById('checklist-hire-name').textContent = hire.name;
-    document.getElementById('checklist-hire-meta').textContent = 'Date of hire: ' + (hire.dateofhire ? formatDate(hire.dateofhire) : 'N/A') + ' · Start date: ' + formatDate(hire.start) + ' · ' + typeLabel(hire.type);
-    renderHireChecklist(hire);
-    renderActiveHires();
-  }
-
-  function renderHireChecklist(hire) {
-    var sections = {};
-    onboardTasks.forEach(function(t) {
-      if (!taskVisible(t, hire.type)) return;
-      if (!sections[t.section]) sections[t.section] = [];
-      sections[t.section].push(t);
-    });
-    var visibleTasks = onboardTasks.filter(function(t) { return taskVisible(t, hire.type); });
-    var done = visibleTasks.filter(function(t) { return hire.statuses[t.id] !== 'pending'; }).length;
-    var total = visibleTasks.length;
-    var pct = Math.round(done / total * 100);
-    document.getElementById('checklist-progress-bar').style.width = pct + '%';
-    document.getElementById('checklist-progress-label').textContent = done + ' of ' + total + ' tasks complete';
-    var html = '';
-    Object.keys(sections).forEach(function(sec) {
-      html += '<div class="checklist-section"><div class="checklist-section-title">' + sec + '</div>';
-      sections[sec].forEach(function(t) {
-        var status = hire.statuses[t.id] || 'pending';
-        var dateStr = (hire.dates && hire.dates[t.id]) ? '<span style="font-size:10px;color:#3B6D11;margin-left:6px;">' + hire.dates[t.id] + '</span>' : '';
-        html += '<div class="checklist-item">' +
-          '<div class="checklist-item-text">' + t.text + dateStr + '</div>' +
-          (t.flag ? flagLabel(t.flag) : '') +
-          '<button class="status-btn ' + (status === 'completed' ? 'completed' : '') + '" onclick="setTaskStatus(\'' + hire.id + '\',\'' + t.id + '\',\'completed\',\'onboard\')">' + (status === 'completed' ? '✓ Done' : 'Done') + '</button>' +
-          '<button class="status-btn ' + (status === 'na' ? 'na' : '') + '" onclick="setTaskStatus(\'' + hire.id + '\',\'' + t.id + '\',\'na\',\'onboard\')">N/A</button>' +
-          '</div>';
-      });
-      html += '</div>';
-    });
-    document.getElementById('onboard-tasks').innerHTML = html;
-  }
-
-  function loadTermChecklist(id) {
-    if (currentTermId === id) {
-      currentTermId = null;
-      document.getElementById('offboard-checklist-area').style.display = 'none';
-      renderActiveTerms();
-      return;
-    }
-    currentTermId = id;
-    var terms = getTerms();
-    var term = terms.find(function(t) { return t.id === id; });
-    if (!term) return;
-    document.getElementById('offboard-checklist-area').style.display = 'block';
-    document.getElementById('offboard-hire-name').textContent = term.name;
-    document.getElementById('offboard-hire-meta').textContent = 'Last day: ' + formatDate(term.lastDay);
-    renderTermChecklist(term);
-    renderActiveTerms();
-  }
-
-  function renderTermChecklist(term) {
-    var sections = {};
-    offboardTasks.forEach(function(t) {
-      if (!sections[t.section]) sections[t.section] = [];
-      sections[t.section].push(t);
-    });
-    var done = Object.values(term.statuses).filter(function(s) { return s !== 'pending'; }).length;
-    var total = offboardTasks.length;
-    var pct = Math.round(done / total * 100);
-    document.getElementById('offboard-progress-bar').style.width = pct + '%';
-    document.getElementById('offboard-progress-label').textContent = done + ' of ' + total + ' tasks complete';
-    var html = '';
-    Object.keys(sections).forEach(function(sec) {
-      html += '<div class="checklist-section"><div class="checklist-section-title">' + sec + '</div>';
-      sections[sec].forEach(function(t) {
-        var status = term.statuses[t.id] || 'pending';
-        var dateStr = (term.dates && term.dates[t.id]) ? '<span style="font-size:10px;color:#3B6D11;margin-left:6px;">' + term.dates[t.id] + '</span>' : '';
-        var emailDropdown = '';
-        if (t.id === 'oem') {
-          var emailAction = term.emailAction || '';
-          emailDropdown = '<select onchange="setEmailAction(\'' + term.id + '\', this.value)" style="font-size:11px;padding:3px 6px;border:1px solid #e5e5e0;border-radius:6px;background:#f5f5f3;color:#555;font-family:inherit;margin-left:6px;cursor:pointer;">' +
-            '<option value=""' + (emailAction === '' ? ' selected' : '') + '>— Select action —</option>' +
-            '<option value="deactivate"' + (emailAction === 'deactivate' ? ' selected' : '') + '>Fully deactivate</option>' +
-            '<option value="forward"' + (emailAction === 'forward' ? ' selected' : '') + '>Set up forwarding</option>' +
-            '</select>';
-        }
-        html += '<div class="checklist-item">' +
-          '<div class="checklist-item-text" style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">' + t.text + dateStr + emailDropdown + '</div>' +
-          '<button class="status-btn ' + (status === 'completed' ? 'completed' : '') + '" onclick="setTaskStatus(\'' + term.id + '\',\'' + t.id + '\',\'completed\',\'offboard\')">' + (status === 'completed' ? '✓ Done' : 'Done') + '</button>' +
-          '<button class="status-btn ' + (status === 'na' ? 'na' : '') + '" onclick="setTaskStatus(\'' + term.id + '\',\'' + t.id + '\',\'na\',\'offboard\')">N/A</button>' +
-          '</div>';
-      });
-      html += '</div>';
-    });
-    document.getElementById('offboard-tasks').innerHTML = html;
-  }
-
-  function setEmailAction(termId, value) {
-    var terms = getTerms();
-    var term = terms.find(function(t) { return t.id === termId; });
-    if (!term) return;
-    term.emailAction = value;
-    saveTerms(terms);
-  }
-
-  function printContent(html) {
-    var blob = new Blob([html], { type: 'text/html' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.target = '_blank';
-    a.click();
-    setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
-  }
-
-  function printHireSummary() {
-    var hires = getHires();
-    var hire = hires.find(function(h) { return h.id === currentHireId; });
-    if (!hire) return;
-    var sections = {};
-    onboardTasks.forEach(function(t) {
-      if (!taskVisible(t, hire.type)) return;
-      if (!sections[t.section]) sections[t.section] = [];
-      sections[t.section].push(t);
-    });
-    var rows = '';
-    Object.keys(sections).forEach(function(sec) {
-      rows += '<tr><td colspan="2" style="background:#f5f5f3;font-weight:600;padding:8px 10px;font-size:12px;border-top:2px solid #ccc;">' + sec + '</td></tr>';
-      sections[sec].forEach(function(t) {
-        var status = hire.statuses[t.id] || 'pending';
-        var dateStr = (hire.dates && hire.dates[t.id]) ? hire.dates[t.id] : '';
-        var completed = status === 'completed' ? dateStr : (status === 'na' ? 'N/A' : '');
-        rows += '<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td><td style="padding:6px 10px;border-bottom:1px solid #eee;">' + t.text + '</td></tr>';
-      });
-    });
-    var html = '<!DOCTYPE html><html><head><title>Employee Onboarding Checklist</title><style>body{font-family:Arial,sans-serif;font-size:13px;margin:2rem;color:#1a1a19;}h2{font-size:16px;margin-bottom:4px;}.meta{display:flex;gap:2rem;margin-bottom:1.5rem;font-size:13px;flex-wrap:wrap;}.meta div{border-bottom:1px solid #333;min-width:180px;padding-bottom:2px;}.meta label{font-size:11px;color:#666;display:block;margin-bottom:2px;}table{width:100%;border-collapse:collapse;}th{text-align:left;font-size:11px;color:#666;padding:6px 10px;border-bottom:2px solid #333;}.sig{margin-top:2rem;display:flex;gap:3rem;}.sig div{border-bottom:1px solid #333;min-width:220px;padding-bottom:2px;}.sig label{font-size:11px;color:#666;display:block;margin-bottom:20px;}@media print{body{margin:1rem;}}</style></head><body>' +
-      '<h2>NEW EMPLOYEE ONBOARDING CHECKLIST</h2><p style="font-size:12px;color:#555;margin-bottom:1rem;">Bernards Township Library</p>' +
-      '<div class="meta"><div><label>EMPLOYEE NAME</label>' + hire.name + '</div><div><label>DATE OF HIRE</label>' + (hire.dateofhire ? formatDate(hire.dateofhire) : '—') + '</div><div><label>START DATE</label>' + formatDate(hire.start) + '</div><div><label>EMPLOYMENT TYPE</label>' + typeLabel(hire.type) + '</div></div>' +
-      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th>TASK</th></tr></thead><tbody>' + rows + '</tbody></table>' +
-      '<div class="sig"><div><label>COMPLETED BY</label></div><div><label>DATE</label></div></div>' +
-      '<script>window.onload=function(){window.print();}<\/script></body></html>';
-    printContent(html);
-  }
-
-  function printTermSummary() {
-    var terms = getTerms();
-    var term = terms.find(function(t) { return t.id === currentTermId; });
-    if (!term) return;
-    var sections = {};
-    offboardTasks.forEach(function(t) {
-      if (!sections[t.section]) sections[t.section] = [];
-      sections[t.section].push(t);
-    });
-    var rows = '';
-    Object.keys(sections).forEach(function(sec) {
-      rows += '<tr><td colspan="2" style="background:#f5f5f3;font-weight:600;padding:8px 10px;font-size:12px;border-top:2px solid #ccc;">' + sec + '</td></tr>';
-      sections[sec].forEach(function(t) {
-        var status = term.statuses[t.id] || 'pending';
-        var dateStr = (term.dates && term.dates[t.id]) ? term.dates[t.id] : '';
-        var completed = status === 'completed' ? dateStr : (status === 'na' ? 'N/A' : '');
-        var taskText = t.text;
-        if (t.id === 'oem' && term.emailAction) { var al = { deactivate: 'Fully deactivate', forward: 'Set up forwarding' }; taskText += ' (' + (al[term.emailAction] || term.emailAction) + ')'; }
-        rows += '<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;width:130px;">' + completed + '</td><td style="padding:6px 10px;border-bottom:1px solid #eee;">' + taskText + '</td></tr>';
-      });
-    });
-    var html = '<!DOCTYPE html><html><head><title>Employee Termination Checklist</title><style>body{font-family:Arial,sans-serif;font-size:13px;margin:2rem;color:#1a1a19;}h2{font-size:16px;margin-bottom:4px;}.meta{display:flex;gap:2rem;margin-bottom:1.5rem;font-size:13px;}.meta div{border-bottom:1px solid #333;min-width:200px;padding-bottom:2px;}.meta label{font-size:11px;color:#666;display:block;margin-bottom:2px;}table{width:100%;border-collapse:collapse;}th{text-align:left;font-size:11px;color:#666;padding:6px 10px;border-bottom:2px solid #333;}.sig{margin-top:2rem;display:flex;gap:3rem;}.sig div{border-bottom:1px solid #333;min-width:220px;padding-bottom:2px;}.sig label{font-size:11px;color:#666;display:block;margin-bottom:20px;}@media print{body{margin:1rem;}}</style></head><body>' +
-      '<div style="font-size:11px;color:#666;margin-bottom:4px;">Rev. 4/2022</div><h2>EMPLOYEE TERMINATION CHECKLIST FOR SUPERVISORS</h2><p style="font-size:12px;color:#555;margin-bottom:1rem;">Please complete this form upon termination of an employee in your department. Once complete – submit to HR.</p>' +
-      '<div class="meta"><div><label>EMPLOYEE NAME</label>' + term.name + '</div><div><label>SEPARATION DATE</label>' + formatDate(term.lastDay) + '</div></div>' +
-      '<table><thead><tr><th style="width:130px;">COMPLETED</th><th>TASK</th></tr></thead><tbody>' + rows + '</tbody></table>' +
-      '<div class="sig"><div><label>SUPERVISOR NAME</label></div><div><label>DATE</label></div></div>' +
-      '<script>window.onload=function(){window.print();}<\/script></body></html>';
-    printContent(html);
-  }
-
-  function setTaskStatus(id, taskId, status, type) {
-    if (type === 'onboard') {
-      var hires = getHires();
-      var hire = hires.find(function(h) { return h.id === id; });
-      if (!hire) return;
-      hire.statuses[taskId] = hire.statuses[taskId] === status ? 'pending' : status;
-      if (!hire.dates) hire.dates = {};
-      if (hire.statuses[taskId] === 'completed') { hire.dates[taskId] = new Date().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}); } else { delete hire.dates[taskId]; }
-      saveHires(hires);
-      renderHireChecklist(hire);
-      renderActiveHires();
-    } else {
-      var terms = getTerms();
-      var term = terms.find(function(t) { return t.id === id; });
-      if (!term) return;
-      term.statuses[taskId] = term.statuses[taskId] === status ? 'pending' : status;
-      if (!term.dates) term.dates = {};
-      if (term.statuses[taskId] === 'completed') { term.dates[taskId] = new Date().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}); } else { delete term.dates[taskId]; }
-      saveTerms(terms);
-      renderTermChecklist(term);
-      renderActiveTerms();
-    }
-  }
-
-  function renderHomeOnboardCard() {
-    // Update nav counts (card was removed from home page; this now just updates the side nav)
-    var hires = getHires();
-    var terms = getTerms();
-    var onboardEl  = document.getElementById('nav-onboard-count');
-    var offboardEl = document.getElementById('nav-offboard-count');
-    if (onboardEl)  onboardEl.textContent  = '(' + hires.length + ')';
-    if (offboardEl) offboardEl.textContent = '(' + terms.length + ')';
-  }
-
-  function confirmDelete(type) {
-    if (type === 'onboard') { document.getElementById('delete-hire-btn').style.display = 'none'; document.getElementById('delete-hire-confirm').style.display = 'inline'; }
-    else { document.getElementById('delete-term-btn').style.display = 'none'; document.getElementById('delete-term-confirm').style.display = 'inline'; }
-  }
-
-  function deleteHire(id, type) {
-    if (type === 'onboard') {
-      saveHires(getHires().filter(function(h) { return h.id !== id; }));
-      currentHireId = null;
-      document.getElementById('onboard-checklist-area').style.display = 'none';
-      renderActiveHires();
-    } else {
-      saveTerms(getTerms().filter(function(t) { return t.id !== id; }));
-      currentTermId = null;
-      document.getElementById('offboard-checklist-area').style.display = 'none';
-      renderActiveTerms();
-    }
-    renderHomeOnboardCard();
-  }
-
-  function typeLabel(type) { return { ft: 'Full-time', pt: 'Part-time', student: 'Student shelver', temp: 'Temporary' }[type] || type; }
-
-  function formatDate(d) {
-    if (!d) return '';
-    var parts = d.split('-');
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return months[parseInt(parts[1]) - 1] + ' ' + parseInt(parts[2]) + ', ' + parts[0];
   }
 
   // ── Projects Page ─────────────────────────────────────────────────────────
@@ -2527,35 +1980,12 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         // Re-render the card in case it loaded before config was ready
         renderInChargeCard();
         // Refresh supervisor dropdown with newly loaded list
-        populateSupervisorDropdown();
-      })
+        })
       .catch(function(err){ console.warn('Dashboard config fetch failed:', err); /* silently fall back to hardcoded default */ });
   }
 
-  // ── Permissions (self-selected from modal; stored in localStorage) ──
-  var supervisorList = []; // kept for compatibility
-
-  function getStoredPermissions() {
-    try {
-      var raw = localStorage.getItem('btl_permissions');
-      if (!raw) return [];
-      var arr = JSON.parse(raw);
-      return Array.isArray(arr) ? arr : [];
-    } catch(e) { return []; }
-  }
-  function savePermissions(perms) {
-    localStorage.setItem('btl_permissions', JSON.stringify(perms || []));
-  }
-  function clearPermissions() {
-    localStorage.removeItem('btl_permissions');
-    localStorage.removeItem('btl_supervisor_id');
-  }
-
-  function hasPermission(perm) {
-    return getStoredPermissions().indexOf(perm) >= 0;
-  }
-  function isAdmin() { return hasPermission('admin'); }
-  function isHr()    { return hasPermission('hr'); }
+  function isHr()    { return currentGoogleUser && ALLOWED_HR_EMAILS.indexOf(currentGoogleUser.email) >= 0; }
+  function isAdmin() { return isHr(); }
 
   function fetchSupervisorList() {
     // Supervisor list now comes from the config sheet via loadDashboardConfig()
@@ -2845,44 +2275,8 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     renderInChargeCard();
   }
 
-  function applyAdminVisibility() {
-    // Onboarding/Offboarding section: HR-only
-    var hr = isHr();
-    var navItems = document.querySelectorAll('.sidenav .nav-item');
-    navItems.forEach(function(el) {
-      var oc = el.getAttribute('onclick') || '';
-      if (oc.indexOf("showPage('onboarding'") >= 0 || oc.indexOf("showPage('offboarding'") >= 0) {
-        el.style.display = hr ? '' : 'none';
-      }
-    });
-    // Hide the "Administration" section label if HR items are hidden
-    var adminLabel = null;
-    document.querySelectorAll('.sidenav .nav-label').forEach(function(el) {
-      if (el.textContent.trim() === 'Administration') adminLabel = el;
-    });
-    if (adminLabel) {
-      var section = adminLabel.parentElement;
-      if (section) section.style.display = hr ? '' : 'none';
-    }
-  }
 
-  function enforceAdminPageAccess() {
-    // If a non-HR user has an onboarding/offboarding page open, bounce them to Home
-    if (isHr()) return;
-    var onboardPage  = document.getElementById('page-onboarding');
-    var offboardPage = document.getElementById('page-offboarding');
-    if ((onboardPage && onboardPage.classList.contains('active')) ||
-        (offboardPage && offboardPage.classList.contains('active'))) {
-      if (typeof showPage === 'function') {
-        var homeNav = null;
-        document.querySelectorAll('.sidenav .nav-item').forEach(function(el) {
-          var oc = el.getAttribute('onclick') || '';
-          if (oc.indexOf("showPage('home'") >= 0) homeNav = el;
-        });
-        showPage('home', homeNav);
-      }
-    }
-  }
+  function isAdmin() { return false; }
 
   function showOutsideLanding() {
     // Replace entire dashboard with a friendly "wrong place" page
@@ -2909,39 +2303,17 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
 
     };
     renderInChargeCard();
-    applyAdminVisibility();          // applies current stored permissions immediately
-    enforceAdminPageAccess();
-    fetchSupervisorList();           // populate dropdown in background
     loadWeather();                   // fetch weather for the In-Charge card
 
     // Defensive: reparent modals to body so they can't get trapped inside a hidden page-section
-    ['dept-modal','in-charge-modal'].forEach(function(id){
+    ['in-charge-modal'].forEach(function(id){
       var m = document.getElementById(id);
       if (m && m.parentElement !== document.body) document.body.appendChild(m);
     });
   });
 </script>
 
-<!-- Department selector modal -->
-<div id="dept-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);z-index:999;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:12px;padding:1.5rem;width:340px;">
-    <div style="font-size:15px;font-weight:500;margin-bottom:6px;">Welcome to the Staff Dashboard</div>
-    <div style="font-size:13px;color:#666;margin-bottom:16px;">Enter your name and select your department to personalize your experience.</div>
-    <input type="text" id="staff-name" placeholder="Your first name" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
-    <select id="dept-select" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;">
-      <option value="">— Select your department —</option>
-      <option value="childrens">Children's Department</option>
-      <option value="adult-teen">Adult & Teen Services</option>
-      <option value="circulation">Circulation</option>
-      <option value="administration">Administration</option>
-    </select>
-    <div style="font-size:11px;color:#888;margin-bottom:4px;padding-left:2px;">For admin access, select your name from the dropdown menu:</div>
-    <select id="supervisor-select" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;">
-      <option value="">— Not an admin —</option>
-    </select>
-    <button onclick="saveDepartment()" style="width:100%;background:#185FA5;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;">Save & continue</button>
-  </div>
-</div>
+
 
 <!-- In-Charge Today edit modal (admin only) -->
 <div id="in-charge-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);z-index:999;align-items:center;justify-content:center;">
