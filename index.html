@@ -326,6 +326,7 @@
             <option value="adult-teen" style="color:#1a1a19;">Adult &amp; Teen Services</option>
             <option value="circulation" style="color:#1a1a19;">Circulation</option>
             <option value="administration" style="color:#1a1a19;">Administration</option>
+            <option value="reference" style="color:#1a1a19;">Reference</option>
           </select>
           <div id="calendar-open-link" style="display:none;">
             <a id="calendar-direct-link" href="https://calendar.google.com" target="_blank" style="font-size:13px;padding:5px 12px;border:1px solid rgba(255,255,255,0.6);border-radius:7px;background:rgba(255,255,255,0.15);color:white;text-decoration:none;text-align:center;display:inline-block;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">Open Calendar ↗</a>
@@ -1589,7 +1590,8 @@ function hwApplySearch() {
   }
 
   var DEPT_CALENDARS = {
-    childrens: 'https://calendar.google.com/calendar/embed?src=ber-childrens%40bernardslibrary.org&ctz=America%2FNew_York'
+    childrens: 'https://calendar.google.com/calendar/embed?src=ber-childrens%40bernardslibrary.org&ctz=America%2FNew_York',
+    reference: 'https://calendar.google.com/calendar/embed?src=c_512d87c37f683bf75bfa1d4e3566e01513fe57d37fc2b6b34bd5269134cf4dcb%40group.calendar.google.com&ctz=America%2FNew_York'
   };
 
   function showCalendarContent() {
