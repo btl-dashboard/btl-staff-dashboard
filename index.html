@@ -2207,18 +2207,17 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   function saveInChargeOverride(name, contact, endDate) {
     _inChargeOverride = { name: name, contact: contact, endDate: endDate };
     // Persist to config sheet so all users see the update
-    fetch(DASHBOARD_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'setInCharge', name: name, contact: contact, endDate: endDate })
-    }).catch(function(err) { console.warn('Could not save in-charge to sheet:', err); });
+    var saveUrl = DASHBOARD_SCRIPT_URL + '?action=setInCharge'
+      + '&name='    + encodeURIComponent(name)
+      + '&contact=' + encodeURIComponent(contact)
+      + '&endDate=' + encodeURIComponent(endDate);
+    fetch(saveUrl).catch(function(err) { console.warn('Could not save in-charge to sheet:', err); });
   }
 
   function clearInChargeOverride() {
     _inChargeOverride = null;
-    fetch(DASHBOARD_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'clearInCharge' })
-    }).catch(function(err) { console.warn('Could not clear in-charge from sheet:', err); });
+    fetch(DASHBOARD_SCRIPT_URL + '?action=clearInCharge')
+      .catch(function(err) { console.warn('Could not clear in-charge from sheet:', err); });
   }
 
   function formatDate(dateStr) {
