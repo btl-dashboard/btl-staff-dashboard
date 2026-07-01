@@ -160,6 +160,7 @@
 </style>
 <script>
   const PROXY_URL = 'https://script.google.com/macros/s/AKfycbysJXV0opbaexVPdFej1TQkC_oImZ-6hGkqg5Bg4E1o_qgHB9LS73VD3-xTRNxjnBwx/exec';
+  const DASHBOARD_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJveeBNe4_nr4cUtRKGSLSfMDfHlK0b2xdxRQyCdl276I8gvfZ8oByNy7ukCtU_ulS/exec';
 
   async function loadTrafficData() {
     const todayEl     = document.getElementById('traffic-today');
@@ -1994,6 +1995,23 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
           }
         }
 
+        // Load shared in-charge override from config sheet (shared across all users)
+        var todayForExpiry = todayStr; // already computed above
+        if (config.ic_override_name) {
+          var oEnd = config.ic_override_enddate || '';
+          if (!oEnd || oEnd >= todayForExpiry) {
+            _inChargeOverride = {
+              name:    config.ic_override_name,
+              contact: config.ic_override_contact || '',
+              endDate: oEnd
+            };
+          } else {
+            _inChargeOverride = null; // expired — clear it
+          }
+        } else {
+          _inChargeOverride = null;
+        }
+
         // Re-render the card in case it loaded before config was ready
         renderInChargeCard();
         // Refresh supervisor dropdown with newly loaded list
@@ -2179,31 +2197,35 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       });
   }
 
+  // In-memory store — populated from the config sheet on load so all users see the same value
+  var _inChargeOverride = null;
+
   function getInChargeOverride() {
-    try {
-      var raw = localStorage.getItem('btl_in_charge_override');
-      if (!raw) return null;
-      var o = JSON.parse(raw);
-      // Check expiration
-      var today = new Date();
-      today.setHours(0,0,0,0);
-      if (o.endDate) {
-        var end = new Date(o.endDate + 'T23:59:59');
-        if (today > end) {
-          localStorage.removeItem('btl_in_charge_override');
-          return null;
-        }
-      }
-      return o;
-    } catch(e) { return null; }
+    return _inChargeOverride;
   }
 
   function saveInChargeOverride(name, contact, endDate) {
-    localStorage.setItem('btl_in_charge_override', JSON.stringify({ name: name, contact: contact, endDate: endDate }));
+    _inChargeOverride = { name: name, contact: contact, endDate: endDate };
+    // Persist to config sheet so all users see the update
+    fetch(DASHBOARD_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'setInCharge', name: name, contact: contact, endDate: endDate })
+    }).catch(function(err) { console.warn('Could not save in-charge to sheet:', err); });
   }
 
   function clearInChargeOverride() {
-    localStorage.removeItem('btl_in_charge_override');
+    _inChargeOverride = null;
+    fetch(DASHBOARD_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'clearInCharge' })
+    }).catch(function(err) { console.warn('Could not clear in-charge from sheet:', err); });
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr + 'T12:00:00');
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
   }
 
   function renderInChargeCard() {
