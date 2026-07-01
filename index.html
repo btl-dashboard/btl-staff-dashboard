@@ -287,8 +287,16 @@
 
     <!-- HOME PAGE -->
     <div id="page-home" class="page-section active">
-    <div class="page-title" id="greeting"></div>
-    <div class="page-sub" id="today-full-date"></div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;">
+      <div>
+        <div class="page-title" id="greeting"></div>
+        <div style="font-size:15px;color:#1a1a19;" id="today-full-date"></div>
+      </div>
+      <div style="text-align:right;display:flex;flex-direction:column;gap:6px;padding-top:2px;">
+        <div id="hours-display" style="font-size:13px;color:#aaa;">Loading hours…</div>
+        <div id="weather-display" style="font-size:13px;color:#aaa;">Loading weather…</div>
+      </div>
+    </div>
 
     <div id="home-customize-bar" class="home-customize-bar" style="display:none;"></div>
 
@@ -351,43 +359,17 @@
       </div>
     </div>
 
-    <div class="grid-2" id="home-row-in-charge">
-      <!-- In-Charge Today card -->
-      <div class="card" id="card-in-charge" style="border-left:4px solid #4d7600;">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="card-icon" style="background:#E1F5EE">
-              <svg width="13" height="13" viewBox="0 0 32 38" fill="none" stroke="#4d7600" stroke-width="2"><rect x="2" y="2" width="28" height="34" rx="3"/><path d="M10 2v6M22 2v6" stroke-linecap="round"/><circle cx="16" cy="20" r="5" stroke-width="1.5"/><path d="M8 32c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </div>
-            In-Charge Today
+    <div class="card" style="border-left:4px solid #4d7600;margin-bottom:1.25rem;">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon" style="background:#E1F5EE">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4d7600" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
-          <button id="in-charge-edit-btn" style="display:none;background:#E1F5EE;color:#1a1a19;border:1px solid #1D9E75;border-radius:7px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;align-items:center;gap:5px;" onclick="openInChargeModal()">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1a1a19" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            Set In-Charge
-          </button>
+          Upcoming events
         </div>
-        <div id="in-charge-display" style="padding:4px 0 14px;"></div>
-        <div id="holiday-message" style="display:none;background:#FAEEDA;border:1px solid #EF9F27;border-radius:8px;padding:8px 12px;font-size:13px;color:#854F0B;font-weight:500;margin-bottom:14px;">
-        </div>
-        <div style="border-top:1px solid #f0efe9;margin:0 -1.25rem;"></div>
-        <div style="padding-top:12px;padding-bottom:4px;font-size:14px;font-weight:700;color:#1a1a19;">Today's Hours</div>
-        <div id="hours-display" style="padding-bottom:14px;font-size:12px;color:#aaa;">Loading hours…</div>
-        <div style="border-top:1px solid #f0efe9;margin:0 -1.25rem;"></div>
-        <div id="weather-display" style="padding-top:14px;font-size:12px;color:#aaa;">Loading weather…</div>
       </div>
-
-      <div class="card" style="border-left:4px solid #4d7600;">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="card-icon" style="background:#E1F5EE">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4d7600" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            Upcoming events
-          </div>
-        </div>
-        <div class="localhop-mini-calendar-embed" data-configid="PoAsnkdPsV" data-overlay="0" data-showcreatedigest="0"></div>
-        <script type="text/javascript" src="//events.getlocalhop.com/widgets/embed-mini-calendar-js"></script>
-      </div>
+      <div class="localhop-mini-calendar-embed" data-configid="PoAsnkdPsV" data-overlay="0" data-showcreatedigest="0"></div>
+      <script type="text/javascript" src="//events.getlocalhop.com/widgets/embed-mini-calendar-js"></script>
     </div>
 
     <div class="grid-2">
@@ -2050,7 +2032,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
 
     if (!hours || (!hours.open && !hours.close)) {
       // Closed all day
-      el.innerHTML = '<div style="display:flex;align-items:center;gap:8px;">'
+      el.innerHTML = '<div style="display:flex;align-items:center;gap:7px;justify-content:flex-end;">'
                    +   '<span style="width:8px;height:8px;background:#A32D2D;border-radius:50%;display:inline-block;"></span>'
                    +   '<span style="font-size:13px;color:#1a1a19;font-weight:500;">Closed today</span>'
                    + '</div>';
@@ -2087,12 +2069,11 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
 
     var todayHours = formatTimeDisplay(hours.open) + ' – ' + formatTimeDisplay(hours.close);
 
-    el.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">'
-                 +   '<div style="display:flex;align-items:center;gap:8px;">'
-                 +     '<span style="width:8px;height:8px;background:' + color + ';border-radius:50%;display:inline-block;flex-shrink:0;"></span>'
-                 +     '<span style="font-size:13px;color:#1a1a19;font-weight:500;">' + statusText + '</span>'
-                 +   '</div>'
-                 +   '<div style="font-size:12px;color:#888;">' + todayHours + '</div>'
+    el.innerHTML = '<div style="display:flex;align-items:center;gap:7px;justify-content:flex-end;">'
+                 +   '<span style="width:8px;height:8px;background:' + color + ';border-radius:50%;display:inline-block;flex-shrink:0;"></span>'
+                 +   '<span style="font-size:13px;color:#1a1a19;font-weight:500;">' + statusText + '</span>'
+                 +   '<span style="font-size:12px;color:#aaa;">·</span>'
+                 +   '<span style="font-size:12px;color:#888;">' + todayHours + '</span>'
                  + '</div>';
   }
 
@@ -2181,15 +2162,16 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         }
 
         el.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">'
-          +   '<div style="display:flex;align-items:center;gap:12px;">'
-          +     info.icon
-          +     '<div>'
-          +       '<div style="font-size:22px;font-weight:500;color:#1a1a19;line-height:1;">' + temp + '°F</div>'
-          +       '<div style="font-size:12px;color:#888;margin-top:4px;">' + info.label + ' · feels ' + feels + '°</div>'
-          +     '</div>'
-          +   '</div>'
-          +   hiLoHtml
+          '<div style="display:flex;align-items:center;gap:7px;justify-content:flex-end;">'
+          +   info.icon
+          +   '<span style="font-size:14px;font-weight:500;color:#1a1a19;">' + temp + '°F</span>'
+          +   '<span style="font-size:12px;color:#888;">' + info.label + '</span>'
+          +   (hi !== null && lo !== null
+              ? '<span style="font-size:12px;color:#aaa;">·</span>'
+              + '<span style="font-size:12px;"><span style="color:#D85A30;font-weight:500;">' + hi + '°</span>'
+              + '<span style="color:#aaa;"> / </span>'
+              + '<span style="color:#378ADD;font-weight:500;">' + lo + '°</span></span>'
+              : '')
           + '</div>';
       })
       .catch(function(err) {
