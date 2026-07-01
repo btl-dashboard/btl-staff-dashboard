@@ -2255,6 +2255,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
   function openInChargeModal() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     var override = getInChargeOverride();
     var today = new Date();
     var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
@@ -2342,6 +2343,24 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     };
     renderInChargeCard();
     loadWeather();                   // fetch weather for the In-Charge card
+
+    // Fetch fresh in-charge override directly from Apps Script (bypasses CSV cache)
+    fetch(DASHBOARD_SCRIPT_URL + '?action=getInCharge')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.name) {
+          var today = new Date();
+          var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+          var endDate = data.endDate || '';
+          if (!endDate || endDate >= todayStr) {
+            _inChargeOverride = { name: data.name, contact: data.contact || '', endDate: endDate };
+          } else {
+            _inChargeOverride = null;
+          }
+          renderInChargeCard();
+        }
+      })
+      .catch(function(err) { console.warn('Could not fetch in-charge override:', err); });
 
     // Defensive: reparent modals to body so they can't get trapped inside a hidden page-section
     ['in-charge-modal'].forEach(function(id){
