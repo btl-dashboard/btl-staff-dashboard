@@ -2207,7 +2207,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   function saveInChargeOverride(name, contact, endDate) {
     _inChargeOverride = { name: name, contact: contact, endDate: endDate };
     // Persist to config sheet so all users see the update
-    var saveUrl = DASHBOARD_SCRIPT_URL + '?action=setInCharge'
+    var saveUrl = PROXY_URL + '?action=setInCharge'
       + '&name='    + encodeURIComponent(name)
       + '&contact=' + encodeURIComponent(contact)
       + '&endDate=' + encodeURIComponent(endDate);
@@ -2216,7 +2216,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
 
   function clearInChargeOverride() {
     _inChargeOverride = null;
-    fetch(DASHBOARD_SCRIPT_URL + '?action=clearInCharge')
+    fetch(PROXY_URL + '?action=clearInCharge')
       .catch(function(err) { console.warn('Could not clear in-charge from sheet:', err); });
   }
 
@@ -2344,7 +2344,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     loadWeather();                   // fetch weather for the In-Charge card
 
     // Fetch fresh in-charge override directly from Apps Script (bypasses CSV cache)
-    fetch(DASHBOARD_SCRIPT_URL + '?action=getInCharge')
+    fetch(PROXY_URL + '?action=getInCharge')
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data.name) {
