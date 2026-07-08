@@ -182,18 +182,31 @@
   const METABASE_STATS_URL = 'https://script.google.com/macros/s/AKfycbypH2KcDEK-RhaEDkRc9CFKq3gdOl6ShfQi4b8KONoRgQPrdLweViEajfer1ILmjzHj/exec';
 
   async function loadMetabaseStats() {
+    const ids = ['stat-active-cardholders','stat-new-cardholders','stat-new-items','stat-checkouts'];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      el.textContent = 'Loading…';
+      el.style.color = '#aaa';
+      el.style.fontSize = '14px';
+    });
     try {
       const res = await fetch(METABASE_STATS_URL);
       if (!res.ok) throw new Error('Stats request failed');
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      document.getElementById('stat-active-cardholders').textContent = data.activeCardholders.toLocaleString();
-      document.getElementById('stat-new-cardholders').textContent = data.newCardholdersThisMonth.toLocaleString();
-      document.getElementById('stat-new-items').textContent = data.newItemsThisMonth.toLocaleString();
-      document.getElementById('stat-checkouts').textContent = data.totalCheckoutsThisMonth.toLocaleString();
+      const values = [data.activeCardholders, data.newCardholdersThisMonth, data.newItemsThisMonth, data.totalCheckoutsThisMonth];
+      ids.forEach((id, i) => {
+        const el = document.getElementById(id);
+        el.textContent = values[i].toLocaleString();
+        el.style.color = '';
+        el.style.fontSize = '';
+      });
     } catch(err) {
-      ['stat-active-cardholders','stat-new-cardholders','stat-new-items','stat-checkouts'].forEach(id => {
-        document.getElementById(id).textContent = '—';
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = 'Unavailable';
+        el.style.color = '#A32D2D';
+        el.style.fontSize = '13px';
       });
     }
   }
