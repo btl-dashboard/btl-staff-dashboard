@@ -2692,14 +2692,6 @@ function cdShowTab(tabName, btn) {
   });
 }
 
-function cdToggleSql(headerEl) {
-  var panel = document.getElementById('cd-sql-panel');
-  var badge = headerEl.querySelector('.badge');
-  if (!panel) return;
-  var isOpen = panel.style.display !== 'none';
-  panel.style.display = isOpen ? 'none' : 'block';
-  if (badge) badge.textContent = isOpen ? 'Click to expand' : 'Click to collapse';
-}
 
 
 // ── DEWEY ANALYTICS ─────────────────────────────────────────────────────────
