@@ -2410,6 +2410,8 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
   }
 
 
+  var CONFIG_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSfjFVGGg7YixLTcOOdTT1WgGD5wXMfzC0bECwORpUqlE3lxOFtSlIX8POGfERYtJtW-truWAez1UTl/pub?gid=0&single=true&output=csv';
+
   function loadDashboardConfig() {
     fetch(CONFIG_CSV_URL)
       .then(function(r){ return r.text(); })
@@ -2476,7 +2478,8 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
           }
         }
 
-        // (in-charge config removed)        })
+        // (in-charge config removed)
+        })
       .catch(function(err){ console.warn('Dashboard config fetch failed:', err); /* silently fall back to hardcoded default */ });
   }
 
