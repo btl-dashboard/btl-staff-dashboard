@@ -641,7 +641,7 @@
         </div>
         <div style="margin-top:10px;font-size:12px;color:#888;display:flex;align-items:center;gap:6px;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span>These stats require a live Metabase endpoint. To populate them, connect a Google Apps Script that queries Koha and returns JSON — see the Reference Doc for the query.</span>
+          <span>Koha data — static snapshot, refreshed monthly. Run Query C in Metabase at the end of each month, then drop the CSV to Claude to update the dashboard.</span>
         </div>
       </div>
 
@@ -4116,7 +4116,7 @@ function cdShowTab(tabName, btn) {
         var r = filtered[i];
         var lc = r.lc ? r.lc.substring(0,10) : '<span style="color:#e67e22;font-style:italic;">Never</span>';
         var collLabel = COLL_NAMES[r.col] || r.col;
-        html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background='#fafaf8'" onmouseout="this.style.background=''">'
+        html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background=\'#fafaf8\'" onmouseout="this.style.background=\'\'">'
           + '<td style="padding:7px 10px;max-width:260px;">' + escapeHtml(r.t) + '</td>'
           + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
           + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escapeHtml(r.c) + '</td>'
@@ -4156,7 +4156,7 @@ function cdShowTab(tabName, btn) {
       for (var i = 0; i < shown; i++) {
         var r = filtered[i];
         var collLabel = COLL_NAMES[r.col] || r.col;
-        html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background='#fafaf8'" onmouseout="this.style.background=''">'
+        html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background=\'#fafaf8\'" onmouseout="this.style.background=\'\'">'
           + '<td style="padding:7px 10px;max-width:260px;">' + escapeHtml(r.t) + '</td>'
           + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
           + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escapeHtml(r.c) + '</td>'
@@ -4196,7 +4196,7 @@ function cdShowTab(tabName, btn) {
         var r = filtered[i];
         var collLabel = COLL_NAMES[r.col] || r.col;
         var lc = r.lc ? r.lc.substring(0,10) : '—';
-        html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background='#fafaf8'" onmouseout="this.style.background=''">'
+        html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background=\'#fafaf8\'" onmouseout="this.style.background=\'\'">'
           + '<td style="padding:7px 10px;max-width:260px;">' + escapeHtml(r.t) + '</td>'
           + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
           + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escapeHtml(r.c) + '</td>'
@@ -4239,7 +4239,7 @@ function cdShowTab(tabName, btn) {
         var onLoan = parseInt(r.ol) || 0;
         var available = copies - onLoan;
         var cpColor = available > copies / 2 ? '#c0392b' : '#27ae60';
-        html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background='#fafaf8'" onmouseout="this.style.background=''">'
+        html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background=\'#fafaf8\'" onmouseout="this.style.background=\'\'">'
           + '<td style="padding:7px 10px;max-width:260px;">' + escapeHtml(r.t) + '</td>'
           + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
           + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escapeHtml(r.c) + '</td>'
