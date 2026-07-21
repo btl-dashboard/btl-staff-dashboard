@@ -1326,7 +1326,7 @@ LIMIT 300;</pre>
             <span id="q5c-arrow" style="font-size:16px;color:#888;transition:transform 0.2s;">›</span>
           </button>
           <div id="q5c" style="display:none;padding:12px 14px;border-top:1px solid #E5E5E3;">
-            <div style="font-size:12px;color:#555;margin-bottom:10px;line-height:1.5;">Items with 20+ lifetime checkouts in the statistics table. High-demand titles that may need replacement copies or repair review. Threshold set at 20 (not 50) to account for statistics table history limits. Excludes Library of Things. Limit 500.</div>
+            <div style="font-size:13px;color:#444;margin-bottom:8px;">Items with 20+ lifetime checkouts in the statistics table. High-demand titles that may need replacement copies or repair review. Threshold set at 20 (not 50) to account for statistics table history limits. Excludes Library of Things. Limit 500.</div>
             <pre style="background:#1a1a19;color:#e8e8e6;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;white-space:pre;margin:0;line-height:1.5;">SELECT
     b.title,
     b.author,
@@ -1422,12 +1422,12 @@ LIMIT 500;</pre>
           </div>
 
           <!-- Note -->
-          <div style="font-size:12px;color:#444;margin-bottom:8px;">All 500 items shown have <strong>never been checked out</strong> and have been in the collection 4+ years. Sorted by collection volume.</div>
+          <div style="font-size:13px;color:#444;margin-bottom:8px;">All 500 items shown have <strong>never been checked out</strong> and have been in the collection 4+ years. Sorted by collection volume.</div>
 
           <!-- Table -->
           <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:12px;">
-              <thead>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;color:#333;">
+              <thead id="cd-weed-thead">
                 <tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;">Title</th>
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;">Author</th>
@@ -1462,10 +1462,10 @@ LIMIT 500;</pre>
             <span id="cd-doa-count" style="font-size:12px;color:#888;white-space:nowrap;padding-right:4px;"></span>
             <button onclick="cdExportCsv('doa')" title="Export to CSV" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;cursor:pointer;font-size:12px;color:#185FA5;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
           </div>
-          <div style="font-size:11px;color:#888;margin-bottom:8px;">Items accessioned January–May 2026 with zero checkouts. <strong>Excluded:</strong> Library of Things, Adult &amp; Juv. Periodicals.</div>
+          <div style="font-size:13px;color:#444;margin-bottom:8px;">Items accessioned January–May 2026 with zero checkouts. <strong>Excluded:</strong> Library of Things, Adult &amp; Juv. Periodicals.</div>
           <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:12px;">
-              <thead>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;color:#333;">
+              <thead id="cd-doa-thead">
                 <tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;">Title</th>
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;">Author</th>
@@ -1495,10 +1495,10 @@ LIMIT 500;</pre>
             <span id="cd-highuse-count" style="font-size:12px;color:#888;white-space:nowrap;padding-right:4px;"></span>
             <button onclick="cdExportCsv('highuse')" title="Export to CSV" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;cursor:pointer;font-size:12px;color:#185FA5;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
           </div>
-          <div style="font-size:11px;color:#888;margin-bottom:8px;">Items with 20+ lifetime checkouts. High copies + high circ → replacement or additional copy candidate.</div>
+          <div style="font-size:13px;color:#444;margin-bottom:8px;">Items with 20+ lifetime checkouts. High copies + high circ → replacement or additional copy candidate.</div>
           <div style="overflow-x:auto;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;">
-              <thead>
+              <thead id="cd-highuse-thead">
                 <tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;">Title</th>
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;">Author</th>
@@ -1535,10 +1535,10 @@ LIMIT 500;</pre>
             <span id="cd-dupes-count" style="font-size:12px;color:#888;white-space:nowrap;padding-right:4px;"></span>
             <button onclick="cdExportCsv('dupes')" title="Export to CSV" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;cursor:pointer;font-size:12px;color:#185FA5;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
           </div>
-          <div style="font-size:11px;color:#888;margin-bottom:8px;">Titles with 2+ copies in the same collection. <strong>Excluded:</strong> Library of Things, Periodicals, Chinese collection. High copies + low on-loan = withdrawal candidate.</div>
+          <div style="font-size:13px;color:#444;margin-bottom:8px;">Titles with 2+ copies in the same collection. <strong>Excluded:</strong> Library of Things, Periodicals, Chinese collection. High copies + low on-loan = withdrawal candidate.</div>
           <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:12px;">
-              <thead>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;color:#333;">
+              <thead id="cd-dupes-thead">
                 <tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;">Title</th>
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;">Author</th>
@@ -4090,10 +4090,55 @@ function cdShowTab(tabName, btn) {
     // ── COLLECTION ANALYSIS — WEED CANDIDATES ──────────────────────
     var COLL_NAMES = {"ANONFIC": "Adult Nonfiction", "AFIC": "Adult Fiction", "JNONFIC": "Juv. Nonfiction", "JFIC": "Juv. Fiction", "YANONFIC": "YA Nonfiction", "YAFIC": "YA Fiction", "AREF": "Adult Reference", "JREF": "Juv. Reference", "YAREF": "YA Reference", "APERIOD": "Adult Periodicals", "JPERIOD": "Juv. Periodicals", "AMEDIA": "Adult Media", "YAMEDIA": "YA Media", "JMEDIA": "Juv. Media", "ONLINE": "Online Resources"};
 
+    // ── SORTABLE TABLES ───────────────────────────────────────────────────────
+    var cdSortState = {
+      weed:    { col: null, dir: 1 },
+      doa:     { col: null, dir: 1 },
+      highuse: { col: null, dir: 1 },
+      dupes:   { col: null, dir: 1 }
+    };
+    var CD_NUM_COLS = { ct: 1, cp: 1, ol: 1 };
+
+    function cdSortBy(tbl, col) {
+      var s = cdSortState[tbl];
+      if (s.col === col) { s.dir *= -1; } else { s.col = col; s.dir = 1; }
+      if      (tbl === 'weed')    cdRenderWeed();
+      else if (tbl === 'doa')     cdRenderDoa();
+      else if (tbl === 'highuse') cdRenderHighuse();
+      else                        cdRenderDupes();
+    }
+
+    function cdTh(tbl, col, label, align) {
+      var s = cdSortState[tbl];
+      var active = s.col === col;
+      var icon   = active ? (s.dir === 1 ? ' ▲' : ' ▼') : '';
+      var style  = 'padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;'
+                 + 'font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;'
+                 + 'text-align:' + (align || 'left') + ';'
+                 + 'color:' + (active ? '#185FA5' : '#555') + ';';
+      return '<th style="' + style + '" onclick="cdSortBy(\'' + tbl + '\',\'' + col + '\')">'
+           + label + '<span style="font-size:9px;margin-left:3px;">' + icon + '</span></th>';
+    }
+
+    function cdApplySort(arr, tbl) {
+      var s = cdSortState[tbl];
+      if (!s.col) return arr;
+      var col = s.col, dir = s.dir, isNum = !!CD_NUM_COLS[col];
+      return arr.slice().sort(function(a, b) {
+        var av = a[col] == null ? '' : a[col];
+        var bv = b[col] == null ? '' : b[col];
+        if (isNum) { return (parseFloat(av) || 0) < (parseFloat(bv) || 0) ? -dir : dir; }
+        var as = av.toString().toLowerCase(), bs = bv.toString().toLowerCase();
+        return as < bs ? -dir : as > bs ? dir : 0;
+      });
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     function cdRenderWeed() {
       var collFilter = (document.getElementById('cd-weed-coll') || {}).value || '';
       var searchRaw  = ((document.getElementById('cd-weed-search') || {}).value || '').toLowerCase().trim();
       var tbody = document.getElementById('cd-weed-tbody');
+      var thead = document.getElementById('cd-weed-thead');
       if (!tbody) return;
 
       var data = (typeof CD_WEED_DATA !== 'undefined') ? CD_WEED_DATA : [];
@@ -4105,6 +4150,12 @@ function cdShowTab(tabName, btn) {
         }
         return true;
       });
+      filtered = cdApplySort(filtered, 'weed');
+
+      if (thead) thead.innerHTML = '<tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">'
+        + cdTh('weed','t','Title') + cdTh('weed','a','Author') + cdTh('weed','c','Call #')
+        + cdTh('weed','col','Collection') + cdTh('weed','lc','Last Circ') + cdTh('weed','bc','Barcode')
+        + '</tr>';
 
       var countEl = document.getElementById('cd-weed-count');
       if (countEl) countEl.textContent = filtered.length.toLocaleString() + ' item' + (filtered.length !== 1 ? 's' : '');
@@ -4138,6 +4189,7 @@ function cdShowTab(tabName, btn) {
       var collFilter = (document.getElementById('cd-doa-coll') || {}).value || '';
       var searchRaw  = ((document.getElementById('cd-doa-search') || {}).value || '').toLowerCase().trim();
       var tbody = document.getElementById('cd-doa-tbody');
+      var thead = document.getElementById('cd-doa-thead');
       if (!tbody) return;
       var data = (typeof CD_DOA_DATA !== 'undefined') ? CD_DOA_DATA : [];
       var filtered = data.filter(function(r) {
@@ -4148,6 +4200,13 @@ function cdShowTab(tabName, btn) {
         }
         return true;
       });
+      filtered = cdApplySort(filtered, 'doa');
+
+      if (thead) thead.innerHTML = '<tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">'
+        + cdTh('doa','t','Title') + cdTh('doa','a','Author') + cdTh('doa','c','Call #')
+        + cdTh('doa','col','Collection') + cdTh('doa','da','Date Added') + cdTh('doa','bc','Barcode')
+        + '</tr>';
+
       var countEl = document.getElementById('cd-doa-count');
       if (countEl) countEl.textContent = filtered.length.toLocaleString() + ' item' + (filtered.length !== 1 ? 's' : '');
       var html = '';
@@ -4179,6 +4238,7 @@ function cdShowTab(tabName, btn) {
       var collFilter = (document.getElementById('cd-highuse-coll') || {}).value || '';
       var searchRaw  = ((document.getElementById('cd-highuse-search') || {}).value || '').toLowerCase().trim();
       var tbody = document.getElementById('cd-highuse-tbody');
+      var thead = document.getElementById('cd-highuse-thead');
       if (!tbody) return;
       var data = (typeof CD_HIGHUSE_DATA !== 'undefined') ? CD_HIGHUSE_DATA : [];
       var filtered = data.filter(function(r) {
@@ -4189,6 +4249,14 @@ function cdShowTab(tabName, btn) {
         }
         return true;
       });
+      filtered = cdApplySort(filtered, 'highuse');
+
+      if (thead) thead.innerHTML = '<tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">'
+        + cdTh('highuse','t','Title') + cdTh('highuse','a','Author') + cdTh('highuse','c','Call #')
+        + cdTh('highuse','col','Collection') + cdTh('highuse','ct','Lifetime Checkouts','right')
+        + cdTh('highuse','lc','Last Circ') + cdTh('highuse','bc','Barcode')
+        + '</tr>';
+
       var countEl = document.getElementById('cd-highuse-count');
       if (countEl) countEl.textContent = filtered.length.toLocaleString() + ' item' + (filtered.length !== 1 ? 's' : '');
       var html = '';
@@ -4217,6 +4285,7 @@ function cdShowTab(tabName, btn) {
       var collFilter = (document.getElementById('cd-dupes-coll') || {}).value || '';
       var searchRaw  = ((document.getElementById('cd-dupes-search') || {}).value || '').toLowerCase().trim();
       var tbody = document.getElementById('cd-dupes-tbody');
+      var thead = document.getElementById('cd-dupes-thead');
       if (!tbody) return;
       var data = (typeof CD_DUPES_DATA !== 'undefined') ? CD_DUPES_DATA : [];
       var filtered = data.filter(function(r) {
@@ -4227,6 +4296,14 @@ function cdShowTab(tabName, btn) {
         }
         return true;
       });
+      filtered = cdApplySort(filtered, 'dupes');
+
+      if (thead) thead.innerHTML = '<tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">'
+        + cdTh('dupes','t','Title') + cdTh('dupes','a','Author') + cdTh('dupes','c','Call #')
+        + cdTh('dupes','col','Collection') + cdTh('dupes','cp','Copies','right')
+        + cdTh('dupes','ol','On Loan','right')
+        + '</tr>';
+
       var countEl = document.getElementById('cd-dupes-count');
       if (countEl) countEl.textContent = filtered.length.toLocaleString() + ' title' + (filtered.length !== 1 ? 's' : '');
       var html = '';
