@@ -517,7 +517,12 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
 
         <!-- Teen Volunteer Card -->
-        <div class="card">
+  
+
+
+      </div><!-- end accordion section -->
+
+      <div class="card">
           <div class="card-header" style="margin-bottom:0.75rem;">
             <div class="card-title">
               <div class="card-icon" style="background:#FAEEDA;">
@@ -1138,13 +1143,13 @@
           <div class="page-title">Collection Development</div>
           <div class="page-sub">Health scores, DoA risk, weed candidates &amp; high-use analytics</div>
         </div>
-        <a href="https://mainlib.metabase.bywatersolutions.com/collection/43-koha-reports-staff" target="_blank" class="action-btn primary" style="font-size:14px;padding:8px 16px;text-decoration:none;display:inline-block;white-space:nowrap;">Open Metabase ↗</a>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;"><a href="https://mainlib.metabase.bywatersolutions.com/collection/43-koha-reports-staff" target="_blank" class="action-btn primary" style="font-size:14px;padding:8px 16px;text-decoration:none;display:inline-block;white-space:nowrap;">Open Metabase ↗</a><a href="https://docs.google.com/document/d/1ls7dt-N4RKpvb2VXtY0u8J2poYdXRpEo/edit?usp=sharing&ouid=114904708134914114332&rtpof=true&sd=true" target="_blank" class="action-btn" style="font-size:14px;padding:8px 16px;text-decoration:none;display:inline-block;white-space:nowrap;background:#2e7d32;color:#fff;border-color:#2e7d32;">Collection Dev Guide ↗</a></div>
       </div>
 
       <!-- Data notice -->
       <div id="cd-notice" style="background:#FAEEDA;border:1px solid #e8d08a;border-radius:10px;padding:12px 16px;margin-bottom:1.25rem;font-size:13px;color:#854F0B;display:flex;align-items:flex-start;gap:10px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div><strong>Koha data as of July 2026</strong> — All stats are queried from your Koha database (BERTWP). Item detail lists will populate once a live Metabase endpoint is configured.</div>
+        <div><strong>Koha data — static snapshot, refreshed monthly.</strong> To update: run <strong>Query A</strong> (health stats) + <strong>Query B</strong> (stat boxes) in Metabase, then drop the CSVs to Claude to update the dashboard.</div>
       </div>
 
       <!-- 4 key metrics -->
@@ -1193,7 +1198,7 @@
           <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#555;">
             <div style="width:10px;height:10px;background:#A32D2D;border-radius:2px;flex-shrink:0;"></div> Critical (&lt;35)
           </div>
-          <div style="margin-left:auto;font-size:11px;color:#aaa;">Score = % of items checked out in last 12 months</div>
+          <div style="margin-left:auto;font-size:12px;color:#555;">Score = % of items checked out in last 12 months</div>
         </div>
         <!-- Health tile grid -->
         <div id="cd-health-grid"></div>
@@ -1239,19 +1244,168 @@
         <div class="page-sub">Weed candidates, DoA risk items &amp; high-use titles</div>
       </div>
 
-      <!-- Static snapshot banner -->
-      <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px;padding:10px 14px;margin-bottom:1rem;display:flex;align-items:center;gap:10px;font-size:12px;color:#78350F;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        <span><strong>Static snapshot</strong> &mdash; data reflects July 2026. Refreshed monthly. Next update: August 2026.</span>
-      </div>
+
+      <!-- Refresh cadence + query accordion -->
+      <div style="margin-bottom:1.25rem;">
+
+        <!-- As-needed banner -->
+        <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px;padding:12px 14px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#78350F;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div><strong>Updated Quarterly or As Needed:</strong> Queries 5A&ndash;5D below generate the working item lists in the tabs below.</div>
+        </div>
+
+      <!-- Query accordion -->
+        <div style="font-weight:600;font-size:12px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Metabase Queries — Collection Analysis</div>
+
+        <!-- 5A -->
+        <div style="border:1px solid #E5E5E3;border-radius:8px;margin-bottom:6px;overflow:hidden;">
+          <button onclick="cdToggleQuery('q5a',this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F9F9F8;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1a1a19;text-align:left;">
+            <span>Query 5A &mdash; Weed Candidates</span>
+            <span id="q5a-arrow" style="font-size:16px;color:#888;transition:transform 0.2s;">›</span>
+          </button>
+          <div id="q5a" style="display:none;padding:12px 14px;border-top:1px solid #E5E5E3;">
+            <div style="font-size:12px;color:#555;margin-bottom:10px;line-height:1.5;">Item-level list of weed candidates. <strong>Criterion A:</strong> no checkout in 3+ years (all collections, 4-yr protection window). <strong>Criterion B:</strong> nonfiction with copyright 15+ years and fewer than 3 lifetime checkouts. Excludes on-loan, lost, withdrawn. Limit 500, sorted oldest-last-circ first.</div>
+            <pre style="background:#1a1a19;color:#e8e8e6;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;white-space:pre;margin:0;line-height:1.5;">SELECT
+    b.title,
+    b.author,
+    i.itemcallnumber     AS call_number,
+    i.ccode              AS collection,
+    i.datelastborrowed   AS last_circ,
+    i.barcode
+FROM items i
+JOIN biblio b ON b.biblionumber = i.biblionumber
+LEFT JOIN biblioitems bi ON bi.biblionumber = i.biblionumber
+WHERE i.homebranch       = &#39;BERTWP&#39;
+  AND i.itemlost         = 0
+  AND i.withdrawn        = 0
+  AND i.notforloan       = 0
+  AND i.onloan           IS NULL
+  AND i.dateaccessioned  &lt; DATE_SUB(NOW(), INTERVAL 4 YEAR)
+  AND (
+        (i.datelastborrowed IS NULL
+         OR i.datelastborrowed &lt; DATE_SUB(NOW(), INTERVAL 3 YEAR))
+        OR
+        (i.ccode IN (&#39;ANONFIC&#39;, &#39;JNONFIC&#39;, &#39;YANONFIC&#39;)
+         AND bi.publicationyear IS NOT NULL
+         AND bi.publicationyear &lt; YEAR(NOW()) - 15
+         AND COALESCE(i.issues, 0) &lt; 3)
+      )
+ORDER BY i.datelastborrowed ASC
+LIMIT 500;</pre>
+          </div>
+        </div>
+
+        <!-- 5B -->
+        <div style="border:1px solid #E5E5E3;border-radius:8px;margin-bottom:6px;overflow:hidden;">
+          <button onclick="cdToggleQuery('q5b',this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F9F9F8;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1a1a19;text-align:left;">
+            <span>Query 5B &mdash; DoA Risk Items</span>
+            <span id="q5b-arrow" style="font-size:16px;color:#888;transition:transform 0.2s;">›</span>
+          </button>
+          <div id="q5b" style="display:none;padding:12px 14px;border-top:1px solid #E5E5E3;">
+            <div style="font-size:12px;color:#555;margin-bottom:10px;line-height:1.5;">Items accessioned 2&ndash;6 months ago with zero checkouts. New items that aren&rsquo;t moving &mdash; candidates for relocation, display promotion, or early review. Excludes Library of Things, Periodicals. Limit 300.</div>
+            <pre style="background:#1a1a19;color:#e8e8e6;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;white-space:pre;margin:0;line-height:1.5;">SELECT
+    b.title,
+    b.author,
+    i.itemcallnumber   AS call_number,
+    i.ccode            AS collection,
+    i.dateaccessioned  AS date_added,
+    i.barcode
+FROM items i
+JOIN biblio b ON b.biblionumber = i.biblionumber
+LEFT JOIN statistics s
+    ON  s.itemnumber = i.itemnumber
+    AND s.type       = &#39;issue&#39;
+WHERE i.homebranch = &#39;BERTWP&#39;
+  AND i.itemlost   = 0
+  AND i.withdrawn  = 0
+  AND i.ccode NOT IN (&#39;LIBOFTHNGS&#39;, &#39;APERIOD&#39;, &#39;JPERIOD&#39;)
+  AND i.dateaccessioned BETWEEN DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                             AND DATE_SUB(NOW(), INTERVAL 2 MONTH)
+GROUP BY
+    i.itemnumber, b.title, b.author,
+    i.itemcallnumber, i.ccode, i.dateaccessioned, i.barcode
+HAVING COUNT(s.datetime) = 0
+ORDER BY i.dateaccessioned ASC
+LIMIT 300;</pre>
+          </div>
+        </div>
+
+        <!-- 5C -->
+        <div style="border:1px solid #E5E5E3;border-radius:8px;margin-bottom:6px;overflow:hidden;">
+          <button onclick="cdToggleQuery('q5c',this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F9F9F8;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1a1a19;text-align:left;">
+            <span>Query 5C &mdash; High Use Items</span>
+            <span id="q5c-arrow" style="font-size:16px;color:#888;transition:transform 0.2s;">›</span>
+          </button>
+          <div id="q5c" style="display:none;padding:12px 14px;border-top:1px solid #E5E5E3;">
+            <div style="font-size:12px;color:#555;margin-bottom:10px;line-height:1.5;">Items with 20+ lifetime checkouts in the statistics table. High-demand titles that may need replacement copies or repair review. Threshold set at 20 (not 50) to account for statistics table history limits. Excludes Library of Things. Limit 500.</div>
+            <pre style="background:#1a1a19;color:#e8e8e6;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;white-space:pre;margin:0;line-height:1.5;">SELECT
+    b.title,
+    b.author,
+    i.itemcallnumber    AS call_number,
+    i.ccode             AS collection,
+    COUNT(s.itemnumber) AS lifetime_checkouts,
+    i.datelastborrowed  AS last_circ,
+    i.barcode
+FROM items i
+JOIN biblio b ON b.biblionumber = i.biblionumber
+JOIN statistics s
+    ON  s.itemnumber = i.itemnumber
+    AND s.type       = &#39;issue&#39;
+WHERE i.homebranch = &#39;BERTWP&#39;
+  AND i.itemlost   = 0
+  AND i.withdrawn  = 0
+  AND i.ccode     != &#39;LIBOFTHNGS&#39;
+GROUP BY
+    i.itemnumber, b.title, b.author,
+    i.itemcallnumber, i.ccode, i.barcode, i.datelastborrowed
+HAVING COUNT(s.itemnumber) &gt;= 20
+ORDER BY lifetime_checkouts DESC
+LIMIT 500;</pre>
+          </div>
+        </div>
+
+        <!-- 5D -->
+        <div style="border:1px solid #E5E5E3;border-radius:8px;margin-bottom:6px;overflow:hidden;">
+          <button onclick="cdToggleQuery('q5d',this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F9F9F8;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1a1a19;text-align:left;">
+            <span>Query 5D &mdash; Duplicate Titles</span>
+            <span id="q5d-arrow" style="font-size:16px;color:#888;transition:transform 0.2s;">›</span>
+          </button>
+          <div id="q5d" style="display:none;padding:12px 14px;border-top:1px solid #E5E5E3;">
+            <div style="font-size:12px;color:#555;margin-bottom:10px;line-height:1.5;">Bib-level view of titles with 2+ copies in the same collection. Includes Copies and On Loan columns to judge whether duplicates are justified by demand. Excludes Library of Things, Periodicals, Chinese collection. Limit 500.</div>
+            <pre style="background:#1a1a19;color:#e8e8e6;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;white-space:pre;margin:0;line-height:1.5;">SELECT
+    b.title,
+    b.author,
+    MIN(i.itemcallnumber)                                  AS call_number,
+    i.ccode                                                AS collection,
+    COUNT(i.itemnumber)                                    AS copies,
+    SUM(CASE WHEN i.onloan IS NOT NULL THEN 1 ELSE 0 END) AS on_loan
+FROM items i
+JOIN biblio b ON b.biblionumber = i.biblionumber
+WHERE i.homebranch = &#39;BERTWP&#39;
+  AND i.itemlost   = 0
+  AND i.withdrawn  = 0
+  AND i.notforloan = 0
+  AND i.ccode NOT IN (&#39;LIBOFTHNGS&#39;, &#39;APERIOD&#39;, &#39;JPERIOD&#39;)
+  AND i.itemcallnumber NOT LIKE &#39;CHINESE%&#39;
+GROUP BY i.biblionumber, b.title, b.author, i.ccode
+HAVING COUNT(i.itemnumber) &gt; 1
+ORDER BY copies DESC, b.title ASC
+LIMIT 500;</pre>
+          </div>
+        </div>
+
+      </div><!-- end accordion section -->
 
       <div class="card">
         <!-- Tab bar -->
-        <div style="display:flex;gap:4px;margin-bottom:1rem;background:#f5f5f3;border-radius:8px;padding:4px;">
-          <button class="cd-tab" id="cd-tab-weed" onclick="cdShowTab('weed',this)" style="flex:1;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:#185FA5;color:white;font-weight:500;font-family:inherit;transition:all 0.15s;">Weed Candidates</button>
-          <button class="cd-tab" id="cd-tab-doa" onclick="cdShowTab('doa',this)" style="flex:1;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:#666;font-weight:500;font-family:inherit;transition:all 0.15s;">DoA Risk Items</button>
-          <button class="cd-tab" id="cd-tab-highuse" onclick="cdShowTab('highuse',this)" style="flex:1;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:#666;font-weight:500;font-family:inherit;transition:all 0.15s;">High Use Items</button>
-          <button class="cd-tab" id="cd-tab-dupes" onclick="cdShowTab('dupes',this)" style="flex:1;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:#666;font-weight:500;font-family:inherit;transition:all 0.15s;">Duplicates</button>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;">
+          <div style="display:flex;gap:4px;flex:1;background:#f5f5f3;border-radius:8px;padding:4px;">
+            <button class="cd-tab" id="cd-tab-weed" onclick="cdShowTab('weed',this)" style="flex:1;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:#185FA5;color:white;font-weight:500;font-family:inherit;transition:all 0.15s;">Weed Candidates</button>
+            <button class="cd-tab" id="cd-tab-doa" onclick="cdShowTab('doa',this)" style="flex:1;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:#666;font-weight:500;font-family:inherit;transition:all 0.15s;">DoA Risk Items</button>
+            <button class="cd-tab" id="cd-tab-highuse" onclick="cdShowTab('highuse',this)" style="flex:1;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:#666;font-weight:500;font-family:inherit;transition:all 0.15s;">High Use Items</button>
+            <button class="cd-tab" id="cd-tab-dupes" onclick="cdShowTab('dupes',this)" style="flex:1;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:#666;font-weight:500;font-family:inherit;transition:all 0.15s;">Duplicates</button>
+          </div>
+          <span class="badge badge-green" id="cd-analysis-badge" style="flex-shrink:0;white-space:nowrap;">Koha Data — July 2026</span>
         </div>
 
         <!-- WEED CANDIDATES PANEL -->
@@ -1275,10 +1429,11 @@
             </select>
             <input type="text" id="cd-weed-search" oninput="cdRenderWeed()" placeholder="Search title, author, call #…" style="background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:6px 10px;font-size:12px;color:#1a1a19;font-family:inherit;outline:none;flex:1;min-width:160px;">
             <span id="cd-weed-count" style="font-size:12px;color:#888;white-space:nowrap;padding-right:4px;"></span>
+            <button onclick="cdExportCsv('weed')" title="Export to CSV" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;cursor:pointer;font-size:12px;color:#185FA5;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
           </div>
 
           <!-- Note -->
-          <div style="font-size:11px;color:#888;margin-bottom:8px;">All 500 items shown have <strong>never been checked out</strong> and have been in the collection 4+ years. Sorted by collection volume.</div>
+          <div style="font-size:12px;color:#444;margin-bottom:8px;">All 500 items shown have <strong>never been checked out</strong> and have been in the collection 4+ years. Sorted by collection volume.</div>
 
           <!-- Table -->
           <div style="overflow-x:auto;">
@@ -1316,6 +1471,7 @@
             </select>
             <input type="text" id="cd-doa-search" oninput="cdRenderDoa()" placeholder="Search title, author, call #…" style="background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:6px 10px;font-size:12px;color:#1a1a19;font-family:inherit;outline:none;flex:1;min-width:160px;">
             <span id="cd-doa-count" style="font-size:12px;color:#888;white-space:nowrap;padding-right:4px;"></span>
+            <button onclick="cdExportCsv('doa')" title="Export to CSV" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;cursor:pointer;font-size:12px;color:#185FA5;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
           </div>
           <div style="font-size:11px;color:#888;margin-bottom:8px;">Items accessioned January–May 2026 with zero checkouts. <strong>Excluded:</strong> Library of Things, Adult &amp; Juv. Periodicals.</div>
           <div style="overflow-x:auto;">
@@ -1348,6 +1504,7 @@
             </select>
             <input type="text" id="cd-highuse-search" oninput="cdRenderHighuse()" placeholder="Search title, author, call #…" style="background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:6px 10px;font-size:12px;color:#1a1a19;font-family:inherit;outline:none;flex:1;min-width:160px;">
             <span id="cd-highuse-count" style="font-size:12px;color:#888;white-space:nowrap;padding-right:4px;"></span>
+            <button onclick="cdExportCsv('highuse')" title="Export to CSV" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;cursor:pointer;font-size:12px;color:#185FA5;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
           </div>
           <div style="font-size:11px;color:#888;margin-bottom:8px;">Items with 20+ lifetime checkouts. High copies + high circ → replacement or additional copy candidate.</div>
           <div style="overflow-x:auto;">
@@ -1387,6 +1544,7 @@
             </select>
             <input type="text" id="cd-dupes-search" oninput="cdRenderDupes()" placeholder="Search title, author, call #…" style="background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:6px 10px;font-size:12px;color:#1a1a19;font-family:inherit;outline:none;flex:1;min-width:160px;">
             <span id="cd-dupes-count" style="font-size:12px;color:#888;white-space:nowrap;padding-right:4px;"></span>
+            <button onclick="cdExportCsv('dupes')" title="Export to CSV" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;cursor:pointer;font-size:12px;color:#185FA5;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
           </div>
           <div style="font-size:11px;color:#888;margin-bottom:8px;">Titles with 2+ copies in the same collection. <strong>Excluded:</strong> Library of Things, Periodicals, Chinese collection. High copies + low on-loan = withdrawal candidate.</div>
           <div style="overflow-x:auto;">
@@ -1432,8 +1590,6 @@
       </div>
 
     </div><!-- end page-cd-tools -->
-
-    <!-- OUTREACH PAGE -->
 
   </div><!-- end main -->
 </div>
@@ -2253,19 +2409,6 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
     renderProjects();
   }
 
-  function toDateStr(d) {
-    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-  }
-
-
-  // ── In-Charge Today ────────────────────────────────────────
-  var CONFIG_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSfjFVGGg7YixLTcOOdTT1WgGD5wXMfzC0bECwORpUqlE3lxOFtSlIX8POGfERYtJtW-truWAez1UTl/pub?gid=0&single=true&output=csv';
-
-  // Default fallback — overwritten by config sheet on load
-  var IN_CHARGE_DEFAULT = { name: 'Rachel', contact: 'x122' };
-
-  // Supervisor list for the override dropdown — populated from config sheet
-  var SUPERVISOR_LIST = [];
 
   function loadDashboardConfig() {
     fetch(CONFIG_CSV_URL)
@@ -2275,14 +2418,6 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         var config = {};
         rows.forEach(function(r){ config[r.key] = r.value; });
 
-        // Set default in-charge from sheet
-        if (config.ic_default_name) {
-          IN_CHARGE_DEFAULT = {
-            name:    config.ic_default_name,
-            contact: config.ic_default_contact || ''
-          };
-        }
-
         // Update emergency phone numbers
         if (config.police_phone) {
           var policeEl = document.getElementById('police-phone');
@@ -2291,17 +2426,6 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
         if (config.dpw_phone) {
           var dpwEl = document.getElementById('dpw-phone');
           if (dpwEl) dpwEl.textContent = config.dpw_phone;
-        }
-
-        // Build supervisor list from supervisor_N_name / supervisor_N_contact pairs
-        SUPERVISOR_LIST = [];
-        var i = 1;
-        while (config['supervisor_' + i + '_name']) {
-          SUPERVISOR_LIST.push({
-            name:    config['supervisor_' + i + '_name'],
-            contact: config['supervisor_' + i + '_contact'] || ''
-          });
-          i++;
         }
 
         // ── Build today's hours from config ──────────────────
@@ -2352,52 +2476,8 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
           }
         }
 
-        // Load shared in-charge override from config sheet (shared across all users)
-        var todayForExpiry = todayStr; // already computed above
-        if (config.ic_override_name) {
-          var oEnd = config.ic_override_enddate || '';
-          if (!oEnd || oEnd >= todayForExpiry) {
-            _inChargeOverride = {
-              name:    config.ic_override_name,
-              contact: config.ic_override_contact || '',
-              endDate: oEnd
-            };
-          } else {
-            _inChargeOverride = null; // expired — clear it
-          }
-        } else {
-          _inChargeOverride = null;
-        }
-
-        // Re-render the card in case it loaded before config was ready
-        renderInChargeCard();
-        // Refresh supervisor dropdown with newly loaded list
-        })
+        // (in-charge config removed)        })
       .catch(function(err){ console.warn('Dashboard config fetch failed:', err); /* silently fall back to hardcoded default */ });
-  }
-
-  function isHr()    { return currentGoogleUser && ALLOWED_HR_EMAILS.indexOf(currentGoogleUser.email) >= 0; }
-  function isAdmin() { return isHr(); }
-
-  function fetchSupervisorList() {
-    // Supervisor list now comes from the config sheet via loadDashboardConfig()
-    // Just populate the dropdown from SUPERVISOR_LIST which is already loaded
-    populateSupervisorDropdown();
-    return Promise.resolve();
-  }
-
-  function populateSupervisorDropdown() {
-    var sel = document.getElementById('supervisor-select');
-    if (!sel) return;
-    var currentName = localStorage.getItem('btl_supervisor_id') || '';
-    var html = '<option value="">— Not an admin —</option>';
-    // Add default (Rachel) + supervisor list from config sheet
-    var allSups = [IN_CHARGE_DEFAULT].concat(SUPERVISOR_LIST);
-    allSups.forEach(function(s) {
-      var selected = (s.name === currentName) ? ' selected' : '';
-      html += '<option value="' + escapeHtml(s.name) + '"' + selected + '>' + escapeHtml(s.name) + '</option>';
-    });
-    sel.innerHTML = html;
   }
 
   // ── Library Hours (today's hours + open/closed status) ──
@@ -2554,192 +2634,15 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
       });
   }
 
-  // In-memory store — populated from the config sheet on load so all users see the same value
-  var _inChargeOverride = null;
-
-  function getInChargeOverride() {
-    return _inChargeOverride;
-  }
-
-  function saveInChargeOverride(name, contact, endDate) {
-    _inChargeOverride = { name: name, contact: contact, endDate: endDate };
-    // Persist to config sheet so all users see the update
-    var saveUrl = PROXY_URL + '?action=setInCharge'
-      + '&name='    + encodeURIComponent(name)
-      + '&contact=' + encodeURIComponent(contact)
-      + '&endDate=' + encodeURIComponent(endDate);
-    fetch(saveUrl).catch(function(err) { console.warn('Could not save in-charge to sheet:', err); });
-  }
-
-  function clearInChargeOverride() {
-    _inChargeOverride = null;
-    fetch(PROXY_URL + '?action=clearInCharge')
-      .catch(function(err) { console.warn('Could not clear in-charge from sheet:', err); });
-  }
-
-  function formatDate(dateStr) {
-    if (!dateStr) return '';
-    var d = new Date(dateStr + 'T12:00:00');
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
-  }
-
-  function renderInChargeCard() {
-    var displayEl = document.getElementById('in-charge-display');
-    var editBtn = document.getElementById('in-charge-edit-btn');
-    if (!displayEl) return;
-
-    var override = getInChargeOverride();
-    var current = override || IN_CHARGE_DEFAULT;
-
-    var html = '<div style="font-size:22px;font-weight:500;color:#1a1a19;margin-bottom:4px;">' + escapeHtml(current.name) + '</div>'
-             + '<div style="font-size:13px;color:#666;">' + escapeHtml(current.contact || '') + '</div>';
-
-    if (override && override.endDate) {
-      var endFmt = formatDate(override.endDate);
-      html += '<div style="font-size:11px;color:#888;margin-top:8px;font-style:italic;">Covering through ' + endFmt + '</div>';
-    }
-
-    displayEl.innerHTML = html;
-
-    // Show edit button only for admins
-    if (editBtn) editBtn.style.display = 'flex';
-  }
-
   function escapeHtml(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
-  function openInChargeModal() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    var override = getInChargeOverride();
-    var today = new Date();
-    var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-
-    // Build supervisor dropdown
-    var nameSelect = document.getElementById('ic-name');
-    nameSelect.innerHTML = '';
-    var allSups = [IN_CHARGE_DEFAULT].concat(SUPERVISOR_LIST);
-    var currentName = override ? override.name : IN_CHARGE_DEFAULT.name;
-    allSups.forEach(function(s) {
-      var opt = document.createElement('option');
-      opt.value = s.name;
-      opt.textContent = s.name;
-      opt.dataset.contact = s.contact || '';
-      if (s.name === currentName) opt.selected = true;
-      nameSelect.appendChild(opt);
-    });
-
-    // Auto-fill contact when dropdown changes
-    nameSelect.onchange = function() {
-      var selected = nameSelect.options[nameSelect.selectedIndex];
-      document.getElementById('ic-contact').value = selected.dataset.contact || '';
-    };
-
-    // Set contact field
-    document.getElementById('ic-contact').value = override ? override.contact : IN_CHARGE_DEFAULT.contact;
-    document.getElementById('ic-end-date').value = override && override.endDate ? override.endDate : todayStr;
-    document.getElementById('ic-end-date').min = todayStr;
-    document.getElementById('ic-reset-btn').style.display = override ? 'inline-block' : 'none';
-    document.getElementById('in-charge-modal').style.display = 'flex';
-  }
-
-  function closeInChargeModal() {
-    document.getElementById('in-charge-modal').style.display = 'none';
-  }
-
-  function saveInChargeFromModal() {
-    var nameSelect = document.getElementById('ic-name');
-    var name = nameSelect.value.trim();
-    var contact = document.getElementById('ic-contact').value.trim();
-    var endDate = document.getElementById('ic-end-date').value;
-    if (!name) { alert('Name is required'); return; }
-    if (!endDate) { alert('End date is required'); return; }
-    if (name === IN_CHARGE_DEFAULT.name && contact === IN_CHARGE_DEFAULT.contact) {
-      clearInChargeOverride();
-    } else {
-      saveInChargeOverride(name, contact, endDate);
-    }
-    closeInChargeModal();
-    renderInChargeCard();
-  }
-
-  function resetInChargeOverride() {
-    clearInChargeOverride();
-    closeInChargeModal();
-    renderInChargeCard();
-  }
-
-
-  function showOutsideLanding() {
-    // Replace entire dashboard with a friendly "wrong place" page
-    var body = document.body;
-    if (!body) return;
-    body.innerHTML =
-      '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f5f5f3;font-family:system-ui,-apple-system,sans-serif;padding:2rem;">' +
-        '<div style="max-width:480px;background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:2rem;text-align:center;">' +
-          '<div style="width:48px;height:48px;background:#185FA5;border-radius:10px;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;">' +
-            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6z"/></svg>' +
-          '</div>' +
-          '<div style="font-size:18px;font-weight:500;color:#1a1a19;margin-bottom:8px;">Bernards Township Library Staff Dashboard</div>' +
-          '<div style="font-size:14px;color:#666;line-height:1.5;">This dashboard is intended for Bernards Township Library staff. If you believe you should have access, please contact Bernards Township Library administration.</div>' +
-        '</div>' +
-      '</div>';
-  }
-
   document.addEventListener('DOMContentLoaded', function() {
-    renderInChargeCard();
-    loadWeather();                   // fetch weather for the In-Charge card
-
-    // Fetch fresh in-charge override directly from Apps Script (bypasses CSV cache)
-    fetch(PROXY_URL + '?action=getInCharge')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.name) {
-          var today = new Date();
-          var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-          var endDate = data.endDate || '';
-          if (!endDate || endDate >= todayStr) {
-            _inChargeOverride = { name: data.name, contact: data.contact || '', endDate: endDate };
-          } else {
-            _inChargeOverride = null;
-          }
-          renderInChargeCard();
-        }
-      })
-      .catch(function(err) { console.warn('Could not fetch in-charge override:', err); });
-
-    // Defensive: reparent modals to body so they can't get trapped inside a hidden page-section
-    ['in-charge-modal'].forEach(function(id){
-      var m = document.getElementById(id);
-      if (m && m.parentElement !== document.body) document.body.appendChild(m);
-    });
+    loadWeather();
   });
 </script>
 
-
-
-<!-- In-Charge Today edit modal (admin only) -->
-<div id="in-charge-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);z-index:999;">
-  <div style="position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#fff;border-radius:12px;padding:1.5rem;width:360px;max-width:calc(100vw - 2rem);box-shadow:0 8px 32px rgba(0,0,0,0.18);">
-    <div style="font-size:15px;font-weight:500;margin-bottom:6px;">Set In-Charge</div>
-    <div style="font-size:13px;color:#666;margin-bottom:16px;">This will override the default in-charge staff member through the end date you choose.</div>
-    <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Name</label>
-    <select id="ic-name" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;"></select>
-    <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Contact (ext. or office)</label>
-    <input type="text" id="ic-contact" placeholder="e.g. x122 or Office B" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
-    <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">Through (end date)</label>
-    <input type="date" id="ic-end-date" style="width:100%;background:#f5f5f3;border:1px solid #e5e5e0;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;box-sizing:border-box;">
-    <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;">
-      <button id="ic-reset-btn" onclick="resetInChargeOverride()" style="display:none;background:transparent;border:none;color:#A32D2D;font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline;padding:0;">Reset to default</button>
-      <div style="display:flex;gap:8px;margin-left:auto;">
-        <button onclick="closeInChargeModal()" style="background:transparent;color:#666;border:1px solid #d0d0c8;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
-        <button onclick="saveInChargeFromModal()" style="background:#185FA5;color:white;border:none;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:inherit;">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-<iframe id="print-frame" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;"></iframe>
 
 <script>
 // ════════════════════════════════════════════════════
@@ -2750,7 +2653,7 @@ DASHBOARD: Hardware inventory has 7 tabs (Staff PCs, Public PCs, Laptops/Chromeb
 var COLLECTION_DEV_URL = '';
 
 // Collection health data — composite score (July 2026, BERTWP)
-// Formula: turnover×40% + (1−dead)×30% + on-loan×20% + holds×10%
+// Formula: turnover×50% + (1−dead)×30% + on-loan×20%
 // Thresholds: Healthy ≥60 | At Risk 35–59 | Critical <35
 // Excluded: AREF, YAREF (reference — inherently low circ), LOCALHIST (3 items, too small)
 var CD_WEED_DATA = [
@@ -4098,19 +4001,19 @@ var CD_WEED_DATA = [
 ];
 
     var CD_SAMPLE_HEALTH = [
-  { name: 'Adult Nonfiction',  code: 'ANONFIC', items: 33410, score: 29, on_loan: 1680, circ_12mo: 10277, dead_items: 16437, never_circd: 1184, avg_lifetime_circ: 14.07, holds: 1824, weed_eligible: 16182, missing_lost: 415 },
-  { name: 'Adult Periodicals', code: 'APERIOD', items:   556, score: 34, on_loan:    35, circ_12mo:   248, dead_items:   285, never_circd:  283, avg_lifetime_circ:  0.94, holds:    0, weed_eligible: 24, missing_lost: 78 },
-  { name: 'Juv. Periodicals',  code: 'JPERIOD', items:   341, score: 35, on_loan:    10, circ_12mo:   134, dead_items:   126, never_circd:  119, avg_lifetime_circ:  1.40, holds:    0, weed_eligible: 7, missing_lost: 4 },
-  { name: 'Adult Fiction',     code: 'AFIC', items: 26689, score: 38, on_loan: 1997, circ_12mo: 11605, dead_items:  9968, never_circd:  545, avg_lifetime_circ: 17.58, holds: 10619, weed_eligible: 9537, missing_lost: 202 },
-  { name: 'YA Nonfiction',     code: 'YANONFIC', items:   427, score: 41, on_loan:    56, circ_12mo:   194, dead_items:   137, never_circd:   26, avg_lifetime_circ: 14.98, holds:    8, weed_eligible: 156, missing_lost: 10 },
-  { name: 'Adult Media',       code: 'AMEDIA', items:  5864, score: 43, on_loan:  206, circ_12mo:  2784, dead_items:  1373, never_circd:    7, avg_lifetime_circ: 42.48, holds:  121, weed_eligible: 2124, missing_lost: 62 },
-  { name: 'YA Media',          code: 'YAMEDIA', items:   337, score: 46, on_loan:    64, circ_12mo:   187, dead_items:   115, never_circd:    3, avg_lifetime_circ: 46.84, holds:   31, weed_eligible: 124, missing_lost: 5 },
-  { name: 'Juv. Nonfiction',   code: 'JNONFIC', items: 10946, score: 47, on_loan: 1190, circ_12mo:  6028, dead_items:  2675, never_circd:  180, avg_lifetime_circ: 29.28, holds:   34, weed_eligible: 3017, missing_lost: 101 },
-  { name: 'Juv. Media',        code: 'JMEDIA', items:  1725, score: 51, on_loan:  223, circ_12mo:  1056, dead_items:   323, never_circd:    5, avg_lifetime_circ: 74.98, holds:    7, weed_eligible: 457, missing_lost: 26 },
-  { name: 'YA Fiction',        code: 'YAFIC', items:  3355, score: 53, on_loan:  571, circ_12mo:  2053, dead_items:   514, never_circd:  183, avg_lifetime_circ: 26.29, holds:  141, weed_eligible: 591, missing_lost: 70 },
-  { name: 'Juv. Fiction',      code: 'JFIC', items: 22519, score: 64, on_loan: 5194, circ_12mo: 17867, dead_items:  1905, never_circd:  212, avg_lifetime_circ: 49.67, holds:  262, weed_eligible: 2379, missing_lost: 432 },
-  { name: 'Library of Things', code: 'LIBOFTHNGS', items:   310, score: 73, on_loan:  112, circ_12mo:   287, dead_items:    19, never_circd:   16, avg_lifetime_circ: 14.35, holds:   50, weed_eligible: 3, missing_lost: 11 }
-];
+  { name: 'Adult Nonfiction',    code: 'ANONFIC',     items:  33422, score:  32, on_loan:  1709, circ_12mo:  12751, dead_items:  20671, never_circd: 1190, avg_lifetime_circ: 14.07, weed_eligible: 16108, missing_lost: 415 },
+  { name: 'Adult Periodicals',   code: 'APERIOD',     items:    556, score:  38, on_loan:    32, circ_12mo:    255, dead_items:    301, never_circd:  284, avg_lifetime_circ: 0.94, weed_eligible:    20, missing_lost: 78 },
+  { name: 'Juv. Periodicals',    code: 'JPERIOD',     items:    341, score:  41, on_loan:    10, circ_12mo:    173, dead_items:    168, never_circd:  119, avg_lifetime_circ: 1.40, weed_eligible:     7, missing_lost: 4 },
+  { name: 'Adult Fiction',       code: 'AFIC',        items:  26700, score:  43, on_loan:  2027, circ_12mo:  13680, dead_items:  13020, never_circd:  547, avg_lifetime_circ: 17.58, weed_eligible:  9518, missing_lost: 201 },
+  { name: 'YA Nonfiction',       code: 'YANONFIC',    items:    427, score:  47, on_loan:    58, circ_12mo:    236, dead_items:    191, never_circd:   26, avg_lifetime_circ: 14.99, weed_eligible:   154, missing_lost: 10 },
+  { name: 'Adult Media',         code: 'AMEDIA',      items:   5864, score:  49, on_loan:   193, circ_12mo:   3557, dead_items:   2307, never_circd:    7, avg_lifetime_circ: 42.48, weed_eligible:  2117, missing_lost: 62 },
+  { name: 'YA Media',            code: 'YAMEDIA',     items:    337, score:  53, on_loan:    69, circ_12mo:    204, dead_items:    133, never_circd:    3, avg_lifetime_circ: 46.85, weed_eligible:   124, missing_lost: 5 },
+  { name: 'Juv. Nonfiction',     code: 'JNONFIC',     items:  10945, score:  53, on_loan:  1179, circ_12mo:   7007, dead_items:   3938, never_circd:  179, avg_lifetime_circ: 29.28, weed_eligible:  3009, missing_lost: 102 },
+  { name: 'Juv. Media',          code: 'JMEDIA',      items:   1725, score:  58, on_loan:   211, circ_12mo:   1196, dead_items:    529, never_circd:    5, avg_lifetime_circ: 74.98, weed_eligible:   457, missing_lost: 26 },
+  { name: 'YA Fiction',          code: 'YAFIC',       items:   3353, score:  60, on_loan:   590, circ_12mo:   2387, dead_items:    966, never_circd:  176, avg_lifetime_circ: 26.30, weed_eligible:   587, missing_lost: 71 },
+  { name: 'Juv. Fiction',        code: 'JFIC',        items:  22515, score:  73, on_loan:  5164, circ_12mo:  19242, dead_items:   3273, never_circd:  209, avg_lifetime_circ: 49.67, weed_eligible:  2331, missing_lost: 433 },
+  { name: 'Library of Things',   code: 'LIBOFTHNGS',  items:    317, score:  80, on_loan:   110, circ_12mo:    290, dead_items:     27, never_circd:   23, avg_lifetime_circ: 14.06, weed_eligible:     3, missing_lost: 11 }
+]
 
 function cdHealthColor(score) {
   if (score >= 60) return { bg: '#EAF3DE', border: '#B8D99A', text: '#3B6D11', label: 'Healthy' };
@@ -4226,12 +4129,12 @@ function cdShowTab(tabName, btn) {
         var lc = r.lc ? r.lc.substring(0,10) : '<span style="color:#e67e22;font-style:italic;">Never</span>';
         var collLabel = COLL_NAMES[r.col] || r.col;
         html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background='#fafaf8'" onmouseout="this.style.background=''">'
-          + '<td style="padding:7px 10px;max-width:260px;">' + escHtml(r.t) + '</td>'
-          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escHtml(r.a) + '</td>'
-          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escHtml(r.c) + '</td>'
-          + '<td style="padding:7px 10px;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;white-space:nowrap;">' + escHtml(collLabel) + '</span></td>'
+          + '<td style="padding:7px 10px;max-width:260px;">' + escapeHtml(r.t) + '</td>'
+          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
+          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escapeHtml(r.c) + '</td>'
+          + '<td style="padding:7px 10px;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;white-space:nowrap;">' + escapeHtml(collLabel) + '</span></td>'
           + '<td style="padding:7px 10px;color:#888;white-space:nowrap;">' + lc + '</td>'
-          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#888;">' + escHtml(r.bc) + '</td>'
+          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#888;">' + escapeHtml(r.bc) + '</td>'
           + '</tr>';
       }
       if (filtered.length > MAX) {
@@ -4241,11 +4144,6 @@ function cdShowTab(tabName, btn) {
         html = '<tr><td colspan="6" style="padding:20px;text-align:center;color:#aaa;font-size:13px;">No items match this filter.</td></tr>';
       }
       tbody.innerHTML = html;
-    }
-
-    function escHtml(s) {
-      if (!s) return '';
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     function cdRenderDoa() {
@@ -4271,12 +4169,12 @@ function cdShowTab(tabName, btn) {
         var r = filtered[i];
         var collLabel = COLL_NAMES[r.col] || r.col;
         html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background='#fafaf8'" onmouseout="this.style.background=''">'
-          + '<td style="padding:7px 10px;max-width:260px;">' + escHtml(r.t) + '</td>'
-          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escHtml(r.a) + '</td>'
-          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escHtml(r.c) + '</td>'
-          + '<td style="padding:7px 10px;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;white-space:nowrap;">' + escHtml(collLabel) + '</span></td>'
-          + '<td style="padding:7px 10px;color:#888;white-space:nowrap;">' + escHtml(r.da) + '</td>'
-          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#888;">' + escHtml(r.bc) + '</td>'
+          + '<td style="padding:7px 10px;max-width:260px;">' + escapeHtml(r.t) + '</td>'
+          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
+          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escapeHtml(r.c) + '</td>'
+          + '<td style="padding:7px 10px;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;white-space:nowrap;">' + escapeHtml(collLabel) + '</span></td>'
+          + '<td style="padding:7px 10px;color:#888;white-space:nowrap;">' + escapeHtml(r.da) + '</td>'
+          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#888;">' + escapeHtml(r.bc) + '</td>'
           + '</tr>';
       }
       if (filtered.length > MAX) {
@@ -4311,13 +4209,13 @@ function cdShowTab(tabName, btn) {
         var collLabel = COLL_NAMES[r.col] || r.col;
         var lc = r.lc ? r.lc.substring(0,10) : '—';
         html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background='#fafaf8'" onmouseout="this.style.background=''">'
-          + '<td style="padding:7px 10px;max-width:260px;">' + escHtml(r.t) + '</td>'
-          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escHtml(r.a) + '</td>'
-          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escHtml(r.c) + '</td>'
-          + '<td style="padding:7px 10px;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;white-space:nowrap;">' + escHtml(collLabel) + '</span></td>'
-          + '<td style="padding:7px 10px;text-align:right;font-weight:600;color:#185FA5;">' + escHtml(r.ct) + '</td>'
+          + '<td style="padding:7px 10px;max-width:260px;">' + escapeHtml(r.t) + '</td>'
+          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
+          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escapeHtml(r.c) + '</td>'
+          + '<td style="padding:7px 10px;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;white-space:nowrap;">' + escapeHtml(collLabel) + '</span></td>'
+          + '<td style="padding:7px 10px;text-align:right;font-weight:600;color:#185FA5;">' + escapeHtml(r.ct) + '</td>'
           + '<td style="padding:7px 10px;color:#888;white-space:nowrap;">' + lc + '</td>'
-          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#888;">' + escHtml(r.bc) + '</td>'
+          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#888;">' + escapeHtml(r.bc) + '</td>'
           + '</tr>';
       }
       if (filtered.length === 0) {
@@ -4354,10 +4252,10 @@ function cdShowTab(tabName, btn) {
         var available = copies - onLoan;
         var cpColor = available > copies / 2 ? '#c0392b' : '#27ae60';
         html += '<tr style="border-bottom:1px solid #f0efe9;" onmouseover="this.style.background='#fafaf8'" onmouseout="this.style.background=''">'
-          + '<td style="padding:7px 10px;max-width:260px;">' + escHtml(r.t) + '</td>'
-          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escHtml(r.a) + '</td>'
-          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escHtml(r.c) + '</td>'
-          + '<td style="padding:7px 10px;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;white-space:nowrap;">' + escHtml(collLabel) + '</span></td>'
+          + '<td style="padding:7px 10px;max-width:260px;">' + escapeHtml(r.t) + '</td>'
+          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
+          + '<td style="padding:7px 10px;font-family:monospace;font-size:11px;color:#333;white-space:nowrap;">' + escapeHtml(r.c) + '</td>'
+          + '<td style="padding:7px 10px;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;white-space:nowrap;">' + escapeHtml(collLabel) + '</span></td>'
           + '<td style="padding:7px 10px;text-align:right;font-weight:600;">' + copies + '</td>'
           + '<td style="padding:7px 10px;text-align:right;"><span style="font-weight:600;color:' + cpColor + ';">' + onLoan + '</span><span style="color:#aaa;font-size:11px;"> / ' + copies + '</span></td>'
           + '</tr>';
@@ -4627,6 +4525,75 @@ function initDeweyAnalytics() {
 }
 
 
+
+function cdToggleQuery(id, btn) {
+  var panel = document.getElementById(id);
+  var arrow = document.getElementById(id + '-arrow');
+  var open  = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.style.transform = open ? '' : 'rotate(90deg)';
+}
+
+
+function cdExportCsv(type) {
+  var COLL = {"ANONFIC":"Adult Nonfiction","AFIC":"Adult Fiction","JNONFIC":"Juv. Nonfiction","JFIC":"Juv. Fiction","YANONFIC":"YA Nonfiction","YAFIC":"YA Fiction","AREF":"Adult Reference","JREF":"Juv. Reference","YAREF":"YA Reference","APERIOD":"Adult Periodicals","JPERIOD":"Juv. Periodicals","AMEDIA":"Adult Media","YAMEDIA":"YA Media","JMEDIA":"Juv. Media","LIBOFTHNGS":"Library of Things","ONLINE":"Online Resources"};
+  function esc(v) { v = (v == null ? '' : String(v)); return v.indexOf(',') > -1 || v.indexOf('"') > -1 || v.indexOf('\n') > -1 ? '"' + v.replace(/"/g, '""') + '"' : v; }
+  var collFilter, search, data, headers, rows;
+
+  if (type === 'weed') {
+    collFilter = (document.getElementById('cd-weed-coll') || {}).value || '';
+    search = ((document.getElementById('cd-weed-search') || {}).value || '').toLowerCase().trim();
+    data = (typeof CD_WEED_DATA !== 'undefined' ? CD_WEED_DATA : []).filter(function(r) {
+      if (collFilter && r.col !== collFilter) return false;
+      if (search && (r.t+' '+r.a+' '+r.c+' '+r.bc).toLowerCase().indexOf(search) === -1) return false;
+      return true;
+    });
+    headers = ['Title','Author','Call Number','Collection','Last Circ','Barcode'];
+    rows = data.map(function(r){ return [r.t, r.a, r.c, COLL[r.col]||r.col, r.lc||'Never circulated', r.bc]; });
+  } else if (type === 'doa') {
+    collFilter = (document.getElementById('cd-doa-coll') || {}).value || '';
+    search = ((document.getElementById('cd-doa-search') || {}).value || '').toLowerCase().trim();
+    data = (typeof CD_DOA_DATA !== 'undefined' ? CD_DOA_DATA : []).filter(function(r) {
+      if (collFilter && r.col !== collFilter) return false;
+      if (search && (r.t+' '+r.a+' '+r.c+' '+r.bc).toLowerCase().indexOf(search) === -1) return false;
+      return true;
+    });
+    headers = ['Title','Author','Call Number','Collection','Date Added','Barcode'];
+    rows = data.map(function(r){ return [r.t, r.a, r.c, COLL[r.col]||r.col, r.da||'', r.bc]; });
+  } else if (type === 'highuse') {
+    collFilter = (document.getElementById('cd-highuse-coll') || {}).value || '';
+    search = ((document.getElementById('cd-highuse-search') || {}).value || '').toLowerCase().trim();
+    data = (typeof CD_HIGHUSE_DATA !== 'undefined' ? CD_HIGHUSE_DATA : []).filter(function(r) {
+      if (collFilter && r.col !== collFilter) return false;
+      if (search && (r.t+' '+r.a+' '+r.c+' '+r.bc).toLowerCase().indexOf(search) === -1) return false;
+      return true;
+    });
+    headers = ['Title','Author','Call Number','Collection','Lifetime Checkouts','Last Circ','Barcode'];
+    rows = data.map(function(r){ return [r.t, r.a, r.c, COLL[r.col]||r.col, r.ct||0, r.lc||'', r.bc]; });
+  } else if (type === 'dupes') {
+    collFilter = (document.getElementById('cd-dupes-coll') || {}).value || '';
+    search = ((document.getElementById('cd-dupes-search') || {}).value || '').toLowerCase().trim();
+    data = (typeof CD_DUPES_DATA !== 'undefined' ? CD_DUPES_DATA : []).filter(function(r) {
+      if (collFilter && r.col !== collFilter) return false;
+      if (search && (r.t+' '+r.a+' '+r.c).toLowerCase().indexOf(search) === -1) return false;
+      return true;
+    });
+    headers = ['Title','Author','Call Number','Collection','Copies','On Loan'];
+    rows = data.map(function(r){ return [r.t, r.a, r.c, COLL[r.col]||r.col, r.cp||0, r.ol||0]; });
+  } else { return; }
+
+  var csv = [headers.map(esc).join(',')].concat(rows.map(function(row){ return row.map(esc).join(','); })).join('\r\n');
+  var blob = new Blob([csv], {type:'text/csv'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url;
+  a.download = 'BTL_' + type + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function loadCollectionDev() {
   // Render health data immediately
   renderCdHealthGrid(CD_SAMPLE_HEALTH);
@@ -4635,7 +4602,7 @@ function loadCollectionDev() {
   // Populate stat boxes from July 2026 Koha query results (BERTWP)
   // Total items = sum of CD_SAMPLE_HEALTH item counts
   var totalItems = CD_SAMPLE_HEALTH.reduce(function(sum, c) { return sum + c.items; }, 0);
-  var staticStats = { total: totalItems, doa: 412, weed: 26334, highuse: 16785 };
+  var staticStats = { total: 106511, doa: 408, weed: 18451, highuse: 16786 };
   var statMap = { 'cd-stat-total': staticStats.total, 'cd-stat-doa': staticStats.doa,
                   'cd-stat-weed': staticStats.weed, 'cd-stat-highuse': staticStats.highuse };
   Object.keys(statMap).forEach(function(id) {
