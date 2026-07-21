@@ -146,40 +146,30 @@
     }
   }
 
-  const METABASE_STATS_URL = 'https://script.google.com/macros/s/AKfycbypH2KcDEK-RhaEDkRc9CFKq3gdOl6ShfQi4b8KONoRgQPrdLweViEajfer1ILmjzHj/exec';
+  // Koha activity stats — updated monthly via Query C (Metabase export)
+  // Last updated: July 2026
+  var kohaStats = {
+    activeCardholders:      7595,
+    newCardholdersThisMonth: 85,
+    newItemsThisMonth:       348,
+    totalCheckoutsThisMonth: 8004
+  };
 
-  async function loadMetabaseStats() {
-    const ids = ['stat-active-cardholders','stat-new-cardholders','stat-new-items','stat-checkouts'];
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      el.textContent = 'Loading…';
-      el.style.color = '#aaa';
-      el.style.fontSize = '14px';
+  function renderKohaStats() {
+    var map = [
+      ['stat-active-cardholders',  kohaStats.activeCardholders],
+      ['stat-new-cardholders',     kohaStats.newCardholdersThisMonth],
+      ['stat-new-items',           kohaStats.newItemsThisMonth],
+      ['stat-checkouts',           kohaStats.totalCheckoutsThisMonth]
+    ];
+    map.forEach(function(pair) {
+      var el = document.getElementById(pair[0]);
+      if (el) el.textContent = pair[1].toLocaleString();
     });
-    try {
-      const res = await fetch(METABASE_STATS_URL);
-      if (!res.ok) throw new Error('Stats request failed');
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      const values = [data.activeCardholders, data.newCardholdersThisMonth, data.newItemsThisMonth, data.totalCheckoutsThisMonth];
-      ids.forEach((id, i) => {
-        const el = document.getElementById(id);
-        el.textContent = values[i].toLocaleString();
-        el.style.color = '';
-        el.style.fontSize = '';
-      });
-    } catch(err) {
-      ids.forEach(id => {
-        const el = document.getElementById(id);
-        el.textContent = 'Unavailable';
-        el.style.color = '#A32D2D';
-        el.style.fontSize = '13px';
-      });
-    }
   }
 
   window.addEventListener('DOMContentLoaded', loadTrafficData);
-  window.addEventListener('DOMContentLoaded', loadMetabaseStats);
+  window.addEventListener('DOMContentLoaded', renderKohaStats);
 </script>
 </head>
 <body>
@@ -625,7 +615,7 @@
             </div>
             Koha Statistics
           </div>
-          <span class="badge" style="background:#FAEEDA;color:#854F0B;">Needs Setup</span>
+          <span class="badge badge-green" style="background:#D1FAE5;color:#065F46;">Koha Data — July 2026</span>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:4px;">
           <div style="background:#E6F1FB;border-radius:8px;padding:0.875rem 1rem;">
