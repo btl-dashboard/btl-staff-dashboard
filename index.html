@@ -5195,6 +5195,20 @@ function deweyEffectiveSignal(c, bd) {
   return 'Moderate';  // downgrade: high avg_circ but insufficient community reach
 }
 
+// Range buy signal = best effective signal among its classes.
+// Ensures the range badge always matches what you find when you drill in.
+function rangeEffectiveSignal(r, bdata) {
+  if (!r.classes || r.classes.length === 0) return r.signal;
+  var priority = {Strong:4, Moderate:3, Hold:2, Weed:1};
+  var best = 0, bestSig = r.signal;
+  r.classes.forEach(function(c) {
+    var sig = deweyEffectiveSignal(c, bdata ? bdata[c.dewey_class] : null);
+    var p = priority[sig] || 0;
+    if (p > best) { best = p; bestSig = sig; }
+  });
+  return bestSig;
+}
+
 function cdDeweySort(col) {
   if (_deweySortCol === col) { _deweySortDir *= -1; } else { _deweySortCol = col; _deweySortDir = 1; }
   renderDeweyContent(_deweyCurrentCcode);
@@ -5336,8 +5350,8 @@ function renderDeweyContent(ccode) {
   if (_deweySortCol) {
     var _sigOrder = {Strong:4,Moderate:3,Hold:2,Weed:1};
     filteredRanges = filteredRanges.slice().sort(function(a,b) {
-      var av = _deweySortCol === 'signal' ? (_sigOrder[a.signal]||0) : a[_deweySortCol];
-      var bv = _deweySortCol === 'signal' ? (_sigOrder[b.signal]||0) : b[_deweySortCol];
+      var av = _deweySortCol === 'signal' ? (_sigOrder[rangeEffectiveSignal(a,_bdata)]||0) : a[_deweySortCol];
+      var bv = _deweySortCol === 'signal' ? (_sigOrder[rangeEffectiveSignal(b,_bdata)]||0) : b[_deweySortCol];
       return (av < bv ? -1 : av > bv ? 1 : 0) * _deweySortDir;
     });
   }
@@ -5381,7 +5395,7 @@ function renderDeweyContent(ccode) {
       + '<div style="padding-left:8px;">' + deweyMiniBar(r.avg_circ, maxCirc) + '<span style="font-size:12px;color:#333;">' + r.avg_circ.toFixed(1) + '</span></div>'
       + '<div style="font-size:12px;text-align:right;color:' + (r.dead_pct >= 40 ? '#C07000' : '#555') + ';">' + r.dead_pct + '%</div>'
       + '<div style="font-size:12px;text-align:right;color:#555;">' + r.on_shelf_pct + '%</div>'
-      + '<div style="text-align:right;">' + deweyBadge(r.signal) + '</div>'
+      + '<div style="text-align:right;">' + deweyBadge(rangeEffectiveSignal(r, _bdata)) + '</div>'
       + '</div>'
       // Expanded sub-table (hidden by default)
       + '<div id="dexp-' + ccode + '-' + r.dewey_100 + '" style="display:none;border:1px solid #E0E8F0;border-top:none;background:#F8FBFF;">'
