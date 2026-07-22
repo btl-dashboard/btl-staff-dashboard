@@ -5300,11 +5300,11 @@ function renderDeweyContent(ccode) {
 
   var panels = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">'
     + '<div style="background:#fff;border:1px solid #E5E5E3;border-radius:8px;padding:14px 16px;">'
-    + '<div style="font-size:12px;font-weight:600;color:#3B6D11;margin-bottom:8px;">↑ Top Performing Classes</div>'
+    + '<div style="font-size:12px;font-weight:600;color:#3B6D11;margin-bottom:2px;">↑ Top Performing Classes</div>' + '<div style="font-size:11px;color:#666;margin-bottom:8px;">Ranked by unique borrowers — classes with the broadest community demand, regardless of signal.</div>'
     + topClasses.map(classRow).join('')
     + '</div>'
     + '<div style="background:#fff;border:1px solid #E5E5E3;border-radius:8px;padding:14px 16px;">'
-    + '<div style="font-size:12px;font-weight:600;color:#A32D2D;margin-bottom:8px;">↓ Lowest Performing Classes</div>'
+    + '<div style="font-size:12px;font-weight:600;color:#A32D2D;margin-bottom:2px;">↓ Lowest Performing Classes</div>' + '<div style="font-size:11px;color:#666;margin-bottom:8px;">Ranked by signal strength and average circulation — candidates for weeding or de-emphasis.</div>'
     + lowClasses.map(classRow).join('')
     + '</div>'
     + '</div>';
@@ -5320,6 +5320,10 @@ function renderDeweyContent(ccode) {
         else if (active) { var ss = deweySignalStyle(f); s = {bg:ss.bg, text:ss.text}; }
         return '<button onclick="cdDeweyFilter(\'' + f + '\')" style="padding:4px 12px;border-radius:5px;border:1px solid #D0D0CE;background:' + s.bg + ';color:' + s.text + ';font-size:12px;cursor:pointer;">' + f + '</button>';
     }).join('')
+    + '</div>'
+    + '<div style="font-size:11px;color:#666;margin-bottom:14px;line-height:1.5;">'
+    + '<strong>Signal</strong> (Strong / Moderate / Hold / Weed) reflects <em>collection health</em>: average lifetime circulation, dead-item rate, and shelf availability. '
+    + 'It does <em>not</em> measure how many different patrons borrow a class — see <strong>Top Performing Classes</strong> for borrower breadth rankings.'
     + '</div>';
 
   // Max avg_circ for bar scaling
