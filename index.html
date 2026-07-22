@@ -1583,50 +1583,10 @@ LIMIT 500;</pre>
 
     </div><!-- end page-cd-tools -->
     <div id="page-holds" class="page-section">
-
-      <div style="margin-bottom:1.25rem;">
-        <div class="page-title">Holds Reports</div>
-        <div class="page-sub">Local and system hold counts from Koha Report #138 &mdash; refreshed as needed</div>
-      </div>
-
-      <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px;padding:12px 14px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#78350F;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div><strong>Data snapshot: July 2026.</strong> Titles with 0 BTL Copies are purchasing signals &mdash; check System Ratio (sys holds &divide; sys items) for demand strength. Run Koha Report #138 and drop the new CSV to refresh.</div>
-      </div>
-
-      <!-- Filter row -->
-      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;">
-        <select id="holds-coll" onchange="renderHolds()" style="font-size:13px;border:1px solid #ddd;border-radius:6px;padding:5px 8px;background:#fff;color:#333;">
-          <option value="">All Collections</option>
-          <option value="AFIC">AFIC &mdash; Adult Fiction</option>
-          <option value="AMEDIA">AMEDIA &mdash; Adult Media</option>
-          <option value="ANONFIC">ANONFIC &mdash; Adult Nonfiction</option>
-          <option value="JFIC">JFIC &mdash; Juv. Fiction</option>
-          <option value="JMEDIA">JMEDIA &mdash; Juv. Media</option>
-          <option value="JNONFIC">JNONFIC &mdash; Juv. Nonfiction</option>
-          <option value="YAFIC">YAFIC &mdash; YA Fiction</option>
-          <option value="YAMEDIA">YAMEDIA &mdash; YA Media</option>
-          <option value="YANONFIC">YANONFIC &mdash; YA Nonfiction</option>
-        </select>
-        <select id="holds-copyfilter" onchange="renderHolds()" style="font-size:13px;border:1px solid #ddd;border-radius:6px;padding:5px 8px;background:#fff;color:#333;">
-          <option value="all">All Titles</option>
-          <option value="nocopy">No BTL Copy (Purchasing Signals)</option>
-          <option value="hascopy">Has BTL Copy</option>
-        </select>
-        <input id="holds-search" oninput="renderHolds()" placeholder="Search title or author&hellip;" style="font-size:13px;border:1px solid #ddd;border-radius:6px;padding:5px 10px;width:200px;color:#333;">
-        <span id="holds-count" style="font-size:12px;color:#888;margin-left:4px;"></span>
-      </div>
-
-      <!-- Table -->
-      <div style="overflow-x:auto;">
-        <table style="width:100%;border-collapse:collapse;font-size:13px;color:#333;">
-          <thead id="holds-thead"></thead>
-          <tbody id="holds-tbody">
-            <tr><td colspan="8" style="padding:16px;text-align:center;color:#888;font-size:13px;">Loading&hellip;</td></tr>
-          </tbody>
-        </table>
-      </div>
-
+      <div style="margin-bottom:1.25rem;"><div class="page-title">Holds Reports</div><div class="page-sub">Local and system hold counts from Koha Report #138 &mdash; refreshed as needed</div></div>
+      <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px;padding:12px 14px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#78350F;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>Data snapshot: July 2026.</strong> Titles with 0 BTL Copies are purchasing signals &mdash; check System Ratio (sys holds &divide; sys items) for demand strength. Run Koha Report #138 and drop the new CSV to refresh.</div></div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;"><select id="holds-coll" onchange="renderHolds()" style="font-size:13px;border:1px solid #ddd;border-radius:6px;padding:5px 8px;background:#fff;color:#333;"><option value="">All Collections</option><option value="AFIC">AFIC &mdash; Adult Fiction</option><option value="AMEDIA">AMEDIA &mdash; Adult Media</option><option value="ANONFIC">ANONFIC &mdash; Adult Nonfiction</option><option value="JFIC">JFIC &mdash; Juv. Fiction</option><option value="JMEDIA">JMEDIA &mdash; Juv. Media</option><option value="JNONFIC">JNONFIC &mdash; Juv. Nonfiction</option><option value="YAFIC">YAFIC &mdash; YA Fiction</option><option value="YAMEDIA">YAMEDIA &mdash; YA Media</option><option value="YANONFIC">YANONFIC &mdash; YA Nonfiction</option></select><select id="holds-copyfilter" onchange="renderHolds()" style="font-size:13px;border:1px solid #ddd;border-radius:6px;padding:5px 8px;background:#fff;color:#333;"><option value="all">All Titles</option><option value="nocopy">No BTL Copy (Purchasing Signals)</option><option value="hascopy">Has BTL Copy</option></select><input id="holds-search" oninput="renderHolds()" placeholder="Search title or author&hellip;" style="font-size:13px;border:1px solid #ddd;border-radius:6px;padding:5px 10px;width:200px;color:#333;"><span id="holds-count" style="font-size:12px;color:#888;margin-left:4px;"></span></div>
+      <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;color:#333;"><thead id="holds-thead"></thead><tbody id="holds-tbody"><tr><td colspan="8" style="padding:16px;text-align:center;color:#888;font-size:13px;">Loading&hellip;</td></tr></tbody></table></div>
     </div><!-- end page-holds -->
 
   </div><!-- end main -->
@@ -4154,9 +4114,9 @@ function cdShowTab(tabName, btn) {
 
     function fmtDate(d) {
       if (!d) return '';
-      var s = (d + '').substring(0, 10);
+      var s = (d + '').substring(0,10);
       if (s.length < 10) return d;
-      return s.substring(5,7) + '/' + s.substring(8,10) + '/' + s.substring(2,4);
+      return s.substring(5,7)+'/'+s.substring(8,10)+'/'+s.substring(2,4);
     }
     function cdSortBy(tbl, col) {
       var s = cdSortState[tbl];
@@ -4194,70 +4154,45 @@ function cdShowTab(tabName, btn) {
     }
     // ─────────────────────────────────────────────────────────────────────────
 
-    // ── HOLDS REPORTS ─────────────────────────────────────────────────────────
+    // ── HOLDS REPORTS ──────────────────────────────────────────────────────────
     function renderHolds() {
-      var collFilter  = (document.getElementById('holds-coll')       || {}).value || '';
-      var copyFilter  = (document.getElementById('holds-copyfilter') || {}).value || 'all';
-      var searchRaw   = ((document.getElementById('holds-search')    || {}).value || '').toLowerCase().trim();
-      var tbody = document.getElementById('holds-tbody');
-      var thead = document.getElementById('holds-thead');
-      if (!tbody) return;
-
-      var data = (typeof CD_HOLDS_DATA !== 'undefined') ? CD_HOLDS_DATA : [];
-
-      var filtered = data.filter(function(r) {
-        if (collFilter && r.col !== collFilter) return false;
-        if (copyFilter === 'nocopy'  && r.li !== 0) return false;
-        if (copyFilter === 'hascopy' && r.li === 0) return false;
-        if (searchRaw) {
-          var hay = (r.t + ' ' + r.a).toLowerCase();
-          if (hay.indexOf(searchRaw) === -1) return false;
-        }
+      var collFilter=(document.getElementById('holds-coll')||{}).value||'';
+      var copyFilter=(document.getElementById('holds-copyfilter')||{}).value||'all';
+      var searchRaw=((document.getElementById('holds-search')||{}).value||'').toLowerCase().trim();
+      var tbody=document.getElementById('holds-tbody'),thead=document.getElementById('holds-thead');
+      if(!tbody)return;
+      var data=(typeof CD_HOLDS_DATA!=='undefined')?CD_HOLDS_DATA:[];
+      var filtered=data.filter(function(r){
+        if(collFilter&&r.col!==collFilter)return false;
+        if(copyFilter==='nocopy'&&r.li!==0)return false;
+        if(copyFilter==='hascopy'&&r.li===0)return false;
+        if(searchRaw){var hay=(r.t+' '+r.a).toLowerCase();if(hay.indexOf(searchRaw)===-1)return false;}
         return true;
       });
-
-      filtered.forEach(function(r) { r.sr = r.si > 0 ? r.sh / r.si : 0; });
-      filtered = cdApplySort(filtered, 'holds');
-
-      var countEl = document.getElementById('holds-count');
-      if (countEl) countEl.textContent = filtered.length.toLocaleString() + ' of ' + data.length.toLocaleString() + ' titles';
-
-      if (thead) thead.innerHTML = '<tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">'
-        + cdTh('holds','t',  'Title')
-        + cdTh('holds','a',  'Author')
-        + cdTh('holds','col','Collection', 'center')
-        + cdTh('holds','lh', 'Local Holds', 'right')
-        + cdTh('holds','li', 'BTL Copies', 'right')
-        + cdTh('holds','sh', 'Sys Holds', 'right')
-        + cdTh('holds','si', 'Sys Items', 'right')
-        + cdTh('holds','sr','Sys Ratio','right')
-        + '</tr>';
-
-      if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="8" style="padding:20px;text-align:center;color:#888;font-size:13px;">No titles match the current filters.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = filtered.map(function(r, i) {
-        var ratio = r.si > 0 ? r.sr.toFixed(1) : '—';
-        var noCopy = r.li === 0;
-        var rowBg  = (i % 2 === 0) ? '#fff' : '#fafaf9';
-        var copyCell = noCopy
-          ? '<td style="text-align:right;padding:7px 10px;color:#A32D2D;font-weight:600;">0</td>'
-          : '<td style="text-align:right;padding:7px 10px;">' + r.li + '</td>';
-        return '<tr style="background:' + rowBg + ';border-bottom:1px solid #f0f0ee;">'
-          + '<td style="padding:7px 10px;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escapeHtml(r.t) + '">' + escapeHtml(r.t) + '</td>'
-          + '<td style="padding:7px 10px;color:#555;white-space:nowrap;">' + escapeHtml(r.a) + '</td>'
-          + '<td style="padding:7px 10px;text-align:center;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;font-weight:600;">' + escapeHtml(r.col || '—') + '</span></td>'
-          + '<td style="text-align:right;padding:7px 10px;font-weight:600;color:#185FA5;">' + r.lh + '</td>'
-          + copyCell
-          + '<td style="text-align:right;padding:7px 10px;color:#555;">' + r.sh + '</td>'
-          + '<td style="text-align:right;padding:7px 10px;color:#555;">' + r.si + '</td>'
-          + '<td style="text-align:right;padding:7px 10px;color:#555;">' + ratio + '</td>'
-          + '</tr>';
+      filtered.forEach(function(r){r.sr=r.si>0?r.sh/r.si:0;});
+      filtered=cdApplySort(filtered,'holds');
+      var countEl=document.getElementById('holds-count');
+      if(countEl)countEl.textContent=filtered.length.toLocaleString()+' of '+data.length.toLocaleString()+' titles';
+      if(thead)thead.innerHTML='<tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">'
+        +cdTh('holds','t','Title')+cdTh('holds','a','Author')+cdTh('holds','col','Collection','center')
+        +cdTh('holds','lh','Local Holds','right')+cdTh('holds','li','BTL Copies','right')
+        +cdTh('holds','sh','Sys Holds','right')+cdTh('holds','si','Sys Items','right')
+        +cdTh('holds','sr','Sys Ratio','right')+'</tr>';
+      if(!filtered.length){tbody.innerHTML='<tr><td colspan="8" style="padding:20px;text-align:center;color:#888;font-size:13px;">No titles match the current filters.</td></tr>';return;}
+      tbody.innerHTML=filtered.map(function(r,i){
+        var ratio=r.si>0?r.sr.toFixed(1):'—',noCopy=r.li===0,rowBg=i%2===0?'#fff':'#fafaf9';
+        return '<tr style="background:'+rowBg+';border-bottom:1px solid #f0f0ee;">'
+          +'<td style="padding:7px 10px;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+escapeHtml(r.t)+'">'+escapeHtml(r.t)+'</td>'
+          +'<td style="padding:7px 10px;color:#555;white-space:nowrap;">'+escapeHtml(r.a)+'</td>'
+          +'<td style="padding:7px 10px;text-align:center;"><span style="font-size:11px;background:#EDE9F8;color:#6B4FA0;border-radius:4px;padding:2px 6px;font-weight:600;">'+escapeHtml(r.col||'—')+'</span></td>'
+          +'<td style="text-align:right;padding:7px 10px;font-weight:600;color:#185FA5;">'+r.lh+'</td>'
+          +(noCopy?'<td style="text-align:right;padding:7px 10px;color:#A32D2D;font-weight:600;">0</td>':'<td style="text-align:right;padding:7px 10px;">'+r.li+'</td>')
+          +'<td style="text-align:right;padding:7px 10px;color:#555;">'+r.sh+'</td>'
+          +'<td style="text-align:right;padding:7px 10px;color:#555;">'+r.si+'</td>'
+          +'<td style="text-align:right;padding:7px 10px;color:#555;">'+ratio+'</td></tr>';
       }).join('');
     }
-    // ─────────────────────────────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────────────────────
 
     function cdRenderWeed() {
       var collFilter = (document.getElementById('cd-weed-coll') || {}).value || '';
@@ -4643,22 +4578,18 @@ function renderDeweyContent(ccode) {
     });
   }
 
-  function deweyTh(col, label, align) {
-    var active = _deweySortCol === col;
-    var icon = active ? (_deweySortDir === 1 ? ' ▲' : ' ▼') : '';
-    var color = active ? '#185FA5' : '#888';
-    var alignStyle = align ? 'text-align:' + align + ';' : '';
-    var pad = col === 'avg_circ' ? 'padding-left:8px;' : '';
-    return '<span onclick="cdDeweySort(\'' + col + '\')" style="font-size:11px;font-weight:600;text-transform:uppercase;cursor:pointer;user-select:none;color:' + color + ';' + alignStyle + pad + '">'
-      + label + '<span style="font-size:9px;margin-left:2px;">' + icon + '</span></span>';
+  function deweyTh(col,label,align){
+    var active=_deweySortCol===col,icon=active?(_deweySortDir===1?' ▲':' ▼'):'',color=active?'#185FA5':'#888';
+    var aStyle=align?'text-align:'+align+';':'',pad=col==='avg_circ'?'padding-left:8px;':'';
+    return '<span onclick="cdDeweySort(\''+col+'\')" style="font-size:11px;font-weight:600;text-transform:uppercase;cursor:pointer;user-select:none;color:'+color+';'+aStyle+pad+'">'+label+'<span style="font-size:9px;margin-left:2px;">'+icon+'</span></span>';
   }
   var tableHeader = '<div style="display:grid;grid-template-columns:1fr 70px 130px 70px 70px 80px;gap:0;padding:7px 8px;background:#F5F5F3;border-radius:6px 6px 0 0;border:1px solid #E5E5E3;">'
-    + deweyTh('dewey_100', 'Range')
-    + deweyTh('items', 'Items', 'right')
-    + deweyTh('avg_circ', 'Avg Lifetime Circ')
-    + deweyTh('dead_pct', 'Dead%', 'right')
-    + deweyTh('on_shelf_pct', 'On Shelf', 'right')
-    + deweyTh('signal', 'Signal', 'right')
+    + deweyTh('dewey_100','Range')
+    + deweyTh('items','Items','right')
+    + deweyTh('avg_circ','Avg Lifetime Circ')
+    + deweyTh('dead_pct','Dead%','right')
+    + deweyTh('on_shelf_pct','On Shelf','right')
+    + deweyTh('signal','Signal','right')
     + '</div>';
 
   var tableRows = filteredRanges.map(function(r, i) {
