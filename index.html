@@ -5272,7 +5272,7 @@ function renderDeweyContent(ccode) {
 
   var statBoxes = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;">'
     + statBox('Ranges Analyzed', rangeCount, classCount + ' 3-digit classes', '#1E3A5F')
-    + statBox('Strong Signals', strongCount, 'High-performing classes', '#3B6D11')
+    + statBox('Strong Buy Signals', strongCount, 'High-performing classes', '#3B6D11')
     + statBox('Hold Classes', holdCount, 'Low demand — buy selectively', '#854F0B')
     + statBox('Weed Classes', weedCount, 'Very low avg circ', '#A32D2D')
     + '</div>';
@@ -5322,7 +5322,7 @@ function renderDeweyContent(ccode) {
     }).join('')
     + '</div>'
     + '<div style="font-size:11px;color:#666;margin-bottom:14px;line-height:1.5;">'
-    + '<strong>Signal</strong> (Strong / Moderate / Hold / Weed) reflects <em>collection health</em>: average lifetime circulation, dead-item rate, and shelf availability. '
+    + '<strong>Buy Signal</strong> (Strong / Moderate / Hold / Weed) reflects <em>collection health</em>: average lifetime circulation, dead-item rate, and shelf availability. '
     + 'It does <em>not</em> measure how many different patrons borrow a class — see <strong>Top Performing Classes</strong> for borrower breadth rankings.'
     + '</div>';
 
@@ -5361,7 +5361,7 @@ function renderDeweyContent(ccode) {
     + deweyTh('avg_circ','Avg Lifetime Circ')
     + deweyTh('dead_pct','Dead%','right')
     + deweyTh('on_shelf_pct','On Shelf','right')
-    + deweyTh('signal','Signal','right')
+    + deweyTh('signal','Buy Signal','right')
     + '</div>';
 
   var tableRows = filteredRanges.map(function(r, i) {
@@ -5449,7 +5449,7 @@ function renderDeweyClasses(ccode, range) {
     var _effSig = deweyEffectiveSignal(c, bd);
     var sigBadge = deweyBadge(_effSig);
     if (bd && bd.bb < 0.01 && (_effSig === 'Strong' || _effSig === 'Moderate')) {
-      sigBadge = deweyBadge(_effSig) + '<span title="Signal may be inflated — low borrower breadth" style="font-size:9px;cursor:help;vertical-align:super;margin-left:2px;">⚠</span>';
+      sigBadge = deweyBadge(_effSig) + '<span title="Buy signal may be inflated — low borrower breadth" style="font-size:9px;cursor:help;vertical-align:super;margin-left:2px;">⚠</span>';
     }
     return '<div style="display:grid;grid-template-columns:' + cols + ';padding:6px 14px;' + bt + '">'
       + '<span style="font-size:12px;font-weight:600;color:#1E3A5F;">' + c.dewey_class + '</span>'
