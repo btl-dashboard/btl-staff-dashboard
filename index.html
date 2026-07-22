@@ -1514,117 +1514,7 @@ LIMIT 500;</pre>
         </div>
 
 
-        <!-- 5E ANONFIC -->
-        <div style="border:1px solid #E5E5E3;border-radius:8px;margin-bottom:6px;overflow:hidden;">
-          <button onclick="cdToggleQuery('q5e-anonfic', this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F9F9F8;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1a1a19;text-align:left;">
-            <span>Query 5E &mdash; Dewey Class Depth (Adult Nonfiction)</span>
-            <span id="q5e-anonfic-arrow" style="font-size:16px;color:#888;transition:transform 0.2s;">›</span>
-          </button>
-          <div id="q5e-anonfic" style="display:none;padding:12px 14px;border-top:1px solid #E5E5E3;">
-            <div style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.5;">Borrower breadth analysis at the 3-digit Dewey class level for Adult Nonfiction. Reveals whether a class&#39;s circulation is driven by broad community demand or repeat-patron inflation. Classes with fewer than 5 items are excluded. Run in Metabase, export as CSV, and share with Claude to update the dashboard.</div>
-            <pre style="background:#f5f5f3;color:#1a1a19;border:1px solid #e5e5e0;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;white-space:pre;margin:0;line-height:1.5;">SELECT
-    CAST(LEFT(REGEXP_SUBSTR(i.itemcallnumber, &#39;[0-9]+&#39;), 3) AS UNSIGNED) AS dewey_class,
-    COUNT(DISTINCT i.itemnumber)                         AS total_items,
-    ROUND(AVG(COALESCE(i.issues, 0)), 2)                AS avg_lifetime_circ,
-    SUM(COALESCE(i.issues, 0))                           AS total_circs,
-    COUNT(DISTINCT s.borrowernumber)                     AS unique_borrowers,
-    COUNT(DISTINCT CASE WHEN i.issues &gt; 0
-          THEN i.itemnumber END)                         AS items_circulated,
-    ROUND(COUNT(DISTINCT CASE WHEN i.issues &gt; 0
-          THEN i.itemnumber END)
-          / COUNT(DISTINCT i.itemnumber) * 100, 1)      AS pct_items_circulated,
-    ROUND(COUNT(DISTINCT s.borrowernumber)
-          / NULLIF(SUM(COALESCE(i.issues, 0)), 0), 3)   AS borrower_breadth
-FROM items i
-LEFT JOIN statistics s
-    ON  s.itemnumber = i.itemnumber
-    AND s.type = &#39;issue&#39;
-WHERE i.homebranch              = &#39;BERTWP&#39;
-  AND i.ccode                   = &#39;ANONFIC&#39;
-  AND i.itemlost                = 0
-  AND i.withdrawn               = 0
-  AND COALESCE(i.notforloan, 0) = 0
-  AND i.itemcallnumber REGEXP &#39;[0-9]&#39;
-GROUP BY CAST(LEFT(REGEXP_SUBSTR(i.itemcallnumber, &#39;[0-9]+&#39;), 3) AS UNSIGNED)
-HAVING total_items &gt;= 5
-ORDER BY dewey_class;</pre>
-          </div>
-        </div>
-
-        <!-- 5E JNONFIC -->
-        <div style="border:1px solid #E5E5E3;border-radius:8px;margin-bottom:6px;overflow:hidden;">
-          <button onclick="cdToggleQuery('q5e-jnonfic', this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F9F9F8;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1a1a19;text-align:left;">
-            <span>Query 5E &mdash; Dewey Class Depth (Juvenile Nonfiction)</span>
-            <span id="q5e-jnonfic-arrow" style="font-size:16px;color:#888;transition:transform 0.2s;">›</span>
-          </button>
-          <div id="q5e-jnonfic" style="display:none;padding:12px 14px;border-top:1px solid #E5E5E3;">
-            <div style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.5;">Borrower breadth analysis at the 3-digit Dewey class level for Juvenile Nonfiction. Note: JNONFIC call numbers are prefixed (e.g. &#34;E 001.944 ATK&#34;) — the query uses REGEXP_SUBSTR to extract the numeric Dewey class regardless of prefix. Run in Metabase, export as CSV, and share with Claude to update the dashboard.</div>
-            <pre style="background:#f5f5f3;color:#1a1a19;border:1px solid #e5e5e0;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;white-space:pre;margin:0;line-height:1.5;">SELECT
-    CAST(LEFT(REGEXP_SUBSTR(i.itemcallnumber, &#39;[0-9]+&#39;), 3) AS UNSIGNED) AS dewey_class,
-    COUNT(DISTINCT i.itemnumber)                         AS total_items,
-    ROUND(AVG(COALESCE(i.issues, 0)), 2)                AS avg_lifetime_circ,
-    SUM(COALESCE(i.issues, 0))                           AS total_circs,
-    COUNT(DISTINCT s.borrowernumber)                     AS unique_borrowers,
-    COUNT(DISTINCT CASE WHEN i.issues &gt; 0
-          THEN i.itemnumber END)                         AS items_circulated,
-    ROUND(COUNT(DISTINCT CASE WHEN i.issues &gt; 0
-          THEN i.itemnumber END)
-          / COUNT(DISTINCT i.itemnumber) * 100, 1)      AS pct_items_circulated,
-    ROUND(COUNT(DISTINCT s.borrowernumber)
-          / NULLIF(SUM(COALESCE(i.issues, 0)), 0), 3)   AS borrower_breadth
-FROM items i
-LEFT JOIN statistics s
-    ON  s.itemnumber = i.itemnumber
-    AND s.type = &#39;issue&#39;
-WHERE i.homebranch              = &#39;BERTWP&#39;
-  AND i.ccode                   = &#39;JNONFIC&#39;
-  AND i.itemlost                = 0
-  AND i.withdrawn               = 0
-  AND COALESCE(i.notforloan, 0) = 0
-  AND i.itemcallnumber REGEXP &#39;[0-9]&#39;
-GROUP BY CAST(LEFT(REGEXP_SUBSTR(i.itemcallnumber, &#39;[0-9]+&#39;), 3) AS UNSIGNED)
-HAVING total_items &gt;= 5
-ORDER BY dewey_class;</pre>
-          </div>
-        </div>
-
-        <!-- 5E YANONFIC -->
-        <div style="border:1px solid #E5E5E3;border-radius:8px;margin-bottom:6px;overflow:hidden;">
-          <button onclick="cdToggleQuery('q5e-yanonfic', this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#F9F9F8;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1a1a19;text-align:left;">
-            <span>Query 5E &mdash; Dewey Class Depth (YA Nonfiction)</span>
-            <span id="q5e-yanonfic-arrow" style="font-size:16px;color:#888;transition:transform 0.2s;">›</span>
-          </button>
-          <div id="q5e-yanonfic" style="display:none;padding:12px 14px;border-top:1px solid #E5E5E3;">
-            <div style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.5;">Borrower breadth analysis at the 3-digit Dewey class level for YA Nonfiction. Run in Metabase, export as CSV, and share with Claude to update the dashboard.</div>
-            <pre style="background:#f5f5f3;color:#1a1a19;border:1px solid #e5e5e0;border-radius:6px;padding:12px;font-size:11px;overflow-x:auto;white-space:pre;margin:0;line-height:1.5;">SELECT
-    CAST(LEFT(REGEXP_SUBSTR(i.itemcallnumber, &#39;[0-9]+&#39;), 3) AS UNSIGNED) AS dewey_class,
-    COUNT(DISTINCT i.itemnumber)                         AS total_items,
-    ROUND(AVG(COALESCE(i.issues, 0)), 2)                AS avg_lifetime_circ,
-    SUM(COALESCE(i.issues, 0))                           AS total_circs,
-    COUNT(DISTINCT s.borrowernumber)                     AS unique_borrowers,
-    COUNT(DISTINCT CASE WHEN i.issues &gt; 0
-          THEN i.itemnumber END)                         AS items_circulated,
-    ROUND(COUNT(DISTINCT CASE WHEN i.issues &gt; 0
-          THEN i.itemnumber END)
-          / COUNT(DISTINCT i.itemnumber) * 100, 1)      AS pct_items_circulated,
-    ROUND(COUNT(DISTINCT s.borrowernumber)
-          / NULLIF(SUM(COALESCE(i.issues, 0)), 0), 3)   AS borrower_breadth
-FROM items i
-LEFT JOIN statistics s
-    ON  s.itemnumber = i.itemnumber
-    AND s.type = &#39;issue&#39;
-WHERE i.homebranch              = &#39;BERTWP&#39;
-  AND i.ccode                   = &#39;YANONFIC&#39;
-  AND i.itemlost                = 0
-  AND i.withdrawn               = 0
-  AND COALESCE(i.notforloan, 0) = 0
-  AND i.itemcallnumber REGEXP &#39;[0-9]&#39;
-GROUP BY CAST(LEFT(REGEXP_SUBSTR(i.itemcallnumber, &#39;[0-9]+&#39;), 3) AS UNSIGNED)
-HAVING total_items &gt;= 5
-ORDER BY dewey_class;</pre>
-          </div>
-        </div>
-
+  
       </div><!-- end accordion section -->
 
       <div class="card">
@@ -5297,6 +5187,14 @@ var _deweyFilter = 'All';
 var _deweySortCol = null;
 var _deweySortDir = 1;
 
+// Breadth-adjusted signal: Strong requires bb >= 0.05 OR ub >= 50 (when breadth data available)
+function deweyEffectiveSignal(c, bd) {
+  if (c.signal !== 'Strong') return c.signal;
+  if (!bd) return c.signal;  // no breadth data — keep original
+  if (bd.bb >= 0.05 || bd.ub >= 50) return 'Strong';
+  return 'Moderate';  // downgrade: high avg_circ but insufficient community reach
+}
+
 function cdDeweySort(col) {
   if (_deweySortCol === col) { _deweySortDir *= -1; } else { _deweySortCol = col; _deweySortDir = 1; }
   renderDeweyContent(_deweyCurrentCcode);
@@ -5366,7 +5264,7 @@ function renderDeweyContent(ccode) {
 
   // Stat boxes
   var totalItems = ranges.reduce(function(s,r){ return s+r.items; }, 0);
-  var strongCount  = allClasses.filter(function(c){ return c.signal==='Strong'; }).length;
+  var strongCount  = allClasses.filter(function(c){ return deweyEffectiveSignal(c, c._ub!==null?{bb:c._bb,ub:c._ub}:null)==='Strong'; }).length;
   var holdCount    = allClasses.filter(function(c){ return c.signal==='Hold'; }).length;
   var weedCount    = allClasses.filter(function(c){ return c.signal==='Weed'; }).length;
   var rangeCount   = ranges.length;
@@ -5396,7 +5294,7 @@ function renderDeweyContent(ccode) {
       + '<span style="width:36px;flex-shrink:0;font-size:12px;font-weight:600;color:#1E3A5F;">' + c.dewey_class + '</span>'
       + '<span style="flex:1;font-size:12px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + c.subject + '</span>'
       + metric
-      + '<span style="flex-shrink:0;">' + deweyBadge(c.signal) + '</span>'
+      + '<span style="flex-shrink:0;">' + deweyBadge(deweyEffectiveSignal(c, c._ub!==null?{bb:c._bb,ub:c._ub}:null)) + '</span>'
     + '</div>';
   }
 
@@ -5442,8 +5340,8 @@ function renderDeweyContent(ccode) {
   if (_deweyFilter !== 'All' && !_deweySortCol) {
     // Sort by number of matching classes descending
     filteredRanges = filteredRanges.slice().sort(function(a,b) {
-      var ac = a.classes ? a.classes.filter(function(c){ return c.signal === _deweyFilter; }).length : 0;
-      var bc = b.classes ? b.classes.filter(function(c){ return c.signal === _deweyFilter; }).length : 0;
+      var ac = a.classes ? a.classes.filter(function(c){ return deweyEffectiveSignal(c, (DEWEY_BREADTH_DATA[ccode]||{})[c.dewey_class]) === _deweyFilter; }).length : 0;
+      var bc = b.classes ? b.classes.filter(function(c){ return deweyEffectiveSignal(c, (DEWEY_BREADTH_DATA[ccode]||{})[c.dewey_class]) === _deweyFilter; }).length : 0;
       return bc - ac;
     });
   }
@@ -5463,16 +5361,14 @@ function renderDeweyContent(ccode) {
     + '</div>';
 
   var tableRows = filteredRanges.map(function(r, i) {
-    var bt = i === 0 ? '' : 'border-top:1px solid #EEEEEC;';
-    var yr = r.avg_pub_year ? (r.avg_pub_year + ' (' + (2026 - r.avg_pub_year) + 'y)') : '—';
     return '<div id="drow-' + ccode + '-' + r.dewey_100 + '">'
-      + '<div onclick="cdDeweyExpandRange(\'' + ccode + '\',' + r.dewey_100 + ')" style="display:grid;grid-template-columns:1fr 70px 130px 70px 70px 80px;gap:0;padding:9px 8px;cursor:pointer;transition:background 0.12s;border:1px solid #E5E5E3;border-top:none;' + (i===0?'':'') + '" class="dewey-range-row">'
+      + '<div onclick="cdDeweyExpandRange(\'' + ccode + '\',' + r.dewey_100 + ')" style="display:grid;grid-template-columns:1fr 70px 130px 70px 70px 80px;gap:0;padding:9px 8px;cursor:pointer;transition:background 0.12s;border:1px solid #E5E5E3;border-top:none;" class="dewey-range-row">'
       + '<div style="display:flex;align-items:center;gap:6px;">'
       + '  <span style="font-size:10px;color:#bbb;" id="darr-' + ccode + '-' + r.dewey_100 + '">▶</span>'
       + '  <span style="font-size:13px;font-weight:600;color:#1E3A5F;">' + (r.dewey_100 === 0 ? '000' : r.dewey_100) + '\'s</span>'
       + '  <span style="font-size:12px;color:#444;">' + r.label + '</span>'
       + (_deweyFilter !== 'All' ? (function(){
-            var cnt = r.classes ? r.classes.filter(function(c){ return c.signal === _deweyFilter; }).length : 0;
+            var cnt = r.classes ? r.classes.filter(function(c){ return deweyEffectiveSignal(c, (DEWEY_BREADTH_DATA[ccode]||{})[c.dewey_class]) === _deweyFilter; }).length : 0;
             var col = cnt > 0 ? '#3B6D11' : '#bbb';
             return '  <span style="font-size:10px;font-weight:600;color:' + col + ';background:' + (cnt > 0 ? '#EAF3DE' : '#F2F2F0') + ';border-radius:10px;padding:1px 7px;white-space:nowrap;">' + cnt + ' ' + _deweyFilter + '</span>';
           })() : '')
@@ -5511,7 +5407,7 @@ function renderDeweyClasses(ccode, range) {
 
   // Filter classes to match active signal filter
   var classes = (_deweyFilter && _deweyFilter !== 'All')
-    ? range.classes.filter(function(c){ return c.signal === _deweyFilter; })
+    ? range.classes.filter(function(c){ return deweyEffectiveSignal(c, (DEWEY_BREADTH_DATA[ccode]||{})[c.dewey_class]) === _deweyFilter; })
     : range.classes;
 
   if (classes.length === 0) {
@@ -5546,9 +5442,10 @@ function renderDeweyClasses(ccode, range) {
         breadthCell = '<span style="font-size:11px;text-align:right;display:block;color:#ccc;" title="Fewer than 5 items — excluded from breadth analysis">—</span>';
       }
     }
-    var sigBadge = deweyBadge(c.signal);
-    if (bd && bd.bb < 0.01 && (c.signal === 'Strong' || c.signal === 'Moderate')) {
-      sigBadge = deweyBadge(c.signal) + '<span title="Signal may be inflated — low borrower breadth" style="font-size:9px;cursor:help;vertical-align:super;margin-left:2px;">⚠</span>';
+    var _effSig = deweyEffectiveSignal(c, bd);
+    var sigBadge = deweyBadge(_effSig);
+    if (bd && bd.bb < 0.01 && (_effSig === 'Strong' || _effSig === 'Moderate')) {
+      sigBadge = deweyBadge(_effSig) + '<span title="Signal may be inflated — low borrower breadth" style="font-size:9px;cursor:help;vertical-align:super;margin-left:2px;">⚠</span>';
     }
     return '<div style="display:grid;grid-template-columns:' + cols + ';padding:6px 14px;' + bt + '">'
       + '<span style="font-size:12px;font-weight:600;color:#1E3A5F;">' + c.dewey_class + '</span>'
