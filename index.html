@@ -1497,7 +1497,7 @@ LIMIT 500;</pre>
           </div>
           <div style="font-size:13px;color:#444;margin-bottom:8px;">Items with 20+ lifetime checkouts. High copies + high circ → replacement or additional copy candidate.</div>
           <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;color:#333;">
               <thead id="cd-highuse-thead">
                 <tr style="background:#f5f5f3;border-bottom:2px solid #e5e5e0;">
                   <th style="padding:8px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#555;font-weight:600;white-space:nowrap;">Title</th>
@@ -4038,7 +4038,7 @@ function renderCdHealthGrid(data) {
         + stat(c.circ_12mo.toLocaleString() + ' (' + activePct + '%)', '12-Mo Circ', 'Items that circulated at least once in the last 12 months', false)
         + stat(turnover + 'x',                     '12-Mo Turnover',     '12-month circulation divided by total items — how many times the average item circulated this year', turnover < 0.5)
         + stat(c.avg_lifetime_circ.toFixed(2),     'Avg Lifetime Circ',  'Average number of checkouts per item over the item\'s lifetime (unweighted)', false)
-        + stat(c.dead_items.toLocaleString() + ' (' + deadPct + '%)', 'Dead Items ⚠', 'Count from July 2026 snapshot using 2-year no-circ threshold. Tooltip says 3+ years but data was queried at 2 years — re-run Query 1 with 3-yr filter at next refresh to align.', parseFloat(deadPct) > 25)
+        + stat(c.dead_items.toLocaleString() + ' (' + deadPct + '%)', 'Dead Items ⚠', 'Items with no circulation activity in the last 3 years, or items that have never circulated. Updated monthly via Query A.', parseFloat(deadPct) > 25)
         + stat(c.never_circd.toLocaleString(),      'Never Circ\'d',    'Items that have never been checked out, regardless of age. Includes new arrivals.', c.never_circd > c.items * 0.1)
         + stat(c.weed_eligible !== undefined ? c.weed_eligible.toLocaleString() : '—', 'Weed Eligible', 'Items past the 4-year protection window that are dead (3+ yrs no circ) or nonfiction with copyright >15 yrs and <3 checkouts', false)
         + stat(c.missing_lost !== undefined ? c.missing_lost.toLocaleString() : '—',   'Missing/Lost',  'Items currently marked as missing or lost in the catalog', false)
@@ -4674,6 +4674,9 @@ function loadCollectionDev() {
     var el = document.getElementById(id);
     if (el) { el.textContent = Number(statMap[id]).toLocaleString(); }
   });
+
+  // Render the default (weed) tab on initial load
+  cdRenderWeed();
 
   // If a live endpoint is configured, fetch it and override static values
   if (!COLLECTION_DEV_URL) return;
