@@ -254,12 +254,12 @@
       <div class="nav-item" onclick="showPage('cd-weeding',this)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B4FA0" stroke-width="2" style="flex-shrink:0;"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg> Collection Analysis
       </div>
-      <div class="nav-item" onclick="showPage('cd-tools',this)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B4FA0" stroke-width="2" style="flex-shrink:0;"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Tools &amp; Resources
-      </div>
       <div class="nav-item" onclick="showPage('holds',this)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B4FA0" stroke-width="2" style="flex-shrink:0;"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Holds Reports
+      </div><div class="nav-item" onclick="showPage('cd-tools',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B4FA0" stroke-width="2" style="flex-shrink:0;"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Tools &amp; Resources
       </div>
+      
     </div>
   </div>
 
@@ -4243,7 +4243,11 @@ function cdShowTab(tabName, btn) {
 
     function fmtDate(d) {
       if (!d) return '';
-      var s = (d + '').substring(0,10);
+      var s = (d + '').trim();
+      // Already human-readable (e.g. "January 22, 2026") — return as-is
+      if (s.indexOf('-') === -1) return s;
+      // ISO format YYYY-MM-DD → MM/DD/YY
+      s = s.substring(0, 10);
       if (s.length < 10) return d;
       return s.substring(5,7)+'/'+s.substring(8,10)+'/'+s.substring(2,4);
     }
