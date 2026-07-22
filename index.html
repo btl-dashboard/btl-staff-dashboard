@@ -5410,12 +5410,22 @@ function renderDeweyClasses(ccode, range) {
   var breadthTip = 'Borrower Breadth = unique borrowers ÷ total checkouts. A ratio near 1.0 means broad community demand; a ratio near 0 means a small number of repeat patrons drive the circulation. Classes below 0.01 may have inflated circ numbers.';
 
   // Filter classes to match active signal filter
+  // If filtering by signal, check if the range itself matches (aggregate signal can differ from class-level signals)
+  var rangeMatchesFilter = _deweyFilter && _deweyFilter !== 'All' && range.signal === _deweyFilter;
   var classes = (_deweyFilter && _deweyFilter !== 'All')
     ? range.classes.filter(function(c){ return deweyEffectiveSignal(c, (DEWEY_BREADTH_DATA[ccode]||{})[c.dewey_class]) === _deweyFilter; })
     : range.classes;
 
-  if (classes.length === 0) {
-    return '<div style="padding:10px 14px;color:#999;font-size:13px;font-style:italic;">No ' + _deweyFilter + '-signal classes in this range.</div>';
+  // If no individual classes match but the range itself is a match, show all classes with a note
+  var rangeSignalNote = '';
+  if (classes.length === 0 && rangeMatchesFilter) {
+    classes = range.classes;
+    rangeSignalNote = '<div style="padding:8px 14px 4px;font-size:11px;color:#666;font-style:italic;background:#FAFAF8;border-bottom:1px solid #EEEEEC;">'
+      + 'The range buy signal (' + _deweyFilter + ') reflects aggregate performance across all ' + range.items + ' items. '
+      + 'Individual class buy signals are shown below.'
+      + '</div>';
+  } else if (classes.length === 0) {
+    return '<div style="padding:10px 14px;color:#999;font-size:13px;font-style:italic;">No ' + _deweyFilter + '-buy-signal classes in this range.</div>';
   }
 
   var maxCirc = Math.max.apply(null, classes.map(function(c){ return c.avg_circ; }));
@@ -5463,7 +5473,7 @@ function renderDeweyClasses(ccode, range) {
     + '</div>';
   }).join('');
 
-  return '<div style="padding:4px 0;">' + header + rows + '</div>';
+  return '<div style="padding:4px 0;">' + rangeSignalNote + header + rows + '</div>';
 }
 
 function cdDeweyExpandRange(ccode, d100) {
